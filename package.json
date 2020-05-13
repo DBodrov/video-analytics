@@ -1,0 +1,16 @@
+{
+  "name": "video-analytics-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "swagger": "node ./swagger"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.bd.msk.mts.ru:8022/cloud-solutions/video-analytics-ui.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
