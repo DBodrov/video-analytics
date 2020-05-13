@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "gen-api": "openapi-generator generate -i swagger/swagger-ui-dist/apispec_1.json -g typescript-fetch -o src/backend/generated -c open-api.config.json",
     "swagger": "node ./swagger"
   },
   "repository": {
@@ -12,5 +16,41 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@ant-design/icons-svg": "^4.1.0",
+    "antd": "^4.2.2",
+    "classnames": "^2.2.6",
+    "core-js": "^3.6.5",
+    "mobx": "^5.15.4",
+    "mobx-react-lite": "^2.0.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-use": "^14.2.0",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.2.0"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.13-4.3.1",
+    "@types/classnames": "^2.2.10",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-eslint": "^4.3.1",
+    "@vue/cli-plugin-typescript": "^4.3.1",
+    "@vue/cli-service": "^4.3.1",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "eslint": "^7.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "less": "^3.11.1",
+    "less-loader": "^6.1.0",
+    "typescript": "^3.9.2",
+    "vue-template-compiler": "^2.6.11"
+  }
 }

@@ -1,5 +1,5 @@
-const express = require("express");
-const pathToSwaggerUi = require("./swagger-ui-dist").absolutePath();
+const express = require('express');
+const pathToSwaggerUi = require('./swagger-ui-dist').absolutePath();
 
 const PORT = 3099;
 
