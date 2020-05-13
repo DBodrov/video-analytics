@@ -1,0 +1,5 @@
+{
+  "typescriptThreePlus": true,
+  "withInterfaces": true,
+  "validateSpec": false
+}
