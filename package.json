@@ -21,7 +21,6 @@
     "@ant-design/icons-svg": "^4.1.0",
     "antd": "^4.2.2",
     "classnames": "^2.2.6",
-    "core-js": "^3.6.5",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.6",
     "react": "^16.13.1",
