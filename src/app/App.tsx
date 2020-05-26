@@ -1,21 +1,22 @@
-import { ConfigProvider } from 'antd';
+import { RouterStore } from '@/router/router-store';
+import { useInject } from '@/store/use-inject';
+import { Button, ConfigProvider } from 'antd';
 import ruRU from 'antd/es/locale/ru_RU';
-import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
-import cn from 'classnames';
 import React from 'react';
-import css from './App.less';
+import { Router } from 'react-router';
+import { AppLayout } from './components/AppLayout';
 
-interface Props {
-  className?: string;
-}
+export const App: React.FC = observer(() => {
+  const [router] = useInject(RouterStore);
 
-export const App: React.FC<Props> = observer(props => {
   return (
-    <ConfigProvider locale={ruRU}>
-      <div className={cn(css.container, props.className)}>
-        <Button>Test</Button>
-      </div>
-    </ConfigProvider>
+    <Router history={router.history}>
+      <ConfigProvider locale={ruRU}>
+        <AppLayout>
+          <Button>Test</Button>
+        </AppLayout>
+      </ConfigProvider>
+    </Router>
   );
 });
