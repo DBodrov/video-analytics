@@ -16,22 +16,22 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения о категории отслеживаемых объектов
  * @export
- * @interface LocationLatestEventsGetResponse200TrackedObjectCategory
+ * @interface InoutLatestEventsGetResponse200TrackedObjectCategory
  */
-export interface LocationLatestEventsGetResponse200TrackedObjectCategory {
+export interface InoutLatestEventsGetResponse200TrackedObjectCategory {
     /**
      * Идентификатор категории отслеживаемых объектов
      * @type {number}
-     * @memberof LocationLatestEventsGetResponse200TrackedObjectCategory
+     * @memberof InoutLatestEventsGetResponse200TrackedObjectCategory
      */
     id: number;
 }
 
-export function LocationLatestEventsGetResponse200TrackedObjectCategoryFromJSON(json: any): LocationLatestEventsGetResponse200TrackedObjectCategory {
-    return LocationLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON(json: any): InoutLatestEventsGetResponse200TrackedObjectCategory {
+    return InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json, false);
 }
 
-export function LocationLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationLatestEventsGetResponse200TrackedObjectCategory {
+export function InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200TrackedObjectCategory {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -41,7 +41,7 @@ export function LocationLatestEventsGetResponse200TrackedObjectCategoryFromJSONT
     };
 }
 
-export function LocationLatestEventsGetResponse200TrackedObjectCategoryToJSON(value?: LocationLatestEventsGetResponse200TrackedObjectCategory | null): any {
+export function InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON(value?: InoutLatestEventsGetResponse200TrackedObjectCategory | null): any {
     if (value === undefined) {
         return undefined;
     }

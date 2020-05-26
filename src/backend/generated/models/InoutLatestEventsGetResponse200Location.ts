@@ -16,22 +16,22 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения о площадке
  * @export
- * @interface LocationLatestEventsGetResponse200Location
+ * @interface InoutLatestEventsGetResponse200Location
  */
-export interface LocationLatestEventsGetResponse200Location {
+export interface InoutLatestEventsGetResponse200Location {
     /**
      * Идентификатор площадки
      * @type {number}
-     * @memberof LocationLatestEventsGetResponse200Location
+     * @memberof InoutLatestEventsGetResponse200Location
      */
     id: number;
 }
 
-export function LocationLatestEventsGetResponse200LocationFromJSON(json: any): LocationLatestEventsGetResponse200Location {
-    return LocationLatestEventsGetResponse200LocationFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200LocationFromJSON(json: any): InoutLatestEventsGetResponse200Location {
+    return InoutLatestEventsGetResponse200LocationFromJSONTyped(json, false);
 }
 
-export function LocationLatestEventsGetResponse200LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationLatestEventsGetResponse200Location {
+export function InoutLatestEventsGetResponse200LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200Location {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -41,7 +41,7 @@ export function LocationLatestEventsGetResponse200LocationFromJSONTyped(json: an
     };
 }
 
-export function LocationLatestEventsGetResponse200LocationToJSON(value?: LocationLatestEventsGetResponse200Location | null): any {
+export function InoutLatestEventsGetResponse200LocationToJSON(value?: InoutLatestEventsGetResponse200Location | null): any {
     if (value === undefined) {
         return undefined;
     }

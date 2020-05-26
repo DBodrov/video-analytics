@@ -63,12 +63,6 @@ export interface LocationsGetResponse200Locations {
      */
     companyId: number;
     /**
-     * Идентификатор окружения по умолчанию
-     * @type {number}
-     * @memberof LocationsGetResponse200Locations
-     */
-    envId: number;
-    /**
      * 
      * @type {LocationsGetResponse200Category}
      * @memberof LocationsGetResponse200Locations
@@ -92,7 +86,6 @@ export function LocationsGetResponse200LocationsFromJSONTyped(json: any, ignoreD
         'description': json['description'],
         'byDefault': json['by_default'],
         'companyId': json['company_id'],
-        'envId': json['env_id'],
         'category': LocationsGetResponse200CategoryFromJSON(json['category']),
     };
 }
@@ -112,7 +105,6 @@ export function LocationsGetResponse200LocationsToJSON(value?: LocationsGetRespo
         'description': value.description,
         'by_default': value.byDefault,
         'company_id': value.companyId,
-        'env_id': value.envId,
         'category': LocationsGetResponse200CategoryToJSON(value.category),
     };
 }

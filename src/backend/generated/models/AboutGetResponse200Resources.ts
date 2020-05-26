@@ -26,11 +26,11 @@ export interface AboutGetResponse200Resources {
      */
     name: string;
     /**
-     * Доступные HTTP-методы
-     * @type {Array<object>}
+     * 
+     * @type {Array<string>}
      * @memberof AboutGetResponse200Resources
      */
-    methods: Array<object>;
+    methods: Array<string>;
     /**
      * Раздел
      * @type {string}
@@ -38,11 +38,11 @@ export interface AboutGetResponse200Resources {
      */
     section: string;
     /**
-     * Перечень URL, по которым доступен метод
-     * @type {Array<object>}
+     * 
+     * @type {Array<string>}
      * @memberof AboutGetResponse200Resources
      */
-    urls: Array<object>;
+    urls: Array<string>;
 }
 
 export function AboutGetResponse200ResourcesFromJSON(json: any): AboutGetResponse200Resources {

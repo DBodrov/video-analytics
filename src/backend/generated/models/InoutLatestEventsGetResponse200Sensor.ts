@@ -16,22 +16,22 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения о датчике
  * @export
- * @interface LocationLatestEventsGetResponse200Sensor
+ * @interface InoutLatestEventsGetResponse200Sensor
  */
-export interface LocationLatestEventsGetResponse200Sensor {
+export interface InoutLatestEventsGetResponse200Sensor {
     /**
      * Идентификатор датчика
      * @type {number}
-     * @memberof LocationLatestEventsGetResponse200Sensor
+     * @memberof InoutLatestEventsGetResponse200Sensor
      */
     id: number;
 }
 
-export function LocationLatestEventsGetResponse200SensorFromJSON(json: any): LocationLatestEventsGetResponse200Sensor {
-    return LocationLatestEventsGetResponse200SensorFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200SensorFromJSON(json: any): InoutLatestEventsGetResponse200Sensor {
+    return InoutLatestEventsGetResponse200SensorFromJSONTyped(json, false);
 }
 
-export function LocationLatestEventsGetResponse200SensorFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationLatestEventsGetResponse200Sensor {
+export function InoutLatestEventsGetResponse200SensorFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200Sensor {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -41,7 +41,7 @@ export function LocationLatestEventsGetResponse200SensorFromJSONTyped(json: any,
     };
 }
 
-export function LocationLatestEventsGetResponse200SensorToJSON(value?: LocationLatestEventsGetResponse200Sensor | null): any {
+export function InoutLatestEventsGetResponse200SensorToJSON(value?: InoutLatestEventsGetResponse200Sensor | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -15,22 +15,22 @@
 
 import * as runtime from '../runtime';
 import {
-    LocationEventsStatsGetResponse200,
-    LocationEventsStatsGetResponse200FromJSON,
-    LocationEventsStatsGetResponse200ToJSON,
-    LocationLatestEventsGetResponse200,
-    LocationLatestEventsGetResponse200FromJSON,
-    LocationLatestEventsGetResponse200ToJSON,
+    InoutEventsStatsGetResponse200,
+    InoutEventsStatsGetResponse200FromJSON,
+    InoutEventsStatsGetResponse200ToJSON,
+    InoutLatestEventsGetResponse200,
+    InoutLatestEventsGetResponse200FromJSON,
+    InoutLatestEventsGetResponse200ToJSON,
 } from '../models';
 
-export interface ApiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRequest {
+export interface ApiVaCompaniesCompanyIdEventsInoutLatestGetRequest {
     companyId: number;
-    locationId: number;
+    tzOffset?: number;
 }
 
-export interface ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest {
+export interface ApiVaCompaniesCompanyIdEventsInoutStatsGetRequest {
     companyId: number;
-    locationId: number;
+    tzOffset?: number;
 }
 
 /**
@@ -42,37 +42,37 @@ export interface ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest
 export interface EventApiInterface {
     /**
      * # 
-     * @summary # Последние события на площадке по всем датчикам и категориям отслеживаемых объектов
+     * @summary # Учет въезжающих/выезжающих транспортных средств. Последние события
      * @param {number} companyId Идентификатор компании
-     * @param {number} locationId Идентификатор площадки
+     * @param {number} [tzOffset] Смещение часового пояса в часах в диапазоне от [-12, +12]. По умолчанию 0
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EventApiInterface
      */
-    apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRaw(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRequest): Promise<runtime.ApiResponse<LocationLatestEventsGetResponse200>>;
+    apiVaCompaniesCompanyIdEventsInoutLatestGetRaw(requestParameters: ApiVaCompaniesCompanyIdEventsInoutLatestGetRequest): Promise<runtime.ApiResponse<InoutLatestEventsGetResponse200>>;
 
     /**
      * # 
-     * # Последние события на площадке по всем датчикам и категориям отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортных средств. Последние события
      */
-    apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGet(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRequest): Promise<LocationLatestEventsGetResponse200>;
+    apiVaCompaniesCompanyIdEventsInoutLatestGet(requestParameters: ApiVaCompaniesCompanyIdEventsInoutLatestGetRequest): Promise<InoutLatestEventsGetResponse200>;
 
     /**
      * # 
-     * @summary # Статистика по событиям в разрезе датчиков и категорий отслеживаемых объектов
+     * @summary # Учет въезжающих/выезжающих транспортныех средств. Статистика
      * @param {number} companyId Идентификатор компании
-     * @param {number} locationId Идентификатор площадки
+     * @param {number} [tzOffset] Смещение часового пояса в часах в диапазоне от [-12, +12]. По умолчанию 0
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EventApiInterface
      */
-    apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRaw(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest): Promise<runtime.ApiResponse<LocationEventsStatsGetResponse200>>;
+    apiVaCompaniesCompanyIdEventsInoutStatsGetRaw(requestParameters: ApiVaCompaniesCompanyIdEventsInoutStatsGetRequest): Promise<runtime.ApiResponse<InoutEventsStatsGetResponse200>>;
 
     /**
      * # 
-     * # Статистика по событиям в разрезе датчиков и категорий отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортныех средств. Статистика
      */
-    apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGet(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest): Promise<LocationEventsStatsGetResponse200>;
+    apiVaCompaniesCompanyIdEventsInoutStatsGet(requestParameters: ApiVaCompaniesCompanyIdEventsInoutStatsGetRequest): Promise<InoutEventsStatsGetResponse200>;
 
 }
 
@@ -83,73 +83,73 @@ export class EventApi extends runtime.BaseAPI implements EventApiInterface {
 
     /**
      * # 
-     * # Последние события на площадке по всем датчикам и категориям отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортных средств. Последние события
      */
-    async apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRaw(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRequest): Promise<runtime.ApiResponse<LocationLatestEventsGetResponse200>> {
+    async apiVaCompaniesCompanyIdEventsInoutLatestGetRaw(requestParameters: ApiVaCompaniesCompanyIdEventsInoutLatestGetRequest): Promise<runtime.ApiResponse<InoutLatestEventsGetResponse200>> {
         if (requestParameters.companyId === null || requestParameters.companyId === undefined) {
-            throw new runtime.RequiredError('companyId','Required parameter requestParameters.companyId was null or undefined when calling apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGet.');
-        }
-
-        if (requestParameters.locationId === null || requestParameters.locationId === undefined) {
-            throw new runtime.RequiredError('locationId','Required parameter requestParameters.locationId was null or undefined when calling apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGet.');
+            throw new runtime.RequiredError('companyId','Required parameter requestParameters.companyId was null or undefined when calling apiVaCompaniesCompanyIdEventsInoutLatestGet.');
         }
 
         const queryParameters: runtime.HTTPQuery = {};
 
+        if (requestParameters.tzOffset !== undefined) {
+            queryParameters['tz_offset'] = requestParameters.tzOffset;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/va/companies/{company_id}/locations/{location_id}/events/latest`.replace(`{${"company_id"}}`, encodeURIComponent(String(requestParameters.companyId))).replace(`{${"location_id"}}`, encodeURIComponent(String(requestParameters.locationId))),
+            path: `/api/va/companies/{company_id}/events/inout/latest`.replace(`{${"company_id"}}`, encodeURIComponent(String(requestParameters.companyId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LocationLatestEventsGetResponse200FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InoutLatestEventsGetResponse200FromJSON(jsonValue));
     }
 
     /**
      * # 
-     * # Последние события на площадке по всем датчикам и категориям отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортных средств. Последние события
      */
-    async apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGet(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRequest): Promise<LocationLatestEventsGetResponse200> {
-        const response = await this.apiVaCompaniesCompanyIdLocationsLocationIdEventsLatestGetRaw(requestParameters);
+    async apiVaCompaniesCompanyIdEventsInoutLatestGet(requestParameters: ApiVaCompaniesCompanyIdEventsInoutLatestGetRequest): Promise<InoutLatestEventsGetResponse200> {
+        const response = await this.apiVaCompaniesCompanyIdEventsInoutLatestGetRaw(requestParameters);
         return await response.value();
     }
 
     /**
      * # 
-     * # Статистика по событиям в разрезе датчиков и категорий отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортныех средств. Статистика
      */
-    async apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRaw(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest): Promise<runtime.ApiResponse<LocationEventsStatsGetResponse200>> {
+    async apiVaCompaniesCompanyIdEventsInoutStatsGetRaw(requestParameters: ApiVaCompaniesCompanyIdEventsInoutStatsGetRequest): Promise<runtime.ApiResponse<InoutEventsStatsGetResponse200>> {
         if (requestParameters.companyId === null || requestParameters.companyId === undefined) {
-            throw new runtime.RequiredError('companyId','Required parameter requestParameters.companyId was null or undefined when calling apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGet.');
-        }
-
-        if (requestParameters.locationId === null || requestParameters.locationId === undefined) {
-            throw new runtime.RequiredError('locationId','Required parameter requestParameters.locationId was null or undefined when calling apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGet.');
+            throw new runtime.RequiredError('companyId','Required parameter requestParameters.companyId was null or undefined when calling apiVaCompaniesCompanyIdEventsInoutStatsGet.');
         }
 
         const queryParameters: runtime.HTTPQuery = {};
 
+        if (requestParameters.tzOffset !== undefined) {
+            queryParameters['tz_offset'] = requestParameters.tzOffset;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/va/companies/{company_id}/locations/{location_id}/events/stats`.replace(`{${"company_id"}}`, encodeURIComponent(String(requestParameters.companyId))).replace(`{${"location_id"}}`, encodeURIComponent(String(requestParameters.locationId))),
+            path: `/api/va/companies/{company_id}/events/inout/stats`.replace(`{${"company_id"}}`, encodeURIComponent(String(requestParameters.companyId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LocationEventsStatsGetResponse200FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InoutEventsStatsGetResponse200FromJSON(jsonValue));
     }
 
     /**
      * # 
-     * # Статистика по событиям в разрезе датчиков и категорий отслеживаемых объектов
+     * # Учет въезжающих/выезжающих транспортныех средств. Статистика
      */
-    async apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGet(requestParameters: ApiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRequest): Promise<LocationEventsStatsGetResponse200> {
-        const response = await this.apiVaCompaniesCompanyIdLocationsLocationIdEventsStatsGetRaw(requestParameters);
+    async apiVaCompaniesCompanyIdEventsInoutStatsGet(requestParameters: ApiVaCompaniesCompanyIdEventsInoutStatsGetRequest): Promise<InoutEventsStatsGetResponse200> {
+        const response = await this.apiVaCompaniesCompanyIdEventsInoutStatsGetRaw(requestParameters);
         return await response.value();
     }
 

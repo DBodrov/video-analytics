@@ -56,6 +56,12 @@ export interface AboutGetResponse200 {
      * @memberof AboutGetResponse200
      */
     timestamp: string;
+    /**
+     * Версия API
+     * @type {string}
+     * @memberof AboutGetResponse200
+     */
+    version: string;
 }
 
 export function AboutGetResponse200FromJSON(json: any): AboutGetResponse200 {
@@ -73,6 +79,7 @@ export function AboutGetResponse200FromJSONTyped(json: any, ignoreDiscriminator:
         'name': json['name'],
         'resources': ((json['resources'] as Array<any>).map(AboutGetResponse200ResourcesFromJSON)),
         'timestamp': json['timestamp'],
+        'version': json['version'],
     };
 }
 
@@ -90,6 +97,7 @@ export function AboutGetResponse200ToJSON(value?: AboutGetResponse200 | null): a
         'name': value.name,
         'resources': ((value.resources as Array<any>).map(AboutGetResponse200ResourcesToJSON)),
         'timestamp': value.timestamp,
+        'version': value.version,
     };
 }
 

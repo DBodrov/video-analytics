@@ -16,28 +16,28 @@ import { exists, mapValues } from '../runtime';
 /**
  * Изображение
  * @export
- * @interface LocationLatestEventsGetResponse200Image
+ * @interface InoutLatestEventsGetResponse200Image
  */
-export interface LocationLatestEventsGetResponse200Image {
+export interface InoutLatestEventsGetResponse200Image {
     /**
      * Формат изображения
      * @type {string}
-     * @memberof LocationLatestEventsGetResponse200Image
+     * @memberof InoutLatestEventsGetResponse200Image
      */
     compression: string;
     /**
      * Содержимое изображения в формате Base64
      * @type {string}
-     * @memberof LocationLatestEventsGetResponse200Image
+     * @memberof InoutLatestEventsGetResponse200Image
      */
     content: string;
 }
 
-export function LocationLatestEventsGetResponse200ImageFromJSON(json: any): LocationLatestEventsGetResponse200Image {
-    return LocationLatestEventsGetResponse200ImageFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200ImageFromJSON(json: any): InoutLatestEventsGetResponse200Image {
+    return InoutLatestEventsGetResponse200ImageFromJSONTyped(json, false);
 }
 
-export function LocationLatestEventsGetResponse200ImageFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationLatestEventsGetResponse200Image {
+export function InoutLatestEventsGetResponse200ImageFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200Image {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function LocationLatestEventsGetResponse200ImageFromJSONTyped(json: any, 
     };
 }
 
-export function LocationLatestEventsGetResponse200ImageToJSON(value?: LocationLatestEventsGetResponse200Image | null): any {
+export function InoutLatestEventsGetResponse200ImageToJSON(value?: InoutLatestEventsGetResponse200Image | null): any {
     if (value === undefined) {
         return undefined;
     }

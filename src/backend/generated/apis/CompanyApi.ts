@@ -50,6 +50,7 @@ export interface ApiVaCompaniesCompanyIdModelsGetRequest {
 }
 
 export interface ApiVaCompaniesCompanyIdModelsPostRequest {
+    companyId: number;
     request: CompanyModelsRequest;
 }
 
@@ -103,6 +104,7 @@ export interface CompanyApiInterface {
     /**
      * # 
      * @summary # Сохранение модели и категорий отслеживаемых объектов
+     * @param {number} companyId Идентификатор компании
      * @param {CompanyModelsRequest} request Сведения о модели и категориях отслеживаемых объектов
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -284,6 +286,10 @@ export class CompanyApi extends runtime.BaseAPI implements CompanyApiInterface {
      * # Сохранение модели и категорий отслеживаемых объектов
      */
     async apiVaCompaniesCompanyIdModelsPostRaw(requestParameters: ApiVaCompaniesCompanyIdModelsPostRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.companyId === null || requestParameters.companyId === undefined) {
+            throw new runtime.RequiredError('companyId','Required parameter requestParameters.companyId was null or undefined when calling apiVaCompaniesCompanyIdModelsPost.');
+        }
+
         if (requestParameters.request === null || requestParameters.request === undefined) {
             throw new runtime.RequiredError('request','Required parameter requestParameters.request was null or undefined when calling apiVaCompaniesCompanyIdModelsPost.');
         }
@@ -295,7 +301,7 @@ export class CompanyApi extends runtime.BaseAPI implements CompanyApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/va/companies/{company_id}/models`,
+            path: `/api/va/companies/{company_id}/models`.replace(`{${"company_id"}}`, encodeURIComponent(String(requestParameters.companyId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

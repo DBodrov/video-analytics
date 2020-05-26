@@ -16,28 +16,28 @@ import { exists, mapValues } from '../runtime';
 /**
  * Описание события
  * @export
- * @interface LocationLatestEventsGetResponse200Event
+ * @interface InoutLatestEventsGetResponse200Event
  */
-export interface LocationLatestEventsGetResponse200Event {
+export interface InoutLatestEventsGetResponse200Event {
     /**
      * Идентификатор события
      * @type {string}
-     * @memberof LocationLatestEventsGetResponse200Event
+     * @memberof InoutLatestEventsGetResponse200Event
      */
     code: string;
     /**
      * Дата и время совершения события
      * @type {string}
-     * @memberof LocationLatestEventsGetResponse200Event
+     * @memberof InoutLatestEventsGetResponse200Event
      */
     timestamp: string;
 }
 
-export function LocationLatestEventsGetResponse200EventFromJSON(json: any): LocationLatestEventsGetResponse200Event {
-    return LocationLatestEventsGetResponse200EventFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200EventFromJSON(json: any): InoutLatestEventsGetResponse200Event {
+    return InoutLatestEventsGetResponse200EventFromJSONTyped(json, false);
 }
 
-export function LocationLatestEventsGetResponse200EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationLatestEventsGetResponse200Event {
+export function InoutLatestEventsGetResponse200EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200Event {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function LocationLatestEventsGetResponse200EventFromJSONTyped(json: any, 
     };
 }
 
-export function LocationLatestEventsGetResponse200EventToJSON(value?: LocationLatestEventsGetResponse200Event | null): any {
+export function InoutLatestEventsGetResponse200EventToJSON(value?: InoutLatestEventsGetResponse200Event | null): any {
     if (value === undefined) {
         return undefined;
     }
