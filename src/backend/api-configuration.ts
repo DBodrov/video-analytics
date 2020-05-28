@@ -1,4 +1,4 @@
-import { Configuration } from './generated/runtime';
+import { Configuration } from './main/runtime';
 
 export class ApiConfig {
   private static instance = new ApiConfig();

@@ -7,7 +7,8 @@
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "gen-api": "rm -rf ./src/backend/generated && openapi-generator generate -i swagger/swagger-ui-dist/apispec_1.json -g typescript-fetch -o src/backend/generated -c open-api.config.json",
+    "gen": "rm -rf ./src/backend/main && openapi-generator generate -i swagger/swagger-ui-dist/apispec_1.json -g typescript-fetch -o src/backend/main -c open-api.config.json",
+    "gen-auth": "rm -rf ./src/backend/auth && openapi-generator generate -i swagger/auth/apispec_1.json -g typescript-fetch -o src/backend/auth -c open-api.config.json",
     "swagger": "node ./swagger"
   },
   "repository": {

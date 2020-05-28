@@ -1,9 +1,9 @@
-import { singleton } from 'tsyringe';
-import { EventApi } from '@/backend/generated/apis/EventApi';
+import { DataLoading, makeFetchData } from '@/backend/data-fetcher-helper';
+import { EventApi } from '@/backend/main/apis/EventApi';
+import { InoutEventsStatsGetResponse200 } from '@/backend/main/models/InoutEventsStatsGetResponse200';
 import { COMPANY_ID } from '@/company/company-constants';
-import { observable, action } from 'mobx';
-import { InoutEventsStatsGetResponse200 } from '@/backend/generated/models/InoutEventsStatsGetResponse200';
-import { makeFetchData, DataLoading } from '@/backend/data-fetcher-helper';
+import { observable } from 'mobx';
+import { singleton } from 'tsyringe';
 
 type StatsData = InoutEventsStatsGetResponse200;
 
