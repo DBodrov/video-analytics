@@ -8,6 +8,7 @@ export class ApiConfig {
   }
 
   private config = new Configuration({
+    basePath: '',
     accessToken: () => '',
   });
 
