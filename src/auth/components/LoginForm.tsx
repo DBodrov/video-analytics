@@ -20,7 +20,8 @@ export const LoginForm: React.FC<Props> = observer(props => {
       layout="vertical"
       className={cn(css.form, props.className)}
       initialValues={auth.formInitialValues}
-      onFinish={auth.onFormFinish as any}
+      onFinish={auth.postLogin as any}
+      onValuesChange={auth.onFormValuesChange}
     >
       <Form.Item>
         <div className="text-2xl">Авторизация</div>
@@ -28,6 +29,7 @@ export const LoginForm: React.FC<Props> = observer(props => {
 
       <Form.Item
         label="Email"
+        required={false}
         name={loginFields.userName}
         rules={[{ required: true, message: 'Введите e-mail' }]}
       >
@@ -36,6 +38,7 @@ export const LoginForm: React.FC<Props> = observer(props => {
 
       <Form.Item
         label="Пароль"
+        required={false}
         name={loginFields.password}
         rules={[{ required: true, message: 'Введите пароль' }]}
       >

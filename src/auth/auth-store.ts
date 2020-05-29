@@ -3,6 +3,7 @@ import { LoginPostResponse201 } from '@/backend/auth/models/LoginPostResponse201
 import { DataLoading, makeFetchData } from '@/backend/fetch-data-helper';
 import { action, computed, observable } from 'mobx';
 import { singleton } from 'tsyringe';
+import { loginFields } from './auth-constants';
 import { LoginFormData } from './auth-types';
 
 const TOKEN_KEY = 'ALA-auth-token';
@@ -54,20 +55,21 @@ export class AuthStore
     localStorage.setItem(USERNAME_KEY, value ?? '');
   }
 
+  onFormValuesChange = (changedValues: Partial<LoginFormData>) => {
+    if (loginFields.userName in changedValues) {
+      this.setUserName(changedValues.userName ?? '');
+    }
+  };
+
   private onSuccessfulLogin = (data: LoginPostResponse201) => {
     this.setToken(data.accessToken.value);
   };
 
-  private postLogin = makeFetchData(this, {
+  postLogin = makeFetchData(this, {
     fetchFn: (credentials: LoginFormData) =>
       this.authApi.apiAuthLoginPost({
         request: credentials,
       }),
     onSuccess: this.onSuccessfulLogin,
   });
-
-  onFormFinish = (formData: LoginFormData) => {
-    this.setUserName(formData.userName);
-    this.postLogin(formData);
-  };
 }

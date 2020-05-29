@@ -13,6 +13,16 @@ interface Props {
   className?: string;
 }
 
+const WelcomeBlock = () => (
+  <div className="absolute bottom-0 py-5 px-10" style={{ height: 140 }}>
+    <div className="text-2xl mb-1">Добро пожаловать</div>
+    <div className="text-base">
+      Введите свои учётные данные, чтобы получить доступ к аналитической видео
+      системе.
+    </div>
+  </div>
+);
+
 export const LoginPage: React.FC<Props> = observer(props => {
   const [auth] = useInject(AuthStore);
 
@@ -37,13 +47,7 @@ export const LoginPage: React.FC<Props> = observer(props => {
         </Spin>
         <div className="relative">
           <img src={backgroundImagePath} />
-          <div className="absolute bottom-0 py-5 px-10" style={{ height: 140 }}>
-            <div className="text-2xl mb-1">Добро пожаловать</div>
-            <div className="text-base">
-              Введите свои учётные данные, чтобы получить доступ к аналитической
-              видео системе.
-            </div>
-          </div>
+          <WelcomeBlock />
         </div>
       </div>
     </div>
