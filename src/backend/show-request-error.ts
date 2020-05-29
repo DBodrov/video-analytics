@@ -1,23 +1,6 @@
-import { to } from '@/common/await-to-js';
 import { notification } from 'antd';
 import { API_BASE_PATH } from './api-constants';
 import { RequestErrorInfo } from './api-types';
-import { ResponseContext } from './main/runtime';
-
-export async function showResponseErrorMware(context: ResponseContext) {
-  const { status } = context.response;
-  if (status >= 400 && status !== 401) {
-    const [body] = await to(context.response.json());
-    showRequestError({
-      status,
-      statusText: context.response.statusText,
-      method: context.init.method,
-      url: context.url,
-      message: body?.message,
-    });
-  }
-  return context.response;
-}
 
 export function showRequestError({
   status,

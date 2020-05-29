@@ -1,5 +1,4 @@
-export const appUrls = {
-  login: '/login',
+export const ROUTES = {
   main: '/',
   stats: '/stats',
-};
+} as const;

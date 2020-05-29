@@ -1,7 +1,11 @@
+import { AuthStore } from '@/auth/auth-store';
+import { to } from '@/common/utils/await-to-js';
+import { message } from 'antd';
+import { container } from 'tsyringe';
 import { abortableFetch } from './abortable-fetch';
 import { API_BASE_PATH } from './api-constants';
-import { showResponseErrorMware } from './api-middlewares';
-import { Configuration } from './main/runtime';
+import { Configuration, ResponseContext } from './main/runtime';
+import { showRequestError } from './show-request-error';
 
 export class ApiConfig {
   private static instance = new ApiConfig();
@@ -10,12 +14,47 @@ export class ApiConfig {
     return this.instance.config;
   }
 
+  private processResponseError = async (context: ResponseContext) => {
+    const { status } = context.response;
+    if (status === 401) {
+      this.process401(context);
+    }
+    if (status >= 400 && status !== 401) {
+      this.showResponseError(context);
+    }
+    return context.response;
+  };
+
+  private process401(context: ResponseContext) {
+    if (context.url.endsWith('/login')) {
+      message.error('Неправильный логин или пароль');
+    } else {
+      this.auth.logout();
+    }
+  }
+
+  private async showResponseError(context: ResponseContext) {
+    const { status, statusText } = context.response;
+    const [body] = await to(context.response.json());
+    showRequestError({
+      status,
+      statusText,
+      method: context.init.method,
+      url: context.url,
+      message: body?.message,
+    });
+  }
+
   private config = new Configuration({
     basePath: API_BASE_PATH,
     accessToken: () => '',
-    middleware: [{ post: showResponseErrorMware }],
+    middleware: [{ post: this.processResponseError }],
     fetchApi: abortableFetch,
   });
 
   private constructor() {}
+
+  private get auth(): AuthStore {
+    return container.resolve(AuthStore);
+  }
 }

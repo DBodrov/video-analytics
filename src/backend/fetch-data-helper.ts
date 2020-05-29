@@ -1,8 +1,8 @@
-import { to } from '@/common/await-to-js';
+import { to } from '@/common/utils/await-to-js';
 import { action } from 'mobx';
 import { FETCH_TIMEOUT } from './api-constants';
-import { showRequestError } from './api-middlewares';
 import { NetworkError } from './api-types';
+import { showRequestError } from './show-request-error';
 
 export interface DataLoading<Data extends any> {
   loading: boolean;

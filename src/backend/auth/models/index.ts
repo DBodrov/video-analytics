@@ -1,4 +1,3 @@
-export * from './';
 export * from './AboutGetResponse200';
 export * from './AboutGetResponse200Resources';
 export * from './CheckTokenError';

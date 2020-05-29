@@ -4,11 +4,17 @@ import { NetworkError } from './api-types';
 export const abortableFetch: Window['fetch'] = (input, init?) => {
   const controller = new AbortController();
   const signal = controller.signal;
-  setTimeout(controller.abort.bind(controller), FETCH_TIMEOUT);
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, FETCH_TIMEOUT);
   const newParams = { ...init, signal };
   return fetch(input, newParams)
-    .then(data => Promise.resolve(data))
+    .then(data => {
+      clearTimeout(timeout);
+      return Promise.resolve(data);
+    })
     .catch(err => {
+      clearTimeout(timeout);
       (err as NetworkError).request = getRequestInfo(input, init);
       throw err;
     });

@@ -2,14 +2,15 @@ import { StatsPage } from '@/stats/StatsPage';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
+import { ROUTES } from './app-urls';
 
 export const TopRoutes: React.FC = observer(props => {
   return (
     <Switch>
       <Route exact path="/">
-        <Redirect to="/stats" />
+        <Redirect to={ROUTES.stats} />
       </Route>
-      <Route path="/stats">
+      <Route path={ROUTES.stats}>
         <StatsPage />
       </Route>
     </Switch>
