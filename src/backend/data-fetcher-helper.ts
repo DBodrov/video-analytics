@@ -1,5 +1,6 @@
-import { action } from 'mobx';
 import { to } from '@/common/await-to-js';
+import { notification } from 'antd';
+import { action } from 'mobx';
 
 export interface DataLoading<Data extends any> {
   loading: boolean;
@@ -20,7 +21,15 @@ export function makeFetchData<Data extends any, Params extends any[] = []>(
 
   return async (...params: Params) => {
     setLoading(true);
-    const [data] = await to(loadFn(...params));
+    const [data, err] = await to(loadFn(...params));
+    if (err) {
+      // @ts-ignore
+      const storeName = store.__proto__?.constructor?.name ?? 'при запросе';
+      notification.error({
+        message: `Ошибка ${storeName}`,
+        description: String(err),
+      });
+    }
     if (data) {
       setData(data);
     }
