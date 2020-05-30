@@ -42,7 +42,7 @@ export const LoginForm: React.FC<Props> = observer(props => {
         name={loginFields.password}
         rules={[{ required: true, message: 'Введите пароль' }]}
       >
-        <Input.Password />
+        <Input.Password className={css.passwordChromeFix} />
       </Form.Item>
 
       <Form.Item>

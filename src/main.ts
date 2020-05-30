@@ -1,6 +1,4 @@
-import '@/styles/tailwind.css';
-import '@/styles/antd.less';
-import '@/styles/fonts.less';
+import '@/styles/index.less';
 
 import 'reflect-metadata';
 import 'mobx-react-lite/batchingForReactDom';
