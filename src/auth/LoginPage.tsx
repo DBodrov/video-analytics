@@ -29,7 +29,7 @@ export const LoginPage: React.FC<Props> = observer(props => {
   return (
     <div
       className={cn(
-        'h-screen flex justify-center items-center',
+        'h-screen flex flex-col justify-center items-center',
         css.container,
         props.className,
       )}
@@ -50,6 +50,7 @@ export const LoginPage: React.FC<Props> = observer(props => {
           <WelcomeBlock />
         </div>
       </div>
+      <div className={cn('w-full', css.spacer)} />
     </div>
   );
 });
