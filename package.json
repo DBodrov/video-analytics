@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ant-design/icons-svg": "^4.1.0",
+    "@ant-design/icons": "^4.2.1",
     "antd": "^4.2.5",
     "classnames": "^2.2.6",
     "eventemitter3": "^4.0.4",

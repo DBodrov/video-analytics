@@ -52,10 +52,10 @@ export class AuthStore
     return Boolean(this.accessToken);
   }
 
-  logout() {
+  logout = () => {
     this.setAccessToken(undefined);
     this.setRefreshToken(undefined);
-  }
+  };
 
   @action
   private setRefreshToken(value: string | undefined) {

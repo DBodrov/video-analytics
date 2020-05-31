@@ -2,6 +2,7 @@ import { Layout } from 'antd';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { AppHeader } from './AppHeader';
 import css from './AppLayout.less';
 import { AppMenu } from './AppMenu';
 import { Logo } from './Logo';
@@ -23,7 +24,9 @@ export const AppLayout: React.FC<Props> = observer(props => {
         </div>
       </Sider>
       <Layout>
-        <Header>Header</Header>
+        <Header>
+          <AppHeader />
+        </Header>
         <Layout>
           <Content>{props.children}</Content>
           <Sider width={310} className={css.rightSider}>
