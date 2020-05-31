@@ -1,4 +1,4 @@
-import { SvgCamera } from '@/assets/icons/Camera';
+import { SvgCamera } from '@/assets/icons/SvgCamera';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';

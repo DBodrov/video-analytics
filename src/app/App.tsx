@@ -1,7 +1,7 @@
 import { AuthStore } from '@/auth/auth-store';
 import { LoginPage } from '@/auth/LoginPage';
+import { TopRoutes } from '@/router/components/TopRoutes';
 import { RouterStore } from '@/router/router-store';
-import { TopRoutes } from '@/router/TopRoutes';
 import { EventBus } from '@/store/event-bus/event-bus';
 import { useInject } from '@/store/use-inject';
 import { ConfigProvider } from 'antd';

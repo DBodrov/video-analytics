@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import css from './AppLayout.less';
+import { AppMenu } from './AppMenu';
 import { Logo } from './Logo';
 const { Header, Sider, Content } = Layout;
 
@@ -16,6 +17,9 @@ export const AppLayout: React.FC<Props> = observer(props => {
       <Sider width={250} className={css.leftSider}>
         <div className={cn('flex items-center', css.logoContainer)}>
           <Logo />
+        </div>
+        <div className="py-6">
+          <AppMenu />
         </div>
       </Sider>
       <Layout>
