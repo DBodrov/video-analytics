@@ -17,7 +17,7 @@ const REFRESH_TOKEN_INTERVAL = 10 * (1000 * 60);
 export class AuthStore
   implements DataLoading<LoginPostResponse201>, LoginFormData {
   @observable
-  private accessToken: string | undefined = localStorage
+  accessToken: string | undefined = localStorage
     .getItem(ACCESS_TOKEN_KEY)
     ?.trim();
 

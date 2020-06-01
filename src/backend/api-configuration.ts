@@ -11,7 +11,7 @@ export class ApiConfig {
   private static instance = new ApiConfig();
 
   static get(): Configuration {
-    return this.instance.config;
+    return this.instance.getConfig();
   }
 
   private processResponseError = async (context: ResponseContext) => {
@@ -45,14 +45,21 @@ export class ApiConfig {
     });
   }
 
-  private config = new Configuration({
-    basePath: API_BASE_PATH,
-    accessToken: () => '',
-    middleware: [{ post: this.processResponseError }],
-    fetchApi: abortableFetch,
-  });
-
   private constructor() {}
+
+  private getConfig() {
+    const that = this;
+    return new Configuration({
+      basePath: API_BASE_PATH,
+      middleware: [{ post: this.processResponseError }],
+      headers: {
+        get Authorization() {
+          return `Bearer ${that.auth.accessToken}`;
+        },
+      },
+      fetchApi: abortableFetch,
+    });
+  }
 
   private get auth(): AuthStore {
     return container.resolve(AuthStore);
