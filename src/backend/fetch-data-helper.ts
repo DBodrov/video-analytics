@@ -4,30 +4,28 @@ import { FETCH_TIMEOUT } from './api-constants';
 import { NetworkError } from './api-types';
 import { showRequestError } from './show-request-error';
 
-export interface DataLoading<Data extends any> {
+export interface ILoading {
   loading: boolean;
+}
+
+export interface DataAndLoading<Data extends any> extends ILoading {
   data: Data | undefined;
 }
 
-interface Params<Data extends any, FnParams extends any[] = []> {
-  fetchFn: (...params: FnParams) => Promise<Data>;
+interface MakeFetchDataParams<Data extends any, Params extends any[] = []> {
+  fetchFn: (...params: Params) => Promise<Data>;
   onSuccess?(data: Data): void | Promise<void>;
 }
 
-export function makeFetchData<Data extends any, FnParams extends any[] = []>(
-  store: DataLoading<Data>,
-  { fetchFn, onSuccess }: Params<Data, FnParams>,
+export function makeFetchData<Data extends any, Params extends any[]>(
+  store: DataAndLoading<Data>,
+  { fetchFn, onSuccess }: MakeFetchDataParams<Data, Params>,
 ) {
-  const setLoading = action((value: boolean) => {
-    store.loading = value;
-  });
-
   const setData = action((value: Data) => {
     store.data = value;
   });
 
-  return async (...params: FnParams) => {
-    setLoading(true);
+  return runWithLoading(store, async (...params: Params) => {
     const [data, err] = await to(fetchFn(...params));
     if (err) {
       showError(err);
@@ -36,8 +34,17 @@ export function makeFetchData<Data extends any, FnParams extends any[] = []>(
       setData(data);
       onSuccess?.(data);
     }
-    setLoading(false);
-  };
+  });
+}
+
+export async function fetchWithShowError<Data extends any>(
+  promise: Promise<Data>,
+): Promise<Data | undefined> {
+  const [data, err] = await to(promise);
+  if (err) {
+    showError(err);
+  }
+  return data;
 }
 
 function showError(err: Error | Response) {
@@ -63,4 +70,18 @@ function isResponse(err: Error | Response): err is Response {
 function isNetworkError(err: Error | NetworkError): err is NetworkError {
   const field: keyof NetworkError = 'request';
   return field in err;
+}
+
+export function runWithLoading<FnParams extends any[]>(
+  store: ILoading,
+  fn: (...params: FnParams) => Promise<void>,
+) {
+  const setLoading = action((value: boolean) => {
+    store.loading = value;
+  });
+  return async (...params: FnParams) => {
+    setLoading(true);
+    await fn(...params);
+    setLoading(false);
+  };
 }

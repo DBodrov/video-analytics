@@ -1,4 +1,4 @@
-export const loginMock = {
+export const loginMock: any = {
   user: {
     id: 2,
     user_name: 'api',
@@ -23,7 +23,7 @@ export const loginMock = {
   },
 };
 
-export const refreshTokenMock = {
+export const refreshTokenMock: any = {
   user: {
     id: 2,
     user_name: 'api',

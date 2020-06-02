@@ -1,5 +1,7 @@
-export const statsMock: any = {
-  stats: [
+const content = require('./image-content.json');
+
+export const eventsLatestMock: any = {
+  events: [
     {
       location: {
         id: 1,
@@ -10,74 +12,13 @@ export const statsMock: any = {
       tracked_object_category: {
         id: 7,
       },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
+      event: {
+        code: '565a6642t43e60-4ce0-8553-1e1e7648a922',
+        timestamp: '2020-06-01 08:03:00',
       },
-    },
-    {
-      location: {
-        id: 1,
-      },
-      sensor: {
-        id: 1,
-      },
-      tracked_object_category: {
-        id: 8,
-      },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
-    },
-    {
-      location: {
-        id: 1,
-      },
-      sensor: {
-        id: 1,
-      },
-      tracked_object_category: {
-        id: 9,
-      },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
-    },
-    {
-      location: {
-        id: 1,
-      },
-      sensor: {
-        id: 2,
-      },
-      tracked_object_category: {
-        id: 7,
-      },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
-    },
-    {
-      location: {
-        id: 1,
-      },
-      sensor: {
-        id: 2,
-      },
-      tracked_object_category: {
-        id: 8,
-      },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
+      image: {
+        compression: 'jpeg',
+        content: content[0],
       },
     },
     {
@@ -90,43 +31,34 @@ export const statsMock: any = {
       tracked_object_category: {
         id: 9,
       },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
+      event: null,
+      image: null,
     },
     {
       location: {
         id: 1,
       },
       sensor: {
-        id: 3,
+        id: 2,
       },
       tracked_object_category: {
         id: 7,
       },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
+      event: null,
+      image: null,
     },
     {
       location: {
         id: 1,
       },
       sensor: {
-        id: 3,
+        id: 2,
       },
       tracked_object_category: {
         id: 8,
       },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
-      },
+      event: null,
+      image: null,
     },
     {
       location: {
@@ -138,11 +70,60 @@ export const statsMock: any = {
       tracked_object_category: {
         id: 9,
       },
-      today: {
-        date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
+      event: null,
+      image: null,
+    },
+    {
+      location: {
+        id: 1,
       },
+      sensor: {
+        id: 3,
+      },
+      tracked_object_category: {
+        id: 7,
+      },
+      event: null,
+      image: null,
+    },
+    {
+      location: {
+        id: 1,
+      },
+      sensor: {
+        id: 1,
+      },
+      tracked_object_category: {
+        id: 8,
+      },
+      event: null,
+      image: null,
+    },
+    {
+      location: {
+        id: 1,
+      },
+      sensor: {
+        id: 1,
+      },
+      tracked_object_category: {
+        id: 9,
+      },
+      event: null,
+      image: null,
+    },
+    {
+      location: {
+        id: 1,
+      },
+      sensor: {
+        id: 3,
+      },
+      tracked_object_category: {
+        id: 8,
+      },
+      event: null,
+      image: null,
     },
   ],
 };

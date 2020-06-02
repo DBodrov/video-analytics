@@ -1,26 +1,47 @@
-import { DataLoading, makeFetchData } from '@/backend/fetch-data-helper';
-import { EventApi } from '@/backend/main/apis/EventApi';
-import { InoutEventsStatsGetResponse200 } from '@/backend/main/models/InoutEventsStatsGetResponse200';
-import { COMPANY_ID } from '@/company/company-constants';
-import { observable } from 'mobx';
+import { ILoading, runWithLoading } from '@/backend/fetch-data-helper';
+import { TocsStore } from '@/company/tocs-store';
+import { action, observable } from 'mobx';
 import { singleton } from 'tsyringe';
-
-type StatsData = InoutEventsStatsGetResponse200;
+import { StatsService } from './stats-service';
+import { DataLatest, DataStats } from './stats-types';
 
 @singleton()
-export class StatsStore implements DataLoading<StatsData> {
+export class StatsStore implements ILoading {
   @observable
   loading: boolean = false;
 
   @observable.ref
-  data: StatsData | undefined;
+  private dataStats: DataStats | undefined;
 
-  constructor(private readonly eventsApi: EventApi) {}
+  @observable.ref
+  dataLatest: DataLatest | undefined;
 
-  private fetchFn = () =>
-    this.eventsApi.apiVaCompaniesCompanyIdEventsInoutStatsGet({
-      companyId: COMPANY_ID,
-    });
+  constructor(
+    private readonly service: StatsService,
+    private readonly tocs: TocsStore,
+  ) {}
 
-  loadStats = makeFetchData(this, { fetchFn: this.fetchFn });
+  fetchData = runWithLoading(this, async () => {
+    const [dataStats, dataLatest] = await Promise.all([
+      this.service.getStats(),
+      this.service.getLatest(),
+      this.tocs.fetchData(),
+    ]);
+    if (dataStats) {
+      this.setStatsData(dataStats);
+    }
+    if (dataLatest) {
+      this.setLatestData(dataLatest);
+    }
+  });
+
+  @action
+  private setStatsData(value: DataStats) {
+    this.dataStats = value;
+  }
+
+  @action
+  private setLatestData(value: DataLatest) {
+    this.dataLatest = value;
+  }
 }

@@ -1,6 +1,6 @@
 import { AuthApi } from '@/backend/auth/apis/AuthApi';
 import { LoginPostResponse201 } from '@/backend/auth/models/LoginPostResponse201';
-import { DataLoading, makeFetchData } from '@/backend/fetch-data-helper';
+import { DataAndLoading, makeFetchData } from '@/backend/fetch-data-helper';
 import { to } from '@/common/utils/await-to-js';
 import { EventBus } from '@/store/event-bus/event-bus';
 import { action, computed, observable } from 'mobx';
@@ -15,7 +15,7 @@ const REFRESH_TOKEN_INTERVAL = 10 * (1000 * 60);
 
 @singleton()
 export class AuthStore
-  implements DataLoading<LoginPostResponse201>, LoginFormData {
+  implements DataAndLoading<LoginPostResponse201>, LoginFormData {
   @observable
   accessToken: string | undefined = localStorage
     .getItem(ACCESS_TOKEN_KEY)
