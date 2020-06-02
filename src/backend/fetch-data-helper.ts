@@ -53,6 +53,7 @@ function showError(err: Error | Response) {
     return;
   }
   const errText = String(err);
+  console.error(err);
   showRequestError({
     url: isNetworkError(err) ? err.request.url : undefined,
     method: isNetworkError(err) ? err.request.method : undefined,

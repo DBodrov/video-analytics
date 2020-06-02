@@ -1,5 +1,6 @@
 import fetchMock from 'fetch-mock';
 import { loginMock } from './mocks/auth-mocks';
+import { latestMock } from './mocks/latest-mock';
 import { statsMock } from './mocks/stats-mock';
 import { tocsMock } from './mocks/tocs-mock';
 
@@ -14,5 +15,5 @@ fetchMock.get(
 
 fetchMock.get(
   'express:/api/va/companies/:companyId/events/inout/latest',
-  statsMock,
+  latestMock,
 );

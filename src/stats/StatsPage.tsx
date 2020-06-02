@@ -6,7 +6,7 @@ import React from 'react';
 import { useEffectOnce } from 'react-use';
 import { StatsStore } from './stats-store';
 import css from './StatsPage.less';
-const imageContent = require('@/backend/mocks/image-content.json');
+const imageContent = require('@/backend/mocks/test-image.json');
 
 interface Props {
   className?: string;

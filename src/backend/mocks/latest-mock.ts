@@ -1,6 +1,6 @@
 const content = require('./image-content.json');
 
-export const eventsLatestMock: any = {
+export const latestMock: any = {
   events: [
     {
       location: {
