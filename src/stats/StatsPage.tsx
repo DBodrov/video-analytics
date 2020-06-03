@@ -4,13 +4,18 @@ import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useEffectOnce } from 'react-use';
+import { StatsListItem } from './components/StatsListItem';
 import { StatsStore } from './stats-store';
+import { StatsItem } from './stats-types';
 import css from './StatsPage.less';
-const imageContent = require('@/backend/mocks/test-image.json');
 
 interface Props {
   className?: string;
 }
+
+const renderItem = (item: StatsItem) => (
+  <StatsListItem key={item.key} item={item} />
+);
 
 export const StatsPage: React.FC<Props> = observer(props => {
   const [store] = useInject(StatsStore);
@@ -22,8 +27,12 @@ export const StatsPage: React.FC<Props> = observer(props => {
   return (
     <div className={cn(css.container, props.className)}>
       <div className={css.body}>
-        <img src={`data:image/jpeg;charset=utf-8;base64, ${imageContent[0]}`} />
-        <List loading={store.loading}></List>
+        <List
+          loading={store.loading}
+          dataSource={store.itemsView}
+          renderItem={renderItem}
+          className={css.list}
+        />
       </div>
     </div>
   );

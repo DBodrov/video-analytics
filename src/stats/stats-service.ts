@@ -4,9 +4,15 @@ import { COMPANY_ID } from '@/company/company-constants';
 import { singleton } from 'tsyringe';
 import { DataLatest, DataStats } from './stats-types';
 
+type ApiParams = Parameters<
+  EventApi['apiVaCompaniesCompanyIdEventsInoutStatsGet']
+>[0];
+
 @singleton()
 export class StatsService {
-  private readonly params = { companyId: COMPANY_ID };
+  private readonly params: ApiParams = {
+    companyId: COMPANY_ID,
+  };
 
   constructor(private readonly eventsApi: EventApi) {}
 

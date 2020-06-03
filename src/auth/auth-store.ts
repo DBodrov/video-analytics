@@ -39,7 +39,7 @@ export class AuthStore
   data: LoginPostResponse201 | undefined;
 
   constructor(private readonly authApi: AuthApi, eventBus: EventBus) {
-    // eventBus.on('appStart', this.onAppStart);
+    eventBus.on('appStart', this.onAppStart);
   }
 
   @computed
