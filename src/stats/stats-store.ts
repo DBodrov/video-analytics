@@ -9,8 +9,8 @@ import { StatsService } from './stats-service';
 import {
   DataLatest,
   DataStats,
-  ItemDataKeys,
   ItemKey,
+  ItemKeysData,
   LatestItemData,
   StatsItemData,
 } from './stats-types';
@@ -54,8 +54,9 @@ export class StatsStore implements ILoading {
     return new StatsItemStore(this, itemData);
   };
 
-  constructKey(itemData: ItemDataKeys): string {
-    return `${itemData.location.id}-${itemData.sensor.id}${itemData.trackedObjectCategory?.id}`;
+  constructKey(item: ItemKeysData): string {
+    const category = item.trackedObjectCategory ?? item.category;
+    return `${item.location.id}-${item.sensor.id}-${category?.id}`;
   }
 
   fetchData = runWithLoading(this, async () => {

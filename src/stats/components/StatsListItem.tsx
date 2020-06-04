@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { StatsItem } from '../stats-types';
 import { StatsAvatar } from './StatsAvatar';
+import { StatsCounts } from './StatsCounts';
+import { StatsItemDescription } from './StatsItemDescription';
 
 interface Props {
   item: StatsItem;
@@ -10,17 +12,12 @@ interface Props {
 }
 
 export const StatsListItem: React.FC<Props> = observer(({ item, ...props }) => {
-  const date = item.lastUpdateDateF;
-  const description = `${item.sensor} | Обновление${
-    date ? ' ' : ': '
-  }${item.lastUpdateDateF ?? 'нет данных'}`;
-
   return (
-    <List.Item>
+    <List.Item extra={<StatsCounts item={item} />}>
       <List.Item.Meta
         avatar={<StatsAvatar image={item.image} />}
         title={item.category}
-        description={description}
+        description={<StatsItemDescription item={item} />}
       />
     </List.Item>
   );

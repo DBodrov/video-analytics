@@ -29,9 +29,7 @@ export const AppLayout: React.FC<Props> = observer(props => {
         </Header>
         <Layout>
           <Content>{props.children}</Content>
-          <Sider width={310} className={css.rightSider}>
-            Sider
-          </Sider>
+          <Sider width={310} className={css.rightSider}></Sider>
         </Layout>
       </Layout>
     </Layout>

@@ -12,8 +12,8 @@ export const statsMock: any = {
       },
       today: {
         date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
+        in_count: 9000,
+        out_count: 8888,
       },
     },
     {

@@ -11,10 +11,16 @@ export type StatsItemData = InoutEventsStatsGetResponse200Stats;
 export type LatestItemData = InoutLatestEventsGetResponse200Events;
 export type ItemKey = string;
 
-export type ItemDataKeys = Pick<
-  StatsItemData,
-  'location' | 'sensor' | 'trackedObjectCategory'
->;
+interface HavingId {
+  id: number;
+}
+
+export interface ItemKeysData {
+  location: HavingId;
+  sensor: HavingId;
+  trackedObjectCategory?: HavingId;
+  category?: HavingId;
+}
 
 export interface ApiImage {
   compression: string;
@@ -29,4 +35,5 @@ export interface StatsItem {
   inCount: number;
   outCount: number;
   lastUpdateDateF: string | undefined;
+  trackedObjectNumber?: string | undefined;
 }

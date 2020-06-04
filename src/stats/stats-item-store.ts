@@ -61,4 +61,9 @@ export class StatsItemStore implements StatsItem {
     }
     return format(new Date(dateStr), 'dd MMMM yyyy HH:MM', { locale: ru });
   }
+
+  @computed
+  get trackedObjectNumber(): string | undefined {
+    return this.latestData?.trackedObject?.licensePlateNumber;
+  }
 }

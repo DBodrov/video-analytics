@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom';
 
 import { App } from '@/app/App';
 import { registerApiServices } from '@/backend/register-api';
+import { getStoreByName } from './store/get-store-by-name';
 
 async function run() {
   if (process.env.NODE_ENV === 'development') {
@@ -25,6 +26,8 @@ async function run() {
   registerApiServices();
 
   ReactDOM.render(h(App), document.getElementById('root'));
+
+  (window as any).APP_getStore = getStoreByName;
 }
 
 run();
