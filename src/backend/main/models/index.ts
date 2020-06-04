@@ -15,6 +15,7 @@ export * from './InoutLatestEventsGetResponse200Events';
 export * from './InoutLatestEventsGetResponse200Image';
 export * from './InoutLatestEventsGetResponse200Location';
 export * from './InoutLatestEventsGetResponse200Sensor';
+export * from './InoutLatestEventsGetResponse200TrackedObject';
 export * from './InoutLatestEventsGetResponse200TrackedObjectCategory';
 export * from './LocationsGetResponse200';
 export * from './LocationsGetResponse200Category';

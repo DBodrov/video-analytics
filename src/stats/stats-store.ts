@@ -55,7 +55,7 @@ export class StatsStore implements ILoading {
   };
 
   constructKey(itemData: ItemDataKeys): string {
-    return `${itemData.location.id}-${itemData.sensor.id}${itemData.trackedObjectCategory.id}`;
+    return `${itemData.location.id}-${itemData.sensor.id}${itemData.trackedObjectCategory?.id}`;
   }
 
   fetchData = runWithLoading(this, async () => {
