@@ -14,6 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
+    InoutLatestEventsGetResponse200Category,
+    InoutLatestEventsGetResponse200CategoryFromJSON,
+    InoutLatestEventsGetResponse200CategoryFromJSONTyped,
+    InoutLatestEventsGetResponse200CategoryToJSON,
     InoutLatestEventsGetResponse200Event,
     InoutLatestEventsGetResponse200EventFromJSON,
     InoutLatestEventsGetResponse200EventFromJSONTyped,
@@ -34,10 +38,6 @@ import {
     InoutLatestEventsGetResponse200TrackedObjectFromJSON,
     InoutLatestEventsGetResponse200TrackedObjectFromJSONTyped,
     InoutLatestEventsGetResponse200TrackedObjectToJSON,
-    InoutLatestEventsGetResponse200TrackedObjectCategory,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON,
 } from './';
 
 /**
@@ -60,10 +60,10 @@ export interface InoutLatestEventsGetResponse200Events {
     sensor: InoutLatestEventsGetResponse200Sensor;
     /**
      * 
-     * @type {InoutLatestEventsGetResponse200TrackedObjectCategory}
+     * @type {InoutLatestEventsGetResponse200Category}
      * @memberof InoutLatestEventsGetResponse200Events
      */
-    trackedObjectCategory: InoutLatestEventsGetResponse200TrackedObjectCategory;
+    category: InoutLatestEventsGetResponse200Category;
     /**
      * 
      * @type {InoutLatestEventsGetResponse200Event}
@@ -96,7 +96,7 @@ export function InoutLatestEventsGetResponse200EventsFromJSONTyped(json: any, ig
         
         'location': InoutLatestEventsGetResponse200LocationFromJSON(json['location']),
         'sensor': InoutLatestEventsGetResponse200SensorFromJSON(json['sensor']),
-        'trackedObjectCategory': InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON(json['tracked_object_category']),
+        'category': InoutLatestEventsGetResponse200CategoryFromJSON(json['category']),
         'event': !exists(json, 'event') ? undefined : InoutLatestEventsGetResponse200EventFromJSON(json['event']),
         'image': !exists(json, 'image') ? undefined : InoutLatestEventsGetResponse200ImageFromJSON(json['image']),
         'trackedObject': !exists(json, 'tracked_object') ? undefined : InoutLatestEventsGetResponse200TrackedObjectFromJSON(json['tracked_object']),
@@ -114,7 +114,7 @@ export function InoutLatestEventsGetResponse200EventsToJSON(value?: InoutLatestE
         
         'location': InoutLatestEventsGetResponse200LocationToJSON(value.location),
         'sensor': InoutLatestEventsGetResponse200SensorToJSON(value.sensor),
-        'tracked_object_category': InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON(value.trackedObjectCategory),
+        'category': InoutLatestEventsGetResponse200CategoryToJSON(value.category),
         'event': InoutLatestEventsGetResponse200EventToJSON(value.event),
         'image': InoutLatestEventsGetResponse200ImageToJSON(value.image),
         'tracked_object': InoutLatestEventsGetResponse200TrackedObjectToJSON(value.trackedObject),

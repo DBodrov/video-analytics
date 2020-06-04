@@ -16,22 +16,22 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения о категории отслеживаемых объектов
  * @export
- * @interface InoutLatestEventsGetResponse200TrackedObjectCategory
+ * @interface InoutLatestEventsGetResponse200Category
  */
-export interface InoutLatestEventsGetResponse200TrackedObjectCategory {
+export interface InoutLatestEventsGetResponse200Category {
     /**
      * Идентификатор категории отслеживаемых объектов
      * @type {number}
-     * @memberof InoutLatestEventsGetResponse200TrackedObjectCategory
+     * @memberof InoutLatestEventsGetResponse200Category
      */
     id: number;
 }
 
-export function InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON(json: any): InoutLatestEventsGetResponse200TrackedObjectCategory {
-    return InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json, false);
+export function InoutLatestEventsGetResponse200CategoryFromJSON(json: any): InoutLatestEventsGetResponse200Category {
+    return InoutLatestEventsGetResponse200CategoryFromJSONTyped(json, false);
 }
 
-export function InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200TrackedObjectCategory {
+export function InoutLatestEventsGetResponse200CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): InoutLatestEventsGetResponse200Category {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -41,7 +41,7 @@ export function InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONType
     };
 }
 
-export function InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON(value?: InoutLatestEventsGetResponse200TrackedObjectCategory | null): any {
+export function InoutLatestEventsGetResponse200CategoryToJSON(value?: InoutLatestEventsGetResponse200Category | null): any {
     if (value === undefined) {
         return undefined;
     }

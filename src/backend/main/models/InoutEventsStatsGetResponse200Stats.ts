@@ -18,6 +18,10 @@ import {
     InoutEventsStatsGetResponse200TodayFromJSON,
     InoutEventsStatsGetResponse200TodayFromJSONTyped,
     InoutEventsStatsGetResponse200TodayToJSON,
+    InoutLatestEventsGetResponse200Category,
+    InoutLatestEventsGetResponse200CategoryFromJSON,
+    InoutLatestEventsGetResponse200CategoryFromJSONTyped,
+    InoutLatestEventsGetResponse200CategoryToJSON,
     InoutLatestEventsGetResponse200Location,
     InoutLatestEventsGetResponse200LocationFromJSON,
     InoutLatestEventsGetResponse200LocationFromJSONTyped,
@@ -26,10 +30,6 @@ import {
     InoutLatestEventsGetResponse200SensorFromJSON,
     InoutLatestEventsGetResponse200SensorFromJSONTyped,
     InoutLatestEventsGetResponse200SensorToJSON,
-    InoutLatestEventsGetResponse200TrackedObjectCategory,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSONTyped,
-    InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON,
 } from './';
 
 /**
@@ -52,10 +52,10 @@ export interface InoutEventsStatsGetResponse200Stats {
     sensor: InoutLatestEventsGetResponse200Sensor;
     /**
      * 
-     * @type {InoutLatestEventsGetResponse200TrackedObjectCategory}
+     * @type {InoutLatestEventsGetResponse200Category}
      * @memberof InoutEventsStatsGetResponse200Stats
      */
-    trackedObjectCategory: InoutLatestEventsGetResponse200TrackedObjectCategory;
+    trackedObjectCategory: InoutLatestEventsGetResponse200Category;
     /**
      * 
      * @type {InoutEventsStatsGetResponse200Today}
@@ -76,7 +76,7 @@ export function InoutEventsStatsGetResponse200StatsFromJSONTyped(json: any, igno
         
         'location': InoutLatestEventsGetResponse200LocationFromJSON(json['location']),
         'sensor': InoutLatestEventsGetResponse200SensorFromJSON(json['sensor']),
-        'trackedObjectCategory': InoutLatestEventsGetResponse200TrackedObjectCategoryFromJSON(json['tracked_object_category']),
+        'trackedObjectCategory': InoutLatestEventsGetResponse200CategoryFromJSON(json['tracked_object_category']),
         'today': InoutEventsStatsGetResponse200TodayFromJSON(json['today']),
     };
 }
@@ -92,7 +92,7 @@ export function InoutEventsStatsGetResponse200StatsToJSON(value?: InoutEventsSta
         
         'location': InoutLatestEventsGetResponse200LocationToJSON(value.location),
         'sensor': InoutLatestEventsGetResponse200SensorToJSON(value.sensor),
-        'tracked_object_category': InoutLatestEventsGetResponse200TrackedObjectCategoryToJSON(value.trackedObjectCategory),
+        'tracked_object_category': InoutLatestEventsGetResponse200CategoryToJSON(value.trackedObjectCategory),
         'today': InoutEventsStatsGetResponse200TodayToJSON(value.today),
     };
 }
