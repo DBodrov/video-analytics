@@ -6,6 +6,7 @@ import {
   ApiImage,
   ItemKey,
   LatestItemData,
+  RefItemToShow,
   StatsItem,
   StatsItemData,
 } from './stats-types';
@@ -27,20 +28,35 @@ export class StatsItemStore implements StatsItem {
   }
 
   @computed
+  get location(): RefItemToShow {
+    const { id } = this.data.location;
+    return {
+      id,
+      title: this.store.locations.getItem(id)?.name ?? `Id ${id}`,
+    };
+  }
+
+  @computed
   get image(): ApiImage | null {
     return this.latestData?.image ?? null;
   }
 
   @computed
-  get sensor(): string {
+  get sensor(): RefItemToShow {
     const { id } = this.data.sensor;
-    return this.store.sensors.getItem(id)?.name ?? String(id);
+    return {
+      id,
+      title: this.store.sensors.getItem(id)?.name ?? `Id ${id}`,
+    };
   }
 
   @computed
-  get category(): string {
-    const { id } = this.data.sensor;
-    return this.store.tocs.getItem(id)?.name ?? `ID ${id}`;
+  get category(): RefItemToShow {
+    const { id } = this.data.trackedObjectCategory;
+    return {
+      id,
+      title: this.store.tocs.getItem(id)?.name ?? `Id ${id}`,
+    };
   }
 
   @computed

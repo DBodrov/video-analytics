@@ -4,6 +4,7 @@ import { SensorsStore } from '@/company/sensors-store';
 import { TocsStore } from '@/company/tocs-store';
 import { action, computed, observable } from 'mobx';
 import { singleton } from 'tsyringe';
+import { StatsFiltersStore } from './stats-filters-store';
 import { StatsItemStore } from './stats-item-store';
 import { StatsService } from './stats-service';
 import {
@@ -12,6 +13,7 @@ import {
   ItemKey,
   ItemKeysData,
   LatestItemData,
+  StatsItem,
   StatsItemData,
 } from './stats-types';
 
@@ -21,10 +23,12 @@ export class StatsStore implements ILoading {
   loading: boolean = false;
 
   @observable.ref
-  private dataStats: DataStats | undefined;
+  dataStats: DataStats | undefined;
 
   @observable.ref
   private dataLatest: DataLatest | undefined;
+
+  filters = new StatsFiltersStore(this);
 
   constructor(
     private readonly service: StatsService,
@@ -41,16 +45,30 @@ export class StatsStore implements ILoading {
   }
 
   @computed
-  get items() {
+  private get items(): StatsItem[] {
     return this.dataStats?.stats.map(this.convertStatsItem) ?? [];
   }
 
   @computed
-  get itemsView() {
-    return this.items;
+  private get itemsFiltered(): StatsItem[] {
+    return this.items.filter(this.filter);
   }
 
-  private convertStatsItem = (itemData: StatsItemData) => {
+  @computed
+  get itemsView(): StatsItem[] {
+    return this.itemsFiltered;
+  }
+
+  private filter = (item: StatsItem): boolean => {
+    const { location, sensor, category } = this.filters;
+    return (
+      (location.all || item.location.id === location.currentValue) &&
+      (sensor.all || item.sensor.id === sensor.currentValue) &&
+      (category.all || item.category.id === category.currentValue)
+    );
+  };
+
+  private convertStatsItem = (itemData: StatsItemData): StatsItem => {
     return new StatsItemStore(this, itemData);
   };
 

@@ -27,11 +27,17 @@ export interface ApiImage {
   content: string;
 }
 
+export interface RefItemToShow {
+  id: number;
+  title: string;
+}
+
 export interface StatsItem {
   key: ItemKey;
   image: ApiImage | null;
-  sensor: string;
-  category: string;
+  location: RefItemToShow;
+  sensor: RefItemToShow;
+  category: RefItemToShow;
   inCount: number;
   outCount: number;
   lastUpdateDateF: string | undefined;

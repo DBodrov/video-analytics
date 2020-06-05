@@ -24,6 +24,7 @@
     "date-fns": "^2.14.0",
     "eventemitter3": "^4.0.4",
     "fetch-mock": "^9.10.1",
+    "libreact": "^2.13.2",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.7",
     "react": "^16.13.1",
@@ -54,7 +55,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.11.1",
     "less-loader": "^6.1.0",
-    "typescript": "^3.9.3",
+    "typescript": "^3.9.5",
     "vue-template-compiler": "^2.6.11"
   }
 }

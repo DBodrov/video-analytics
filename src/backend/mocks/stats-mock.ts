@@ -18,7 +18,7 @@ export const statsMock: any = {
     },
     {
       location: {
-        id: 1,
+        id: 2,
       },
       sensor: {
         id: 1,
@@ -28,8 +28,8 @@ export const statsMock: any = {
       },
       today: {
         date: '2020-06-02',
-        in_count: 0,
-        out_count: 0,
+        in_count: 1,
+        out_count: 1,
       },
     },
     {

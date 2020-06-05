@@ -12,7 +12,7 @@ export const StatsItemDescription: React.FC<Props> = observer(
   ({ item, ...props }) => {
     return (
       <div className={cn('whitespace-pre', props.className)}>
-        {item.sensor}
+        {item.sensor.title}
         {'  |  Обновление'}
         {item.lastUpdateDateF ? ' ' : ': '}
         {item.lastUpdateDateF ?? ': нет данных'}

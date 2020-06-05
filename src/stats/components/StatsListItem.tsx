@@ -16,7 +16,7 @@ export const StatsListItem: React.FC<Props> = observer(({ item, ...props }) => {
     <List.Item extra={<StatsCounts item={item} />}>
       <List.Item.Meta
         avatar={<StatsAvatar image={item.image} />}
-        title={item.category}
+        title={item.category.title}
         description={<StatsItemDescription item={item} />}
       />
     </List.Item>
