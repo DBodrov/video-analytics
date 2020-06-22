@@ -21,4 +21,5 @@ yarn-error.log*
 *.sw?
 
 /dev-files
+/temp
 /swagger/node_modules

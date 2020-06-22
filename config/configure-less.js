@@ -4,7 +4,7 @@ const rootDir = require('../root-dir');
 function setCommonOptions(options) {
   return {
     ...options,
-    javascriptEnabled: true,
+    lessOptions: { javascriptEnabled: true },
   };
 }
 

@@ -1,0 +1,748 @@
+{
+  "info": {
+    "version": "0.0.1", 
+    "title": "auth", 
+    "description": "powered by Flasgger", 
+    "termsOfService": "/tos"
+  }, 
+  "paths": {
+    "/api/auth/check-token": {
+      "get": {
+        "summary": "# Проверка токена доступа", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Запрос содержит действующий токен доступа", 
+            "schema": {
+              "$ref": "#/definitions/check-token_response_200"
+            }
+          }, 
+          "400": {
+            "description": "Отсутсвует токен доступа или истек срок его действия", 
+            "schema": {
+              "$ref": "#/definitions/check-token_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/heartbeat": {
+      "get": {
+        "summary": "# Доступность сервиса", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сервис доступен", 
+            "schema": {
+              "$ref": "#/definitions/heartbeat_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Core"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/companies": {
+      "get": {
+        "summary": "# Сведения о компаниях", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о компаниях", 
+            "schema": {
+              "$ref": "#/definitions/companies_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Company"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/login": {
+      "post": {
+        "summary": "# Идентификация пользователя", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Access/refresh-токены с указанием периода действия", 
+            "schema": {
+              "$ref": "#/definitions/login_post_response_201"
+            }
+          }, 
+          "400": {
+            "description": "Ошибка пр разборе параметров запроса", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }, 
+          "401": {
+            "description": "Некорректный пароль и/или имя пользователя", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }, 
+          "403": {
+            "description": "Пользователь не найден. Недостаточно прав для проведения авторизации", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "request", 
+            "in": "body", 
+            "required": true, 
+            "description": "Авторизационные данные пользователя", 
+            "schema": {
+              "$ref": "#/definitions/login_post_request"
+            }
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/token": {
+      "post": {
+        "summary": "# Обновление токена доступа", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Действующий токен доступа", 
+            "schema": {
+              "$ref": "#/definitions/token_post_response_201"
+            }
+          }, 
+          "400": {
+            "description": "Запрос содержит некорректный токен доступа (refresh-токен)", 
+            "schema": {
+              "$ref": "#/definitions/token_post_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа (refresh) в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/about": {
+      "get": {
+        "summary": "# Сведения о сервисе и API", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о сервисе и API", 
+            "schema": {
+              "$ref": "#/definitions/about_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Core"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/companies/{company_id}": {
+      "get": {
+        "summary": "# Сведения о компании", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о компании", 
+            "schema": {
+              "$ref": "#/definitions/company_get_response_200"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "company_id", 
+            "in": "path", 
+            "type": "integer", 
+            "required": true, 
+            "description": "Идентификатор компании"
+          }
+        ], 
+        "tags": [
+          "Company"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  }, 
+  "definitions": {
+    "check-token_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "description": "HTTP-код ответа", 
+          "type": "integer"
+        }
+      }
+    }, 
+    "check-token_response_200": {
+      "type": "object", 
+      "required": [
+        "payload"
+      ], 
+      "properties": {
+        "payload": {
+          "type": "object", 
+          "required": [
+            "user_id"
+          ], 
+          "properties": {
+            "company_id": {
+              "type": "integer", 
+              "title": "Идентификатор компании"
+            }, 
+            "user_id": {
+              "type": "integer", 
+              "title": "Идентификатор авторизованного пользователя"
+            }
+          }
+        }
+      }
+    }, 
+    "heartbeat_get_response_200": {
+      "type": "object"
+    }, 
+    "companies_get_response_200": {
+      "type": "array", 
+      "items": {
+        "type": "object", 
+        "required": [
+          "id", 
+          "inn", 
+          "ogrn", 
+          "name", 
+          "full_name", 
+          "database"
+        ], 
+        "description": "Сведения о компании", 
+        "properties": {
+          "id": {
+            "type": "integer", 
+            "description": "Идентификатор компании"
+          }, 
+          "inn": {
+            "type": "string", 
+            "description": "ИНН"
+          }, 
+          "ogrn": {
+            "type": "string", 
+            "description": "ОГРН"
+          }, 
+          "name": {
+            "type": "integer", 
+            "description": "Краткое название"
+          }, 
+          "full_name": {
+            "type": "string", 
+            "description": "Полное название"
+          }, 
+          "database": {
+            "type": "object", 
+            "required": [
+              "hostname", 
+              "port", 
+              "name", 
+              "user"
+            ], 
+            "properties": {
+              "hostname": {
+                "type": "string", 
+                "description": "Название сервера для хранения видеоаналитики"
+              }, 
+              "port": {
+                "type": "integer", 
+                "description": "Порт для подключения к серверу"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Название базы данных"
+              }, 
+              "user": {
+                "type": "string", 
+                "description": "Учетная запись для подключения"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "login_post_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "login_post_token": {
+      "type": "object", 
+      "description": "Токен доступа", 
+      "required": [
+        "value", 
+        "expired_at"
+      ], 
+      "properties": {
+        "value": {
+          "type": "string", 
+          "description": "Значение токена доступа"
+        }, 
+        "expired_at": {
+          "type": "string", 
+          "description": "Дата и время истечения срока действия"
+        }
+      }
+    }, 
+    "login_post_request": {
+      "type": "object", 
+      "required": [
+        "user_name", 
+        "password"
+      ], 
+      "properties": {
+        "user_name": {
+          "type": "string", 
+          "description": "Учетная запись пользователя"
+        }, 
+        "password": {
+          "type": "string", 
+          "description": "Пароль пользователя"
+        }
+      }
+    }, 
+    "login_post_response_201": {
+      "type": "object", 
+      "required": [
+        "access_token", 
+        "refresh_token", 
+        "user"
+      ], 
+      "properties": {
+        "user": {
+          "type": "object", 
+          "description": "Сведения о пользователе", 
+          "required": [
+            "id", 
+            "code", 
+            "full_name", 
+            "first_name", 
+            "last_name", 
+            "short_name", 
+            "system"
+          ], 
+          "properties": {
+            "id": {
+              "type": "integer", 
+              "description": "Идентификатор пользователя"
+            }, 
+            "code": {
+              "type": "string", 
+              "description": "Учетная запись пользователя"
+            }, 
+            "full_name": {
+              "type": "string", 
+              "description": "Полное имя (Фамилия Имя Отчество)"
+            }, 
+            "first_name": {
+              "type": "string", 
+              "description": "Имя"
+            }, 
+            "last_name": {
+              "type": "string", 
+              "description": "Фамилия"
+            }, 
+            "middle_name": {
+              "type": "string", 
+              "description": "Отчество"
+            }, 
+            "short_name": {
+              "type": "string", 
+              "description": "Краткое имя (Фамилия И.О.)"
+            }, 
+            "system": {
+              "type": "string", 
+              "description": "Признак системного пользователя"
+            }, 
+            "email": {
+              "type": "string", 
+              "description": "Адрес электронной почты"
+            }, 
+            "company_id": {
+              "type": "integer", 
+              "description": "Идентификатор компании"
+            }
+          }
+        }, 
+        "access_token": {
+          "type": "object", 
+          "description": "Access-токен", 
+          "$ref": "#/definitions/login_post_token"
+        }, 
+        "refresh_token": {
+          "type": "object", 
+          "description": "Refresh-токен", 
+          "$ref": "#/definitions/login_post_token"
+        }
+      }
+    }, 
+    "token_post_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "token_post_token": {
+      "type": "object", 
+      "title": "Токен доступа", 
+      "required": [
+        "value", 
+        "expired_at"
+      ], 
+      "properties": {
+        "value": {
+          "type": "string", 
+          "description": "Значение токена доступа"
+        }, 
+        "expired_at": {
+          "type": "string", 
+          "description": "Дата и время истечения срока действия токена"
+        }
+      }
+    }, 
+    "token_post_response_201": {
+      "type": "object", 
+      "required": [
+        "access_token", 
+        "user"
+      ], 
+      "properties": {
+        "user": {
+          "type": "object", 
+          "title": "Сведения о пользователе", 
+          "required": [
+            "id", 
+            "code", 
+            "full_name", 
+            "first_name", 
+            "last_name", 
+            "middle_name", 
+            "short_name", 
+            "system"
+          ], 
+          "properties": {
+            "id": {
+              "type": "integer", 
+              "description": "Идентификатор пользователя"
+            }, 
+            "code": {
+              "type": "string", 
+              "description": "Учетная запись пользователя"
+            }, 
+            "full_name": {
+              "type": "string", 
+              "description": "Полное имя (Фамилия Имя Отчество)"
+            }, 
+            "first_name": {
+              "type": "string", 
+              "description": "Имя"
+            }, 
+            "last_name": {
+              "type": "string", 
+              "description": "Фамилия"
+            }, 
+            "middle_name": {
+              "type": "string", 
+              "description": "Отчество"
+            }, 
+            "short_name": {
+              "type": "string", 
+              "description": "Краткое имя (Фамилия И.О.)"
+            }, 
+            "system": {
+              "type": "string", 
+              "description": "Признак системного пользователя"
+            }, 
+            "email": {
+              "type": "string", 
+              "description": "Адрес электронной почты"
+            }, 
+            "company_id": {
+              "type": "integer", 
+              "description": "Идентификатор компании"
+            }
+          }
+        }, 
+        "access_token": {
+          "type": "string", 
+          "title": "Access-токен", 
+          "$ref": "#/definitions/token_post_token"
+        }
+      }
+    }, 
+    "about_get_response_200": {
+      "type": "object", 
+      "description": "Сведения о сервисе и API", 
+      "required": [
+        "commit", 
+        "env", 
+        "name", 
+        "resources", 
+        "timestamp", 
+        "version"
+      ], 
+      "properties": {
+        "commit": {
+          "type": "string", 
+          "description": "Идентификатор последнего коммита"
+        }, 
+        "env": {
+          "type": "string", 
+          "description": "Название среды"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Название сервиса"
+        }, 
+        "resources": {
+          "type": "array", 
+          "description": "Методы API", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "name", 
+              "methods", 
+              "section", 
+              "urls"
+            ], 
+            "properties": {
+              "name": {
+                "type": "string", 
+                "description": "Название метода"
+              }, 
+              "methods": {
+                "type": "array", 
+                "items": {
+                  "type": "string", 
+                  "description": "Доступные HTTP-методы"
+                }
+              }, 
+              "section": {
+                "type": "string", 
+                "description": "Раздел"
+              }, 
+              "urls": {
+                "type": "array", 
+                "items": {
+                  "type": "string", 
+                  "description": "Перечень URL, по которым доступен метод"
+                }
+              }
+            }
+          }
+        }, 
+        "timestamp": {
+          "type": "string", 
+          "description": "Дата и время сборки"
+        }, 
+        "version": {
+          "type": "string", 
+          "description": "Версия API"
+        }
+      }
+    }, 
+    "company_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "inn", 
+        "ogrn", 
+        "name", 
+        "full_name", 
+        "database"
+      ], 
+      "description": "Сведения о компании", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор компании"
+        }, 
+        "inn": {
+          "type": "string", 
+          "description": "ИНН"
+        }, 
+        "ogrn": {
+          "type": "string", 
+          "description": "ОГРН"
+        }, 
+        "name": {
+          "type": "integer", 
+          "description": "Краткое название"
+        }, 
+        "full_name": {
+          "type": "string", 
+          "description": "Полное название"
+        }, 
+        "database": {
+          "type": "object", 
+          "required": [
+            "hostname", 
+            "port", 
+            "name", 
+            "user"
+          ], 
+          "properties": {
+            "hostname": {
+              "type": "string", 
+              "description": "Название сервера для хранения видеоаналитики"
+            }, 
+            "port": {
+              "type": "integer", 
+              "description": "Порт для подключения к серверу"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Название базы данных"
+            }, 
+            "user": {
+              "type": "string", 
+              "description": "Учетная запись для подключения"
+            }
+          }
+        }
+      }
+    }
+  }, 
+  "swagger": "2.0", 
+  "swaggerUiPrefix": ""
+}
