@@ -22,7 +22,7 @@ function dropBasePath(url: string | undefined): string | undefined {
   if (typeof url !== 'string') {
     return url;
   }
-  return API_BASE_PATH && url.startsWith(API_BASE_PATH)
+  return API_BASE_PATH && url.startsWith(API_BASE_PATH) && API_BASE_PATH !== ''
     ? url.slice(API_BASE_PATH.length)
     : url;
 }
