@@ -8,6 +8,7 @@ import { AppHeader } from './AppHeader';
 import css from './AppLayout.less';
 import { AppMenu } from './AppMenu';
 import { Logo } from './Logo';
+import {RightPanel} from './RightPanel'
 const { Header, Sider, Content } = Layout;
 
 interface Props {
@@ -37,7 +38,9 @@ export const AppLayout: React.FC<Props> = observer(props => {
           >
             {props.children}
           </Content>
-          <Sider width={310} className={css.rightSider}></Sider>
+          <Sider width={310} className={css.rightSider}>
+            <RightPanel />
+          </Sider>
         </Layout>
       </Layout>
     </Layout>
