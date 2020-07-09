@@ -39,14 +39,14 @@ export const StatsPage: React.FC<Props> = observer(props => {
   return (
     <div className={props.className}>
       {appHeaderContainer && createPortal(<StatsHeader />, appHeaderContainer)}
-      <SizeSensor onSize={statsUi.setHeaderHeight}>
         <div className={cn('w-full px-5 pt-3 flex items-center', css.header)}>
           <StatsFilters />
         </div>
-      </SizeSensor>
+      {/* <SizeSensor onSize={statsUi.setHeaderHeight}>
+      </SizeSensor> */}
       <div
         className={cn('overflow-y-auto', css.body)}
-        style={{ height: statsUi.bodyHeight }}
+        // style={{ height: statsUi.bodyHeight }}
       >
         <List
           loading={store.loading}

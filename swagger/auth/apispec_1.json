@@ -1,11 +1,34 @@
 {
   "info": {
-    "version": "0.9.dev48", 
+    "version": "0.9.dev54", 
     "title": "auth", 
     "description": "powered by Flasgger", 
     "termsOfService": "/tos"
   }, 
   "paths": {
+    "/api/auth/refs/check_categories": {
+      "get": {
+        "summary": "# Справочные сведения о категориях проверок (шаблонах)", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о категориях проверок (шаблонах)", 
+            "schema": {
+              "$ref": "#/definitions/check-categories_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
     "/api/auth/refs/event_statuses": {
       "get": {
         "summary": "# Справочные сведения о статусах событий", 
@@ -15,6 +38,153 @@
             "description": "Справочные сведения о статусах событий", 
             "schema": {
               "$ref": "#/definitions/event-statuses_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/detectors": {
+      "get": {
+        "summary": "# Справочные сведения о детекторах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о детекторах", 
+            "schema": {
+              "$ref": "#/definitions/detectors_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/trackers": {
+      "get": {
+        "summary": "# Справочные сведения о трекерах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о трекерах", 
+            "schema": {
+              "$ref": "#/definitions/trackers_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/checks": {
+      "get": {
+        "summary": "# Справочные сведения о проверках (бизнес-правилах)", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о проверках (бизнес-правилах)", 
+            "schema": {
+              "$ref": "#/definitions/checks_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/models": {
+      "post": {
+        "summary": "# Сохранение модели и категорий отслеживаемых объектов", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Данные успешно сохранены", 
+            "schema": {
+              "$ref": "#/definitions/models_response_201"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "request", 
+            "in": "body", 
+            "required": true, 
+            "description": "Сведения о модели и категориях отслеживаемых объектов", 
+            "schema": {
+              "$ref": "#/definitions/models_request"
+            }
+          }
+        ], 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }, 
+      "get": {
+        "summary": "# Сведения о моделях расчета", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о моделях расчета", 
+            "schema": {
+              "$ref": "#/definitions/models_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/tocs": {
+      "get": {
+        "summary": "# Сведения о категориях отслеживаемых объектов", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о категориях отслеживаемых объектов", 
+            "schema": {
+              "$ref": "#/definitions/tocs_get_response_200"
             }
           }
         }, 
@@ -341,7 +511,7 @@
     }
   }, 
   "definitions": {
-    "event-statuses_get_response_200": {
+    "check-categories_get_response_200": {
       "type": "object", 
       "required": [
         "id", 
@@ -349,23 +519,354 @@
         "name", 
         "description"
       ], 
-      "description": "Статус по событию", 
+      "description": "Описание категории", 
       "properties": {
         "id": {
           "type": "integer", 
-          "description": "Идентификатор статуса"
+          "description": "Идентификатор категории"
         }, 
         "code": {
           "type": "string", 
-          "description": "Код статуса"
+          "description": "Код категории"
         }, 
         "name": {
           "type": "string", 
-          "description": "Краткое название статуса"
+          "description": "Краткое название категории"
         }, 
         "description": {
           "type": "string", 
-          "description": "Описание статуса"
+          "description": "Описание категории"
+        }
+      }
+    }, 
+    "event-statuses_get_response_200": {
+      "type": "array", 
+      "items": {
+        "type": "object", 
+        "required": [
+          "id", 
+          "code", 
+          "name", 
+          "description"
+        ], 
+        "description": "Статус по событию", 
+        "properties": {
+          "id": {
+            "type": "integer", 
+            "description": "Идентификатор статуса"
+          }, 
+          "code": {
+            "type": "string", 
+            "description": "Код статуса"
+          }, 
+          "name": {
+            "type": "string", 
+            "description": "Краткое название статуса"
+          }, 
+          "description": {
+            "type": "string", 
+            "description": "Описание статуса"
+          }
+        }
+      }
+    }, 
+    "detectors_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description"
+      ], 
+      "description": "Описание детектора", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор детектора"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код детектора"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название детектора"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание детектора"
+        }
+      }
+    }, 
+    "trackers_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description"
+      ], 
+      "description": "Описание трекера", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор трекера"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код трекера"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название трекера"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание трекера"
+        }
+      }
+    }, 
+    "checks_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description", 
+        "category_id"
+      ], 
+      "description": "Описание проверки", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор проверки"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код проверки"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название проверки"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание проверки"
+        }, 
+        "category_id": {
+          "type": "integer", 
+          "description": "Идентификатор категории проверки"
+        }
+      }
+    }, 
+    "models_request": {
+      "type": "object", 
+      "required": [
+        "model", 
+        "tocs"
+      ], 
+      "properties": {
+        "model": {
+          "type": "object", 
+          "required": [
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Сведения о модели", 
+          "properties": {
+            "code": {
+              "type": "string", 
+              "description": "Код модели"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название модели"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание модели"
+            }
+          }
+        }, 
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Категория отслеживаемого объекта", 
+            "properties": {
+              "code": {
+                "type": "string", 
+                "description": "Код категории отслеживаемого объекта в рамках модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории отслеживаемого объекта"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории отслеживаемого объекта"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_response_201": {
+      "type": "object"
+    }, 
+    "models_get_response_200": {
+      "type": "object", 
+      "required": [
+        "models"
+      ], 
+      "properties": {
+        "models": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "tocs"
+            ], 
+            "description": "Сведения о модели", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор модели"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название модели"
+              }, 
+              "description": {
+                "type": "string"
+              }, 
+              "tocs": {
+                "type": "array", 
+                "items": {
+                  "type": "object", 
+                  "required": [
+                    "id", 
+                    "code", 
+                    "name", 
+                    "description"
+                  ], 
+                  "description": "Категория отслеживаемого объекта", 
+                  "properties": {
+                    "id": {
+                      "type": "integer", 
+                      "description": "Идентификатор категории отслеживаемого объекта"
+                    }, 
+                    "code": {
+                      "type": "string", 
+                      "description": "Код категории отслеживаемого объекта"
+                    }, 
+                    "name": {
+                      "type": "string", 
+                      "description": "Краткое название категории отслеживаемого объекта"
+                    }, 
+                    "description": {
+                      "type": "string", 
+                      "description": "Описание категории отслеживаемого объекта"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "tocs_get_response_200": {
+      "type": "object", 
+      "required": [
+        "tocs"
+      ], 
+      "properties": {
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "by_default", 
+              "models"
+            ], 
+            "description": "Сведения о категории", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор категории"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код категории"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории"
+              }, 
+              "by_default": {
+                "type": "boolean", 
+                "description": "Отображаемая категория умолчанию"
+              }, 
+              "company_id": {
+                "type": "integer", 
+                "description": "Идентификатор компании"
+              }, 
+              "models": {
+                "type": "array", 
+                "items": {
+                  "type": "object", 
+                  "required": [
+                    "id", 
+                    "code", 
+                    "name", 
+                    "description"
+                  ], 
+                  "description": "Сведения о модели", 
+                  "properties": {
+                    "id": {
+                      "type": "integer", 
+                      "description": "Идентификатор модели"
+                    }, 
+                    "code": {
+                      "type": "string", 
+                      "description": "Код модели"
+                    }, 
+                    "name": {
+                      "type": "string", 
+                      "description": "Краткое название модели"
+                    }, 
+                    "description": {
+                      "type": "string", 
+                      "description": "Описание модели"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }, 
