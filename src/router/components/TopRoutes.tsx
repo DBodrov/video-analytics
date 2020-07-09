@@ -1,4 +1,5 @@
 import { StatsPage } from '@/stats/StatsPage';
+import {EventsPage} from '@/events-page'
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
@@ -12,6 +13,9 @@ export const TopRoutes: React.FC = observer(props => {
       </Route>
       <Route {...ROUTES.stats}>
         <StatsPage />
+      </Route>
+      <Route {...ROUTES.events}>
+        <EventsPage />
       </Route>
     </Switch>
   );

@@ -1,3 +1,5 @@
+/**@jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { ALL_VALUES_ID } from '@/common/common-constants';
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Typography } from 'antd';
@@ -55,13 +57,13 @@ export const DropdownFilter: React.FC<Props> = observer(
 
     return (
       <Dropdown trigger={['click']} {...dropdownProps} overlay={menu}>
-        <Button className={className}>
+        <Button className={className} css={{display: 'flex', flexFlow: 'row nowrap'}}>
           <Text type="secondary" className="whitespace-pre">
             {title}
             {': '}
           </Text>
           <span className="mr-4">{currentTitle}</span>
-          <DownOutlined />
+          <DownOutlined css={{alignSelf: 'center', marginLeft: 'auto !important'}}/>
         </Button>
       </Dropdown>
     );
