@@ -9,7 +9,7 @@ import { Aggregate, AggregateList } from './styles';
 
 export const Aggregates = observer(() => {
   const [store] = useInject(StatsStore);
-    const { eventsCounts, percent: inOutPercent } = computeTodayInoutEvents(store);
+    const { eventsCounts, inOutPercent, fillUnfillPercent } = computeTodayInoutEvents(store);
 
   return (
     <AggregateList>
@@ -33,7 +33,7 @@ export const Aggregates = observer(() => {
       </Aggregate>
       <Aggregate>
         <div css={{ width: '50px', height: '50px', marginRight: '10px' }}>
-          <CircleChart percent={30} color="#E82727" />
+          <CircleChart percent={fillUnfillPercent} color="#E82727" />
         </div>
         <div
           css={{
@@ -43,7 +43,7 @@ export const Aggregates = observer(() => {
             alignItems: 'flex-start',
           }}
         >
-          <span css={{ fontSize: 16 }}>121 021/5 656</span>
+          <span css={{ fontSize: 16 }}>{eventsCounts.filled} / {eventsCounts.unfilled}</span>
           <span css={{ color: '#7F8FA4' }}>Пустых/ Заполненых</span>
         </div>
       </Aggregate>
