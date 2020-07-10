@@ -10,6 +10,8 @@ export * from './CompanyGetError';
 export * from './CompanyGetResponse200';
 export * from './CompanyGetResponse200Database';
 export * from './DetectorsGetResponse200';
+export * from './EventStatusesGetResponse200';
+export * from './EventStatusesGetResponse200EventStatuses';
 export * from './LoginPostError';
 export * from './LoginPostRequest';
 export * from './LoginPostResponse201';
