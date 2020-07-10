@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import { css, jsx } from '@emotion/core'
 import { useInject } from '@/store/use-inject';
 import { pick } from '@/common/utils/pick';
-import {StatsStore} from '@/stats/stats-store'
+import {EventsStore} from '../events-store';
 import styled from '@emotion/styled';
 import {
   DropdownFilter,
@@ -33,8 +33,8 @@ function pickProps(filterStore: DropdownFilterProps): DropdownFilterProps {
 }
 
 function EventsFiltersPanel() {
-  const [statsStore] = useInject(StatsStore);
-  const { location, sensor } = statsStore.filters;
+  const [store] = useInject(EventsStore);
+  const { location, sensor } = store.filters;
 
   return (
     <Panel>
