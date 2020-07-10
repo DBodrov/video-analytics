@@ -3,7 +3,7 @@ import { EventApi } from '@/backend/main/apis';
 import { RefsApi } from '@/backend/auth';
 import { COMPANY_ID } from '@/company/company-constants';
 import { singleton } from 'tsyringe';
-import {TEventsStatusesList} from './types';
+import {TEventsStatusesList, TCheckList} from './types';
 
 type ApiParams = Parameters<EventApi['apiVaCompaniesCompanyIdEventsInoutStatsGet']>[0];
 
@@ -21,5 +21,9 @@ export class EventsService {
 
   getLatest = () => fetchWithShowError(this.eventsApi.apiVaCompaniesCompanyIdEventsLatestGet(this.params));
 
-  getEventsStatuses = (): Promise<any> => fetchWithShowError(this.refsApi.apiAuthRefsEventStatusesGet());
+  getEventsStatuses = () => fetchWithShowError(this.refsApi.apiAuthRefsEventStatusesGet());
+
+  getAllChecks = (): Promise<any> => fetchWithShowError(this.refsApi.apiAuthRefsChecksGet());
+
+  getCheckCategories = () => fetchWithShowError(this.refsApi.apiAuthRefsCheckCategoriesGet());
 }
