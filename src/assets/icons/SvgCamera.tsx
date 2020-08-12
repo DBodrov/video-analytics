@@ -1,7 +1,6 @@
 import React from 'react';
-import { SvgFC } from './icons-types';
 
-export const SvgCamera: SvgFC = React.memo(props => {
+export function SvgCamera(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width={46} height={24} fill="none" {...props}>
       <path
@@ -12,4 +11,4 @@ export const SvgCamera: SvgFC = React.memo(props => {
       />
     </svg>
   );
-});
+}

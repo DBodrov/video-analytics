@@ -54,3 +54,5 @@ declare module '*.less' {
   const classes: { [key: string]: string | undefined };
   export default classes;
 }
+
+declare module '*.ttf'
