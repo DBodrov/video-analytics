@@ -20,6 +20,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+*.rest
 
 /dev-files
 /temp

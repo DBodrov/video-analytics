@@ -5,6 +5,7 @@
     "module": "esnext",
     "strict": true,
     "jsx": "react",
+    "skipLibCheck": true,
     "importHelpers": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -13,12 +14,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-    // "types": ["webpack-env"],
     "paths": {
       "@/*": ["src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dev-files"]
 }
