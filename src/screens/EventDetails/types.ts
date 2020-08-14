@@ -12,3 +12,6 @@ export type TDetectInfo = {
   endDetect: string | undefined;
   eventStatus: string | undefined;
 };
+
+export type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
+export type TEventsByHours = Record<number, TEventView[]>;

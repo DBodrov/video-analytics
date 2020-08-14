@@ -1,24 +1,22 @@
 import React from 'react';
-import {useTimelineClient} from '../use-timeline-client';
 import {HoursScale} from './HoursScale';
 import {ImagesLine} from './ImagesLine';
 import {EventCounters} from './EventCounters';
+import {TEventView} from '../types';
 import {TimelineTable} from './styles';
 
-export function Timeline() {
-  const {queryTimeline, allEventsByHours, eventsCount, incidentsCount} = useTimelineClient();
+type TimelineProps = {
+  allEvents?: Record<number, TEventView[]> | undefined;
+  eventsCount?: number[];
+  incidentsCount?: number[];
+};
 
-  React.useEffect(() => {
-    if (!allEventsByHours) {
-      queryTimeline();
-    }
-  }, [allEventsByHours, queryTimeline]);
-
+export function Timeline({allEvents, eventsCount, incidentsCount}: TimelineProps) {
   return (
     <div css={{padding: 20, width: '100%'}}>
       <TimelineTable>
         <HoursScale />
-        <ImagesLine events={allEventsByHours} />
+        <ImagesLine events={allEvents} />
         <EventCounters counts={eventsCount} />
         <EventCounters counts={incidentsCount} isIncidents />
       </TimelineTable>

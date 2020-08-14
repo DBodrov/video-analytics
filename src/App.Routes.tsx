@@ -1,7 +1,7 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { Events } from '@/screens/Events';
-import { EventDetails } from '@/screens/EventDetails';
+import {Switch, Route, Redirect} from 'react-router-dom';
+import {Events} from '@/screens/Events';
+import {EventDetails} from '@/screens/EventDetails';
 
 export function AppRoutes() {
   return (
@@ -10,7 +10,7 @@ export function AppRoutes() {
       <Route exact path="/events">
         <Events />
       </Route>
-      <Route path="/events/:id">
+      <Route path="/events/details">
         <EventDetails />
       </Route>
     </Switch>
