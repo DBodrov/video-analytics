@@ -44,7 +44,7 @@ export function EventsTable() {
               key={event.eventCode}
               value={event.eventCode}
               onClick={() => {
-                history.push(`/events/${event.eventCode}`);
+                history.push({pathname: '/events/details', state: {id: event.eventCode}});
               }}
             >
               <EventThumbnail thumbnail={event.thumbnail} />

@@ -9,7 +9,7 @@ export const EventContent = styled.div`
 
 export const EventBox = styled.div`
   display: grid;
-  grid-template: 1fr / 880px 1fr;
+  grid-template: minmax(500px, 1fr) / 880px 1fr;
   width: 100%;
   min-height: 500px;
 `;

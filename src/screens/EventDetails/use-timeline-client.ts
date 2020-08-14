@@ -2,9 +2,7 @@ import React from 'react';
 import {useFetch, TIMEZONE_OFFSET} from '@/utils';
 import {useAuth} from '@/context';
 import {EventsGetResponse200Events, EventsGetResponse200FromJSON} from '@/backend/main';
-
-type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
-export type TEventsByHours = Record<number, TEventView[]>;
+import {TEventView, TEventsByHours} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -64,51 +62,83 @@ const sumEventsByHours = (events: TEventsByHours, filterFn: (e: TEventView) => b
 };
 
 export function useTimelineClient() {
-  const [{status, error, allEventsByHours, eventsCount, incidentsCount}, dispatch] = React.useReducer(
-    timelineReducer,
-    initState,
-  );
+  const [
+    {status, error, timeline, allEventsByHours, eventsCount, incidentsCount},
+    dispatch,
+  ] = React.useReducer(timelineReducer, initState);
   const {accessToken, companyId} = useAuth();
   const fetchClient = useFetch();
 
-  const queryTimeline = React.useCallback(() => {
-    const headers = {Authorization: `Bearer ${accessToken}`};
-    let startTime = new Date();
-    startTime.setHours(0, 0, 0, 0);
-    const isoStart = startTime.toISOString();
-    let endTime = new Date();
-    endTime.setHours(23, 59, 59, 999);
-    const isoEnd = endTime.toISOString();
+  const queryTimeline = React.useCallback(
+    (timestamp?: string) => {
+      const headers = {Authorization: `Bearer ${accessToken}`};
+      let startTime = timestamp ? new Date(timestamp) : new Date();
+      startTime.setHours(0, 0, 0, 0);
+      const isoStart = startTime.toISOString();
+      let endTime = timestamp ? new Date(timestamp) : new Date();
+      endTime.setHours(23, 59, 59, 999);
+      const isoEnd = endTime.toISOString();
 
-    fetchClient(
-      `/api/va/companies/${companyId}/events/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc&start_time=${isoStart}&end_time=${isoEnd}`,
-      {
-        headers,
-      },
-    ).then(
-      response => {
-        const timelineData = EventsGetResponse200FromJSON(response).events;
-        const allEventsByHours = groupEventsByHours(timelineData);
-        // const incidentsByHours = groupEventsByHours(incidents);
-        // const eventsByHours = groupEventsByHours(events);
+      fetchClient(
+        `/api/va/companies/${companyId}/events/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc&start_time=${isoStart}&end_time=${isoEnd}`,
+        {
+          headers,
+        },
+      ).then(
+        response => {
+          const timelineData = EventsGetResponse200FromJSON(response).events;
+          const allEventsByHours = groupEventsByHours(timelineData);
+          dispatch({
+            status: 'resolved',
+            timeline: timelineData,
+            allEventsByHours,
+            eventsCount: sumEventsByHours(allEventsByHours, e => !e.isIncident),
+            incidentsCount: sumEventsByHours(allEventsByHours, e => e.isIncident),
+          });
+          return response;
+        },
+        error => {
+          dispatch({status: 'rejected', error});
+          return error;
+        },
+      );
+    },
+    [accessToken, companyId, fetchClient],
+  );
 
-        // console.log(allEventsByHours);
-        // const imageContent = `data:image/gif;base64, ${eventData.image?.content}`;
-        // const trackBox = eventData.image?.trackBox;
-        dispatch({
-          status: 'resolved',
-          allEventsByHours,
-          eventsCount: sumEventsByHours(allEventsByHours, e => !e.isIncident),
-          incidentsCount: sumEventsByHours(allEventsByHours, e => e.isIncident),
-        });
-        return response;
-      },
-      error => {
-        dispatch({status: 'rejected', error});
-        return error;
-      },
-    );
-  }, [accessToken, companyId, fetchClient]);
+  const getFirstEvent = React.useCallback(() => {
+    if (timeline) {
+      return timeline[0]?.eventCode;
+    }
+  }, [timeline]);
+
+  const getLastEvent = React.useCallback(() => {
+    if (timeline) {
+      return timeline[timeline.length - 1]?.eventCode;
+    }
+  }, [timeline]);
+
+  const getPrevEventCode = React.useCallback(
+    (id: string) => {
+      if (timeline) {
+        const currentIndex = timeline.findIndex(e => e?.eventCode === id);
+        return currentIndex > 0 ? timeline[currentIndex - 1]?.eventCode : timeline[0]?.eventCode;
+      }
+    },
+    [timeline],
+  );
+
+  const getNextEventCode = React.useCallback(
+    (id: string) => {
+      if (timeline) {
+        const currentIndex = timeline.findIndex(e => e?.eventCode === id);
+        return currentIndex < timeline.length - 1
+          ? timeline[currentIndex + 1]?.eventCode
+          : timeline[timeline.length - 1]?.eventCode;
+      }
+    },
+    [timeline],
+  );
 
   return {
     isIdle: status === 'idle',
@@ -121,5 +151,9 @@ export function useTimelineClient() {
     allEventsByHours,
     eventsCount,
     incidentsCount,
+    getFirstEvent,
+    getLastEvent,
+    getPrevEventCode,
+    getNextEventCode,
   };
 }
