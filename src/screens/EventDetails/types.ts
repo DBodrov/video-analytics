@@ -1,17 +1,21 @@
-import {EventGetResponse200, EventsGetResponse200ImageTrackBox} from '@/backend/main';
+import {EventGetResponse200Event, EventsGetResponse200ImageTrackBox} from '@/backend/main';
+import {TEventView} from '@/context/Events';
 
-export type TEvent = EventGetResponse200['event'];
-export type TImageTrackBox = EventsGetResponse200ImageTrackBox | undefined;
+export type TEvent = EventGetResponse200Event;
+export type TImageTrackBox = EventsGetResponse200ImageTrackBox;
 export type TDetectInfo = {
-  sensor: string | undefined;
-  check: string | undefined;
-  checkCategory: string | undefined;
-  location: string | undefined;
-  object: string | undefined;
-  startDetect: string | undefined;
-  endDetect: string | undefined;
-  eventStatus: string | undefined;
+  sensor: string;
+  check: string;
+  checkCategory?: string;
+  location: string;
+  object: string;
+  startDetect?: string;
+  endDetect?: string;
+  eventStatus?: string;
 };
 
-export type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
+export type TEventType = 'events' | 'incidents';
+
+//export type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
 export type TEventsByHours = Record<number, TEventView[]>;
+export {TEventView};

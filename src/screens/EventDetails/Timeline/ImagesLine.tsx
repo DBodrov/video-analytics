@@ -1,6 +1,6 @@
 import React from 'react';
 import {OldCameraIcon} from '@/assets/icons';
-import {TEventsByHours} from '../use-timeline-client';
+import {TEventsByHours} from '../types';
 import {HeaderCell, ImageBox} from './styles';
 
 type TImageLineProps = {events?: TEventsByHours};

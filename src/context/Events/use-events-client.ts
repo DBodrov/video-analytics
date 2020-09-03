@@ -1,8 +1,8 @@
-import {useReducer, useCallback} from 'react';
+import React, {useReducer, useCallback} from 'react';
 import {EventsGetResponse200FromJSON} from '@/backend/main';
 import {useAuth, useCompany, useRefs} from '@/context';
 import {useFetch, isEmptyString} from '@/utils';
-import {TEventsData, TEvents, TEventsQuery} from './types';
+import {TEventsData, TEvents, TEventsQuery, TEventView} from './types';
 
 type TEventsState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -31,20 +31,26 @@ export function useEventsClient() {
   const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
 
   const createEventsView = useCallback(
-    (events: TEvents) => {
-      return events?.map(event => {
-        const checkData = getCheckById(event.checkId);
-        return {
-          eventCode: event.eventCode,
-          timestamp: event.eventTimestamp,
-          locationName: getLocationById(event.locationId)?.name,
-          sensorName: getSensorById(event.sensorId)?.name,
-          thumbnail: event.thumbnail?.content ? `data:image/gif;base64, ${event?.thumbnail.content}` : 'N/A',
-          check: checkData?.name,
-          checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
-          eventStatus: getEventStatusById(event?.status?.currentId)?.name,
-        };
-      });
+    (events: TEvents): TEventView[] | undefined => {
+      if (events) {
+        return events.map(event => {
+          const checkData = getCheckById(event.checkId);
+          return {
+            eventCode: event.eventCode,
+            timestamp: event.eventTimestamp,
+            locationName: getLocationById(event.locationId)?.name ?? '',
+            sensorName: getSensorById(event.sensorId)?.name ?? '',
+            thumbnail: event.thumbnail?.content
+              ? `data:image/gif;base64, ${event?.thumbnail.content}`
+              : 'N/A',
+            check: checkData?.name,
+            checkCategory: getCheckCategoryById(checkData?.categoryId)?.name,
+            eventStatus: getEventStatusById(event?.status?.currentId)?.name,
+            isIncident: event.incident,
+          };
+        });
+      }
+      return undefined;
     },
     [getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById],
   );
@@ -85,18 +91,24 @@ export function useEventsClient() {
 
   const getEventByCode = useCallback(
     (eventCode: string) => {
-      return createEventsView(events)?.find(event => {
-        return event.eventCode === eventCode;
-      });
+      if (events) {
+        return createEventsView(events)?.find(event => {
+          return event.eventCode === eventCode;
+        });
+      }
     },
     [createEventsView, events],
   );
+
+  const eventsView = React.useMemo(() => {
+    return events ? createEventsView(events) : [];
+  }, [createEventsView, events]);
 
   return {
     queryEvents,
     events,
     error,
-    eventsView: createEventsView(events),
+    eventsView,
     getEventByCode,
 
     isIdle: status === 'idle',

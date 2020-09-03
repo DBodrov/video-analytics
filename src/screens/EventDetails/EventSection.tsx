@@ -6,7 +6,7 @@ import {EventBox, RectSwitch} from './styles';
 import {TDetectInfo} from './types';
 
 type TEventSectionProps = {
-  detectInfo: TDetectInfo | undefined;
+  detectInfo?: TDetectInfo;
   imageContent?: string;
   boxRect: {
     top: number;

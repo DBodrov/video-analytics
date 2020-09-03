@@ -38,22 +38,28 @@ export function EventsTable() {
   if (isSuccess) {
     return (
       <List>
-        {eventsView?.map(event => {
-          return (
-            <Event
-              key={event.eventCode}
-              value={event.eventCode}
-              onClick={() => {
-                history.push({pathname: '/events/details', state: {id: event.eventCode}});
-              }}
-            >
-              <EventThumbnail thumbnail={event.thumbnail} />
-              <EventInfo {...event} />
-              <EventDetection timeStamp={event.timestamp} />
-              <EventStatus eventStatus={event.eventStatus} />
-            </Event>
-          );
-        })}
+        {eventsView &&
+          eventsView.map(event => {
+            return (
+              <Event
+                key={event!.eventCode}
+                value={event!.eventCode}
+                onClick={() => {
+                  history.push({pathname: '/events/details', state: {id: event!.eventCode}});
+                }}
+              >
+                <EventThumbnail thumbnail={event!.thumbnail} />
+                <EventInfo
+                  check={event?.check}
+                  checkCategory={event?.checkCategory}
+                  locationName={event?.locationName}
+                  sensorName={event?.sensorName}
+                />
+                <EventDetection timeStamp={event!.timestamp} />
+                <EventStatus eventStatus={event!.eventStatus} />
+              </Event>
+            );
+          })}
       </List>
     );
   }

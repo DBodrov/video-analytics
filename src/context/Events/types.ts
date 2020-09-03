@@ -4,18 +4,19 @@ export type TEventsData = EventsGetResponse200;
 export type TEvents = EventsGetResponse200['events'] | undefined;
 export type TEvent = EventsGetResponse200Events;
 export type TEventView = {
-  locationName: string | undefined;
-  sensorName: string | undefined;
+  locationName: string;
+  sensorName: string;
   thumbnail: string;
-  check: string | undefined;
-  checkCategory: string | undefined;
-  eventStatus: string | undefined;
-  eventCode: string | undefined;
-  timestamp: string | undefined;
+  check?: string;
+  checkCategory?: string;
+  eventStatus?: string;
+  eventCode: string;
+  timestamp: string;
+  isIncident?: boolean;
 };
 
 export type TEventsContext = {
-  eventsView?: TEventView[];
+  eventsView?: Partial<TEventView[]>;
   setQueryParams: (queryParams: TEventsQuery | ((args: TEventsQuery) => TEventsQuery)) => void;
   setFiltersState: (filterState: TFiltersState | ((args: TFiltersState) => TFiltersState)) => void;
   getEventByCode: (eventCode: string) => TEventView | undefined;

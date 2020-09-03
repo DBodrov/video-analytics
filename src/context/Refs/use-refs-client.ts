@@ -64,8 +64,8 @@ export function useRefsClient() {
   );
 
   const getCheckCategoryById = useCallback(
-    (id: number) => {
-      return checkCategories?.find(c => c.id === id);
+    (id?: number) => {
+      return Boolean(id) ? checkCategories?.find(c => c.id === id) : undefined;
     },
     [checkCategories],
   );
