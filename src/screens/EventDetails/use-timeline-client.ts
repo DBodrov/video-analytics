@@ -1,8 +1,9 @@
 import React from 'react';
 import {useFetch, TIMEZONE_OFFSET} from '@/utils';
-import {useAuth} from '@/context';
+import {useAuth, useCompany, useRefs} from '@/context';
 import {EventsGetResponse200Events, EventsGetResponse200FromJSON} from '@/backend/main';
 import {TEventView, TEventsByHours} from './types';
+import {TEvents} from '@/context/Events';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -30,28 +31,13 @@ const initState: State = {
 };
 
 const createEmptyView = () => {
-  let view: Record<string, any> = {};
+  let view: Record<string, TEventView[]> = {};
   let i = 0;
   while (i <= 23) {
     view[String(i)] = [];
     i++;
   }
   return view;
-};
-
-const groupEventsByHours = (eventsList: EventsGetResponse200Events[]) => {
-  const view = createEmptyView();
-  return eventsList.reduce((acc, current, i) => {
-    const hour = new Date(current.eventTimestamp).getHours();
-    const {eventCode, thumbnail, incident} = current;
-    const eventView = {
-      thumbnail: `data:image/${thumbnail?.compression};base64, ${thumbnail?.content}`,
-      eventCode,
-      isIncident: incident,
-    };
-    acc[hour] = [...acc[hour], {...eventView}];
-    return acc;
-  }, view);
 };
 
 const sumEventsByHours = (events: TEventsByHours, filterFn: (e: TEventView) => boolean) => {
@@ -67,6 +53,43 @@ export function useTimelineClient() {
     dispatch,
   ] = React.useReducer(timelineReducer, initState);
   const {accessToken, companyId} = useAuth();
+  const {getLocationById, getSensorById} = useCompany();
+  const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
+  //FIXME: Double
+  const groupEventsByHours = React.useCallback(
+    (eventsList: TEvents) => {
+      const view = createEmptyView();
+      return eventsList?.reduce((acc, current, i) => {
+        const hour = new Date(current.eventTimestamp).getHours();
+        const {
+          eventCode,
+          thumbnail,
+          incident,
+          locationId,
+          checkId,
+          status,
+          sensorId,
+          eventTimestamp,
+        } = current;
+        const checkData = getCheckById(checkId);
+        const eventView: TEventView = {
+          thumbnail: `data:image/${thumbnail?.compression};base64, ${thumbnail?.content}`,
+          eventCode,
+          isIncident: incident ?? false,
+          locationName: getLocationById(locationId)?.name ?? '',
+          check: checkData?.name,
+          checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
+          eventStatus: getEventStatusById(status?.currentId)?.name,
+          sensorName: getSensorById(sensorId)?.name ?? '',
+          timestamp: eventTimestamp,
+        };
+        acc[hour] = [...acc[hour], {...eventView}];
+        return acc;
+      }, view);
+    },
+    [getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById],
+  );
+
   const fetchClient = useFetch();
 
   const queryTimeline = React.useCallback(
@@ -92,8 +115,9 @@ export function useTimelineClient() {
             status: 'resolved',
             timeline: timelineData,
             allEventsByHours,
-            eventsCount: sumEventsByHours(allEventsByHours, e => !e.isIncident),
-            incidentsCount: sumEventsByHours(allEventsByHours, e => e.isIncident),
+            eventsCount: allEventsByHours && sumEventsByHours(allEventsByHours, e => Boolean(!e.isIncident)),
+            incidentsCount:
+              allEventsByHours && sumEventsByHours(allEventsByHours, e => Boolean(e.isIncident)),
           });
           return response;
         },
@@ -103,39 +127,61 @@ export function useTimelineClient() {
         },
       );
     },
-    [accessToken, companyId, fetchClient],
+    [accessToken, companyId, fetchClient, groupEventsByHours],
   );
 
-  const getFirstEvent = React.useCallback(() => {
-    if (timeline) {
-      return timeline[0]?.eventCode;
-    }
-  }, [timeline]);
+  const getFirstEvent = React.useCallback(
+    (isIncident: boolean = false) => {
+      let eventsList: (EventsGetResponse200Events | undefined)[] = [];
+      if (timeline && isIncident) {
+        eventsList = timeline.filter(e => e?.incident);
+      } else if (timeline && !isIncident) {
+        eventsList = timeline.filter(e => !e?.incident);
+      }
+      return eventsList[0]?.eventCode;
+    },
+    [timeline],
+  );
 
-  const getLastEvent = React.useCallback(() => {
-    if (timeline) {
-      return timeline[timeline.length - 1]?.eventCode;
-    }
-  }, [timeline]);
+  const getLastEvent = React.useCallback(
+    (isIncident: boolean = false) => {
+      let eventsList: (EventsGetResponse200Events | undefined)[] = [];
+      if (timeline && isIncident) {
+        eventsList = timeline.filter(e => e?.incident);
+      } else if (timeline && !isIncident) {
+        eventsList = timeline.filter(e => !e?.incident);
+      }
+      return eventsList[eventsList.length - 1]?.eventCode;
+    },
+    [timeline],
+  );
 
   const getPrevEventCode = React.useCallback(
-    (id: string) => {
-      if (timeline) {
-        const currentIndex = timeline.findIndex(e => e?.eventCode === id);
-        return currentIndex > 0 ? timeline[currentIndex - 1]?.eventCode : timeline[0]?.eventCode;
+    (id: string, isIncident = false) => {
+      let eventsList: (EventsGetResponse200Events | undefined)[] = [];
+      if (timeline && isIncident) {
+        eventsList = timeline.filter(e => e?.incident);
+      } else if (timeline && !isIncident) {
+        eventsList = timeline.filter(e => !e?.incident);
       }
+      const currentIndex = eventsList.findIndex(e => e?.eventCode === id);
+      return currentIndex > 0 ? eventsList[currentIndex - 1]?.eventCode : eventsList[0]?.eventCode;
     },
     [timeline],
   );
 
   const getNextEventCode = React.useCallback(
-    (id: string) => {
-      if (timeline) {
-        const currentIndex = timeline.findIndex(e => e?.eventCode === id);
-        return currentIndex < timeline.length - 1
-          ? timeline[currentIndex + 1]?.eventCode
-          : timeline[timeline.length - 1]?.eventCode;
+    (id: string, isIncident: boolean = false) => {
+      let eventsList: (EventsGetResponse200Events | undefined)[] = [];
+      if (timeline && isIncident) {
+        eventsList = timeline.filter(e => e?.incident);
+      } else if (timeline && !isIncident) {
+        eventsList = timeline.filter(e => !e?.incident);
       }
+      const currentIndex = eventsList.findIndex(e => e?.eventCode === id);
+      return currentIndex < eventsList.length - 1
+        ? eventsList[currentIndex + 1]?.eventCode
+        : eventsList[eventsList.length - 1]?.eventCode;
     },
     [timeline],
   );
@@ -149,6 +195,7 @@ export function useTimelineClient() {
     queryTimeline,
     error,
     allEventsByHours,
+    timeline,
     eventsCount,
     incidentsCount,
     getFirstEvent,

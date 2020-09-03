@@ -15,8 +15,27 @@ export const HeaderCell = styled.div`
   align-items: center;
   border: 1px var(--color-border) solid;
   border-left: 0;
+  background-color: transparent;
   width: 100%;
   height: 100%;
+`;
+export const HeaderCellButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px var(--color-border) solid;
+  border-left: 0;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  &:active,
+  &:focus {
+    outline: 0;
+    background-color: #364357;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const TimelineTable = styled.div`

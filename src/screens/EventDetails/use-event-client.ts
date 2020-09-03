@@ -2,7 +2,7 @@ import React from 'react';
 import {EventGetResponse200EventFromJSON} from '@/backend/main';
 import {useAuth, useRefs, useCompany} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
-import {TEvent, TImageTrackBox} from './types';
+import {TEvent, TImageTrackBox, TDetectInfo} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -58,20 +58,21 @@ export function useEventClient() {
     height: (trackBox?.bottomY ?? 0) - (trackBox?.topY ?? 0),
   };
 
-  const createDetectInfo = React.useCallback(() => {
+  const createDetectInfo = React.useCallback((): TDetectInfo | undefined => {
     if (eventData) {
       const checkData = getCheckById(eventData?.checkId);
       return {
-        sensor: getSensorById(eventData?.sensorId)?.name,
-        check: checkData?.name,
+        sensor: getSensorById(eventData?.sensorId)?.name ?? '',
+        check: checkData?.name ?? '',
         checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
-        location: getLocationById(eventData.locationId)?.name,
+        location: getLocationById(eventData.locationId)?.name ?? '',
         object: eventData.trackedObject.name,
         startDetect: eventData.trackedObject.startTime,
         endDetect: eventData.trackedObject.endTime,
         eventStatus: getEventStatusById(eventData.status?.currentId)?.name,
       };
     }
+    return undefined;
   }, [eventData, getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById]);
 
   return {

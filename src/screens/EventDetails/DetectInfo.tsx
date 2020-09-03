@@ -21,7 +21,7 @@ const InfoItem = styled.li`
 `;
 
 const Caption = styled.span`
-  font-size: 14;
+  font-size: 14px;
   color: var(--color-text-secondary);
   min-width: 120px;
 `;
@@ -30,7 +30,7 @@ const Value = styled(Caption)`
   padding-left: 8px;
 `;
 type Props = {
-  info: TDetectInfo | undefined;
+  info?: TDetectInfo;
 };
 
 export function DetectInfo({info}: Props) {

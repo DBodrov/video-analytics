@@ -1,13 +1,27 @@
 import React from 'react';
 import {CircleWarningIcon, FlagIcon} from '@/assets/icons';
-import {HeaderCell} from './styles';
+import {HeaderCellButton} from './styles';
 
-type TCounterProps = {counts?: number[]; isIncidents?: boolean};
+type TCounterProps = {
+  counts?: number[];
+  isIncidents?: boolean;
+  onFilter: (showIncidents: boolean) => void;
+  isActive: boolean;
+};
 
-export function EventCounters({counts, isIncidents = false}: TCounterProps) {
+export function EventCounters({counts, isIncidents = false, isActive, onFilter}: TCounterProps) {
+  const handleSetEventsType = React.useCallback(() => {
+    onFilter(isIncidents);
+  }, [isIncidents, onFilter]);
+
   return (
     <>
-      <HeaderCell>{isIncidents ? <CircleWarningIcon /> : <FlagIcon />}</HeaderCell>
+      <HeaderCellButton
+        onClick={handleSetEventsType}
+        css={{backgroundColor: isActive ? '#364357' : 'transparent'}}
+      >
+        {isIncidents ? <CircleWarningIcon /> : <FlagIcon />}
+      </HeaderCellButton>
       {counts &&
         counts.map((h, idx) => {
           return (
