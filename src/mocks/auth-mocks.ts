@@ -39,7 +39,7 @@ export const refreshTokenMock: any = {
   access_token: {
     value:
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTA4NjcyNDMsIm5iZiI6MTU5MDg2NzI0MywianRpIjoiNzE1MzIwZGQtYTgwNy00NGNhLTliNWEtZDdlZDkzN2MwNjg3IiwiZXhwIjoxNTkwODY4MTQzLCJpZGVudGl0eSI6eyJ1c2VyX2lkIjoyLCJjb21wYW55X2lkIjoxfSwiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.cPduVTNaqEoH7T78YwqmuNQJLxJDsHNi3kfwFhNbgEU',
-    expired_at: '2020-05-30 19:49:03',
+    expired_at: '2021-05-30 19:49:03',
   },
 };
 

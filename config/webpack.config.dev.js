@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const utils = require('../scripts/loadersTests');
 const {resolveApp} = require('../scripts/paths');
+const DotEnv = require('dotenv-webpack');
 const commonConfig = require('./webpack.config.common');
 
 module.exports = webpackMerge.merge(commonConfig, {
@@ -57,6 +58,7 @@ module.exports = webpackMerge.merge(commonConfig, {
       hash: true,
       chunksSortMode: 'none',
     }),
+    new DotEnv()
   ],
 
   devServer: {
