@@ -4,11 +4,14 @@ import {Global} from '@emotion/core';
 import {AppProviders} from '@/context';
 import {App} from './App';
 import {globalStyles} from './styles/globalStyles';
+import {devServer} from './mocks/dev-server';
 
-async function run() {
+function run() {
   if (process.env.NODE_ENV === 'development' && process.env.USE_API_MOCKS === 'true') {
-    await import('@/backend/init-mocks');
+    devServer.start();
   }
+
+  console.log(process.env.USE_API_MOCKS);
 
   render(
     <React.StrictMode>
