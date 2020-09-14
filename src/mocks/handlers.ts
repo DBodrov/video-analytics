@@ -47,13 +47,14 @@ const eventsHandlers = [
 ];
 
 const eventDetailsHandlers = [
+  rest.get('/api/va/companies/:companyId/events/timeline', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(timelineMock));
+  }),
+
   rest.get('/api/va/companies/:companyId/events/:eventid', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(eventMock));
   }),
 
-  rest.get('/api/va/companies/:companyId/events/timeline', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(timelineMock));
-  }),
 ];
 
 export const handlers = [
