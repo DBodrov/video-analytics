@@ -5,7 +5,7 @@ export function EventThumbnail({ thumbnail }: { thumbnail: string }) {
     <div css={{ width: 82, height: 52 }}>
       <img
         src={thumbnail}
-        css={{ maxWidth: '100%', height: 'auto', borderRadius: 4 }}
+        css={{ width: '100%', height: '100%', borderRadius: 4 }}
         alt="Event thumbnail"
       />
     </div>

@@ -1,83 +1,13 @@
 import React, {useCallback} from 'react';
-import styled from '@emotion/styled';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
-import {SelectFilter, SwitchFilter} from '@/components';
-
-const Panel = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: var(--color-form);
-  width: 100%;
-  height: 100%;
-  padding: 0 30px;
-`;
-
-const createFilterList = (data?: any[]) => {
-  const list = data?.filter(item => item.id > 0).map(item => ({id: item.id, title: item.name}));
-  return list;
-};
-
-const periodsList = [
-  {
-    id: -1,
-    title: '1 день',
-    filterDate() {
-      return {startTime: undefined, endTime: undefined};
-    },
-  },
-  {
-    id: 1,
-    title: '3 дня',
-    filterDate() {
-      const now = new Date();
-      const endTime = now.toISOString();
-      const startDate = new Date();
-      const startTimeVal = startDate.setDate(startDate.getDate() - 3);
-      const startTime = new Date(startTimeVal).toISOString();
-      return {
-        startTime,
-        endTime,
-      };
-    },
-  },
-  {
-    id: 2,
-    title: '1 неделя',
-    filterDate() {
-      const now = new Date();
-      const endTime = now.toISOString();
-      const startDate = new Date();
-      const startTimeVal = startDate.setDate(startDate.getDate() - 7);
-      const startTime = new Date(startTimeVal).toISOString();
-      return {
-        startTime,
-        endTime,
-      };
-    },
-  },
-  {
-    id: 3,
-    title: '1 месяц',
-    filterDate() {
-      const now = new Date();
-      const endTime = now.toISOString();
-      const startDate = new Date();
-      const startTimeVal = startDate.setMonth(startDate.getMonth() - 1);
-      const startTime = new Date(startTimeVal).toISOString();
-      return {
-        startTime,
-        endTime,
-      };
-    },
-  },
-];
+import {SelectFilter, SwitchFilter, MultiSelectFilter} from '@/components';
+import {periodsList, createFilterList, createCheckAndCategoriesList} from './utils';
+import {Panel} from './styles';
 
 export function EventsFilters() {
   const {setQueryParams, filtersState, setFiltersState} = useEvents();
   const {locations, sensors} = useCompany();
-  const {checkCategories} = useRefs();
+  const {checkCategories, checks} = useRefs();
 
   const locationsOptions = createFilterList(locations) ?? [];
   locationsOptions.unshift({id: -1, title: 'Все'});
@@ -85,6 +15,8 @@ export function EventsFilters() {
   sensorsOptions.unshift({id: -1, title: 'Все'});
   const checkCategoriesOptions = createFilterList(checkCategories) ?? [];
   checkCategoriesOptions?.unshift({id: -1, title: 'Любой'});
+
+  const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
 
   const setLocationFilter = useCallback(
     (id: number) => {
@@ -102,13 +34,13 @@ export function EventsFilters() {
     [setFiltersState, setQueryParams],
   );
 
-  // const setCheckCategoryFilter = useCallback(
-  //   (id: number) => {
-  //     /**@ts-ignore */
-  //     setQueryParams((q: TEventsQuery): TEventsQuery => ({ ...q, categoryIds: id }));
-  //   },
-  //   [setQueryParams],
-  // );
+  const setCheckFilter = useCallback(
+    (ids: number[] = []) => {
+
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, checkIds: ids}));
+    },
+    [setQueryParams],
+  );
 
   const setIncidentFilter = useCallback(
     (on: boolean) => {
@@ -159,6 +91,12 @@ export function EventsFilters() {
         prefix="Период"
         css={{height: 36, flexBasis: 250, marginRight: 10}}
         defaultValue={filtersState.periodFilter}
+      />
+      <MultiSelectFilter
+        onSelect={setCheckFilter}
+        options={checkAndCategoriesOptions}
+        prefix="Правила"
+        css={{height: 36, flexBasis: 300, marginRight: 10}}
       />
     </Panel>
   );
