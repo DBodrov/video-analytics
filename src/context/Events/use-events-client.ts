@@ -129,7 +129,7 @@ function encodeQueryData(data: any) {
   return query.join('&');
 }
 
-function createQueryToJSON(query: Record<string, unknown>) {
+function createQueryToJSON(query: Record<string, any>) {
   const queryParameters: Record<string, any> = {};
 
   if (query.page !== undefined) {
@@ -162,6 +162,10 @@ function createQueryToJSON(query: Record<string, unknown>) {
 
   if (query.endTime !== undefined) {
     queryParameters['end_time'] = query.endTime;
+  }
+
+  if (query.checkIds.length > 0) {
+    queryParameters['check_ids'] = query.checkIds.join(',');
   }
   return queryParameters;
 }

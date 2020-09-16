@@ -25,6 +25,7 @@ export function EventsProvider(props: any) {
     onlyIncidents: false,
     page: undefined,
     pageSize: undefined,
+    checkIds: [],
   });
 
   const [filtersState, setFiltersState] = useState({

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const WorkLayout = styled.div`
   display: grid;
-  grid-template: 4em / 75% 25% 1fr;
+  grid-template: 60px 1fr / 1fr 310px;
   width: 100%;
   height: 100%;
 `;

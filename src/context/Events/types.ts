@@ -39,6 +39,7 @@ export type TEventsQuery = {
   startTime?: string;
   endTime?: string;
   onlyIncidents?: boolean;
+  checkIds?: number[];
 };
 
 export type TFiltersState = {
