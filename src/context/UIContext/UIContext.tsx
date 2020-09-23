@@ -6,6 +6,7 @@ export const UIContext = createContext(null);
 const routeMap = new Map([
   ['/', 'Дашборд'],
   ['/events', 'События'],
+  ['/sensors', 'Все камеры'],
 ]);
 
 export function UIProvider(props: any) {

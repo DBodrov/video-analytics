@@ -4,8 +4,8 @@ import {
   CompanyLocationsGetResponse200,
   LocationsGetResponse200FromJSON,
   CompanySensorsGetResponse200,
-  SensorsGetResponse200FromJSON,
-  RefIncidentsGetResponse200,
+  CompanySensorsGetResponse200FromJSON,
+  IncidentsGetResponse200Incidents,
 } from '@/backend/main';
 import {useAuth} from '../Auth';
 
@@ -13,7 +13,7 @@ type TCompanyState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   locations?: CompanyLocationsGetResponse200['locations'];
   sensors?: CompanySensorsGetResponse200['sensors'];
-  incidents?: RefIncidentsGetResponse200['incidents'];
+  incidents?: IncidentsGetResponse200Incidents;
   data?: any;
   error?: any;
 };
@@ -48,7 +48,7 @@ export function useCompanyClient() {
       response => {
         const [locationsData, sensorsData] = response;
         const locations = LocationsGetResponse200FromJSON(locationsData).locations;
-        const sensors = SensorsGetResponse200FromJSON(sensorsData).sensors;
+        const sensors = CompanySensorsGetResponse200FromJSON(sensorsData).sensors;
         // const incidents = RefIncidentsGetResponse200FromJSON(incidentsData).incidents;
         setCompanyState({status: 'resolved', locations, sensors});
       },
