@@ -29,6 +29,9 @@ export function NavMenu() {
           <li>Транспортные средства</li>
           <li>Контроль</li>
         </ul>
+        <MenuLink exact to="/sensors" activeClassName="isActive">
+          ПОДКЛЮЧЕНИЕ КАМЕР
+        </MenuLink>
       </NavList>
     </div>
   );

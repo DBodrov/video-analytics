@@ -2,6 +2,7 @@ import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {Events} from '@/screens/Events';
 import {EventDetails} from '@/screens/EventDetails';
+import {Sensors} from '@/screens/Sensors';
 
 export function AppRoutes() {
   return (
@@ -12,6 +13,9 @@ export function AppRoutes() {
       </Route>
       <Route path="/events/details">
         <EventDetails />
+      </Route>
+      <Route path="/sensors">
+        <Sensors />
       </Route>
     </Switch>
   );

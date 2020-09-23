@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "0.10.dev67", 
+    "version": "0.12.dev74", 
     "title": "auth", 
     "description": "powered by Flasgger", 
     "termsOfService": "/tos"
@@ -75,6 +75,29 @@
         ]
       }
     }, 
+    "/api/auth/refs/thumbnails": {
+      "get": {
+        "summary": "# Сведения о форматах превью изображений", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о форматах превью изображений", 
+            "schema": {
+              "$ref": "#/definitions/thumbnails_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
     "/api/auth/refs/detectors": {
       "get": {
         "summary": "# Справочные сведения о детекторах", 
@@ -84,6 +107,29 @@
             "description": "Справочные сведения о детекторах", 
             "schema": {
               "$ref": "#/definitions/detectors_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/incidents": {
+      "get": {
+        "summary": "# Справочные сведения о детекторах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения об инцидентах", 
+            "schema": {
+              "$ref": "#/definitions/incidents_get_response_200"
             }
           }
         }, 
@@ -168,27 +214,6 @@
       }
     }, 
     "/api/auth/refs/models": {
-      "get": {
-        "summary": "# Сведения о моделях расчета", 
-        "description": "# ", 
-        "responses": {
-          "200": {
-            "description": "Сведения о моделях расчета", 
-            "schema": {
-              "$ref": "#/definitions/models_get_response_200"
-            }
-          }
-        }, 
-        "tags": [
-          "Refs"
-        ], 
-        "consumes": [
-          "application/json"
-        ], 
-        "produces": [
-          "application/json"
-        ]
-      }, 
       "post": {
         "summary": "# Сохранение модели и категорий отслеживаемых объектов", 
         "description": "# ", 
@@ -211,6 +236,27 @@
             }
           }
         ], 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }, 
+      "get": {
+        "summary": "# Сведения о моделях расчета", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о моделях расчета", 
+            "schema": {
+              "$ref": "#/definitions/models_get_response_200"
+            }
+          }
+        }, 
         "tags": [
           "Refs"
         ], 
@@ -751,6 +797,55 @@
         }
       }
     }, 
+    "thumbnails_get_response_200": {
+      "type": "object", 
+      "required": [
+        "thumbnails"
+      ], 
+      "properties": {
+        "thumbnails": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "width", 
+              "height"
+            ], 
+            "description": "Сведения о форматах", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор формата"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код формата"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название формата"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание формата"
+              }, 
+              "width": {
+                "type": "integer", 
+                "description": "Максимальная ширина изображения"
+              }, 
+              "height": {
+                "type": "integer", 
+                "description": "Максимальная высота изображения"
+              }
+            }
+          }
+        }
+      }
+    }, 
     "detectors_get_response_200": {
       "type": "object", 
       "required": [
@@ -776,6 +871,62 @@
         "description": {
           "type": "string", 
           "description": "Описание детектора"
+        }
+      }
+    }, 
+    "incidents_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description", 
+        "parameters", 
+        "checks"
+      ], 
+      "description": "Описание инцидента", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор инцидента"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код инцидента"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название инцидента"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание инцидента"
+        }, 
+        "parameters": {
+          "type": "object", 
+          "description": "Параметры инцидента"
+        }, 
+        "checks": {
+          "type": "array", 
+          "description": "Перечень проверок, участвующих в инциденте", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "parameters"
+            ], 
+            "description": "Описание проверки", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор проверки"
+              }, 
+              "parameters": {
+                "type": "object", 
+                "description": "Параметры проверки"
+              }
+            }
+          }
         }
       }
     }, 
@@ -851,6 +1002,67 @@
         }
       }
     }, 
+    "models_request": {
+      "type": "object", 
+      "required": [
+        "model", 
+        "tocs"
+      ], 
+      "properties": {
+        "model": {
+          "type": "object", 
+          "required": [
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Сведения о модели", 
+          "properties": {
+            "code": {
+              "type": "string", 
+              "description": "Код модели"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название модели"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание модели"
+            }
+          }
+        }, 
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Категория отслеживаемого объекта", 
+            "properties": {
+              "code": {
+                "type": "string", 
+                "description": "Код категории отслеживаемого объекта в рамках модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории отслеживаемого объекта"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории отслеживаемого объекта"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_response_201": {
+      "type": "object"
+    }, 
     "models_get_response_200": {
       "type": "object", 
       "required": [
@@ -920,67 +1132,6 @@
           }
         }
       }
-    }, 
-    "models_request": {
-      "type": "object", 
-      "required": [
-        "model", 
-        "tocs"
-      ], 
-      "properties": {
-        "model": {
-          "type": "object", 
-          "required": [
-            "code", 
-            "name", 
-            "description"
-          ], 
-          "description": "Сведения о модели", 
-          "properties": {
-            "code": {
-              "type": "string", 
-              "description": "Код модели"
-            }, 
-            "name": {
-              "type": "string", 
-              "description": "Краткое название модели"
-            }, 
-            "description": {
-              "type": "string", 
-              "description": "Описание модели"
-            }
-          }
-        }, 
-        "tocs": {
-          "type": "array", 
-          "items": {
-            "type": "object", 
-            "required": [
-              "code", 
-              "name", 
-              "description"
-            ], 
-            "description": "Категория отслеживаемого объекта", 
-            "properties": {
-              "code": {
-                "type": "string", 
-                "description": "Код категории отслеживаемого объекта в рамках модели"
-              }, 
-              "name": {
-                "type": "string", 
-                "description": "Краткое название категории отслеживаемого объекта"
-              }, 
-              "description": {
-                "type": "string", 
-                "description": "Описание категории отслеживаемого объекта"
-              }
-            }
-          }
-        }
-      }
-    }, 
-    "models_response_201": {
-      "type": "object"
     }, 
     "tocs_get_response_200": {
       "type": "object", 
