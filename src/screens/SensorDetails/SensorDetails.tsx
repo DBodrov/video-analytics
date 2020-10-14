@@ -12,7 +12,7 @@ export function SensorDeatils() {
   const {companyId} = useAuth();
   const {id} = useParams<{id: string}>();
   const {getEventsViewBySensorId, isError, isIdle, isLoading, isSuccess, error} = useEvents();
-  const videoUrl = `/api/live/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`
+  const videoUrl = `/api/live/company/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`
 
   React.useEffect(() => {
     if (!events && Number(id)) {
