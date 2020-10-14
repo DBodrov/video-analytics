@@ -80,7 +80,7 @@ export function useTimelineClient() {
           check: checkData?.name,
           checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
           eventStatus: getEventStatusById(status?.currentId)?.name,
-          sensorName: getSensorById(sensorId)?.name ?? '',
+          sensorName: getSensorById(sensorId)?.ref?.name ?? '',
           timestamp: eventTimestamp,
         };
         acc[hour] = [...acc[hour], {...eventView}];

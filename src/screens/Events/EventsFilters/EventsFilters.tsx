@@ -11,7 +11,8 @@ export function EventsFilters() {
 
   const locationsOptions = createFilterList(locations) ?? [];
   locationsOptions.unshift({id: -1, title: 'Все'});
-  const sensorsOptions = createFilterList(sensors) ?? [];
+  const sensorsList = sensors?.map(s => s.ref);
+  const sensorsOptions = createFilterList(sensorsList) ?? [];
   sensorsOptions.unshift({id: -1, title: 'Все'});
   const checkCategoriesOptions = createFilterList(checkCategories) ?? [];
   checkCategoriesOptions?.unshift({id: -1, title: 'Любой'});

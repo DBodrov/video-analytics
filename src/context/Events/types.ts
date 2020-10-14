@@ -16,10 +16,11 @@ export type TEventView = {
 };
 
 export type TEventsContext = {
-  eventsView?: Partial<TEventView[]>;
+  eventsView?: TEventView[];
   setQueryParams: (queryParams: TEventsQuery | ((args: TEventsQuery) => TEventsQuery)) => void;
   setFiltersState: (filterState: TFiltersState | ((args: TFiltersState) => TFiltersState)) => void;
   getEventByCode: (eventCode: string) => TEventView | undefined;
+  getEventsViewBySensorId: (sensorId: number) => TEventView[] | undefined;
   filtersState: TFiltersState;
   error?: Error;
   isIdle: boolean;

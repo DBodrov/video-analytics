@@ -62,7 +62,7 @@ export function useEventClient() {
     if (eventData) {
       const checkData = getCheckById(eventData?.checkId);
       return {
-        sensor: getSensorById(eventData?.sensorId)?.name ?? '',
+        sensor: getSensorById(eventData?.sensorId)?.ref?.name ?? '',
         check: checkData?.name ?? '',
         checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
         location: getLocationById(eventData.locationId)?.name ?? '',

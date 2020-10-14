@@ -1,12 +1,11 @@
 import {
-  CompanyLocationsGetResponse200,
   CompanySensorsGetResponse200,
   CompanySensorsGetResponse200Sensors,
-  LocationsGetResponse200Locations,
+  CompanyLocationsGetResponse200Locations,
 } from '@/backend/main';
 
-export type TLocations = CompanyLocationsGetResponse200['locations'];
-export type TLocation = LocationsGetResponse200Locations;
+export type TLocation = CompanyLocationsGetResponse200Locations;
+export type TLocations = TLocation[];
 
 export type TSensors = CompanySensorsGetResponse200['sensors'];
 export type TSensor = CompanySensorsGetResponse200Sensors;
