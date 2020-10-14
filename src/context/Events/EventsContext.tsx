@@ -14,6 +14,7 @@ export function EventsProvider(props: any) {
     isLoading,
     isSuccess,
     getEventByCode,
+    getEventsViewBySensorId,
   } = useEventsClient();
   const [queryParams, setQueryParams] = useState<TEventsQuery>({
     startTime: undefined, //'2020-07-13T00:00:00',
@@ -51,8 +52,19 @@ export function EventsProvider(props: any) {
       setFiltersState,
       filtersState,
       getEventByCode,
+      getEventsViewBySensorId,
     }),
-    [error, eventsView, filtersState, getEventByCode, isError, isIdle, isLoading, isSuccess],
+    [
+      error,
+      eventsView,
+      filtersState,
+      getEventByCode,
+      getEventsViewBySensorId,
+      isError,
+      isIdle,
+      isLoading,
+      isSuccess,
+    ],
   );
   return <EventsContext.Provider value={ctxValue} {...props} />;
 }

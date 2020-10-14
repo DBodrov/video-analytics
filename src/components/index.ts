@@ -5,3 +5,4 @@ export * from './CircleChart';
 export * from './List';
 export * from './MultiSelectFilter';
 export * from './LinkButton';
+export * from './BoxToggle';

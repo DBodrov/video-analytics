@@ -13,26 +13,65 @@ const InfoBlock = styled.div`
   padding: 10px 28px;
 `;
 
-type Props = {sensor: TSensor};
+const EventsCounts = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 55px;
+  border-top: 1px var(--color-border) solid;
+  margin-top: 10px;
+  padding: 10px 0;
+`;
 
-export function SensorInfo({sensor}: Props) {
+type Props = {sensor: TSensor, incidentsCount: number, eventsCount: number};
+
+export function SensorInfo({sensor, eventsCount, incidentsCount}: Props) {
   const {getLocationById} = useCompany();
+
   const readLocation = (locationId?: number) => {
     if (locationId) {
-     return getLocationById(locationId)?.name;
+      return getLocationById(locationId)?.name;
     }
     return '';
-  }
+  };
 
   return (
     <InfoBlock>
-      <Span>{sensor?.name}</Span>
+      <Span css={{fontWeight: 600}}>{sensor?.ref?.name}</Span>
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-        URL: <Span css={{fontSize: 12}}>{sensor?.url}</Span>
+        URL: <Span css={{fontSize: 12}}>{sensor?.ref?.url}</Span>
       </Span>
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-        Расположение: <Span css={{fontSize: 12}}>{readLocation(sensor?.locationId)}</Span>
+        Расположение: <Span css={{fontSize: 12}}>{readLocation(sensor?.ref?.locationId)}</Span>
       </Span>
+      <EventsCounts>
+        <div
+          css={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+          }}
+        >
+          <Span css={{fontWeight: 600, fontSize: 14}}>Инцидентов за сутки</Span>
+          <Span css={{fontWeight: 600, fontSize: 14, color: 'var(--color-mts)'}}>{incidentsCount ? incidentsCount : '-'}</Span>
+        </div>
+        <div
+          css={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+          }}
+        >
+          <Span css={{fontWeight: 400, fontSize: 12, color: 'var(--color-text-secondary)'}}>Событий за сутки</Span>
+          <Span css={{fontWeight: 400, fontSize: 12, color: 'var(--color-text-secondary)'}}>{eventsCount ? eventsCount : '-'}</Span>
+        </div>
+      </EventsCounts>
     </InfoBlock>
   );
 }

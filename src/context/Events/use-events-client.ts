@@ -39,7 +39,7 @@ export function useEventsClient() {
             eventCode: event.eventCode,
             timestamp: event.eventTimestamp,
             locationName: getLocationById(event.locationId)?.name ?? '',
-            sensorName: getSensorById(event.sensorId)?.name ?? '',
+            sensorName: getSensorById(event.sensorId)?.ref?.name ?? '',
             thumbnail: event.thumbnail?.content
               ? `data:image/gif;base64, ${event?.thumbnail.content}`
               : 'N/A',
@@ -104,12 +104,21 @@ export function useEventsClient() {
     return events ? createEventsView(events) : [];
   }, [createEventsView, events]);
 
+  const getEventsViewBySensorId = React.useCallback(
+    (sensorId: number) => {
+      const eventsBySensor = events?.filter(event => event.sensorId === sensorId);
+      return createEventsView(eventsBySensor);
+    },
+    [createEventsView, events],
+  );
+
   return {
     queryEvents,
     events,
     error,
     eventsView,
     getEventByCode,
+    getEventsViewBySensorId,
 
     isIdle: status === 'idle',
     isLoading: status === 'pending',

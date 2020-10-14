@@ -1,11 +1,19 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import {useEvents} from '@/context';
+import {TEventView} from '@/context';
 import {Event, List} from './styles';
 import {EventThumbnail, EventInfo, EventDetection, EventStatus} from './components';
 
-export function EventsTable() {
-  const {eventsView, isIdle, isLoading, isError, isSuccess, error} = useEvents();
+type TEventsTableProps = {
+  eventsView?: TEventView[];
+  isIdle: boolean;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  error?: Error;
+};
+
+export function EventsTable({eventsView, isIdle, isLoading, isError, isSuccess, error}: TEventsTableProps) {
   const history = useHistory();
 
   if (isIdle || isLoading) {

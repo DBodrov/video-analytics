@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom';
 import {List, EventBox, EventInfo} from './styles';
 import {TEventView} from '../types';
 
@@ -19,11 +20,23 @@ const formatTimestamp = (timestamp?: string) => {
 };
 
 export function EventSidebar({eventsList}: Props) {
+  const history = useHistory();
+
   return (
     <List>
       {eventsList.map(event => {
         return (
-          <EventBox key={event.eventCode}>
+          <EventBox
+            key={event.eventCode}
+            onClick={() =>
+              history.push({
+                pathname: '/events/details',
+                state: {
+                  id: event.eventCode,
+                },
+              })
+            }
+          >
             <div
               css={{
                 minWidth: 130,

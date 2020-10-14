@@ -8,6 +8,10 @@ export const EventBox = styled.li`
   align-items: center;
   padding: 5px 30px;
   min-height: 80px;
+  cursor: pointer;
+  &:hover {
+    outline: 1px var(--color-border) solid;
+  }
 `;
 
 export const EventInfo = styled.div`

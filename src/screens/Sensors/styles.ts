@@ -19,4 +19,5 @@ export const Tile = styled.div`
   &::last-of-type {
     margin-right: 0;
   }
+  cursor: pointer;
 `;

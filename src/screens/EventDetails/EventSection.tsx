@@ -1,6 +1,7 @@
 import React from 'react';
 import {css} from '@emotion/core';
 import {Switch, Span} from 'neutrino-ui';
+import {BoxToggle} from '@/components';
 import {DetectInfo} from './DetectInfo';
 import {EventBox, RectSwitch} from './styles';
 import {TDetectInfo} from './types';
@@ -21,17 +22,7 @@ export function EventSection({imageContent, boxRect, detectInfo}: TEventSectionP
   return (
     <EventBox>
       <div css={{position: 'relative'}}>
-        <RectSwitch>
-          <Switch
-            on={showTrackBox}
-            onToggle={() => setShowTrackBox(!showTrackBox)}
-            trackCss={css({width: 38, height: 20})}
-            buttonCss={css({width: 16, height: 16})}
-          />
-          <Span css={{marginLeft: 5, fontSize: 10, fontWeight: 'bold'}}>
-            РАЗМЕТКА {showTrackBox ? 'ВКЛ' : 'ВЫКЛ'}
-          </Span>
-        </RectSwitch>
+        <BoxToggle showBox={showTrackBox} onToggle={() => setShowTrackBox(!showTrackBox)}/>
         <img src={imageContent} alt="event" />
         {showTrackBox ? (
           <div css={{position: 'absolute', border: '2px var(--color-secondary) solid', ...boxRect}}></div>

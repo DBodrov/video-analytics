@@ -43,11 +43,9 @@ export function EventDetails() {
   const [isIncident, setIsIncident] = React.useState(false);
 
   React.useEffect(() => {
-    if (!eventData) {
-      fetchEvent(id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchEvent(id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   React.useEffect(() => {
     if (!allEventsByHours && eventData) {

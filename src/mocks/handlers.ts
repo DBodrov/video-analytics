@@ -1,6 +1,6 @@
 import {rest} from 'msw';
 import {refreshTokenMock, checkTokenMock, loginMock} from './auth-mocks';
-import {locationsMock, sensorsMock} from './company-mock';
+import {locationsMock, sensorsMock, pipelinesMock} from './company-mock';
 import {checkCategories, checks, statuses} from './refs-mocks';
 import {events} from './events-mock';
 import {eventMock, timelineMock} from './event-details-mocks';
@@ -25,6 +25,9 @@ const companyHandlers = [
   }),
   rest.get('/api/va/companies/:companyId/sensors', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(sensorsMock));
+  }),
+  rest.get('/api/va/companies/:companyId/pipelines', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(pipelinesMock));
   }),
 ];
 
