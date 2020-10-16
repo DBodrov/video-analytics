@@ -46,7 +46,7 @@ export const sensorsMock: any = {
         location_id: 1,
         address: '1',
       },
-      status: {id: 6, code: 'in_use', name: 'В работе', description: 'В работе'},
+      status: {id: 7, code: 'inactive', name: 'Не активна', description: 'Не активна'},
       metrics: {active_checks: 1},
     },
     {
@@ -78,7 +78,7 @@ export const sensorsMock: any = {
         location_id: 1,
         address: '3',
       },
-      status: {id: 6, code: 'in_use', name: 'В работе', description: 'В работе'},
+      status: {id: 5, code: 'error', name: 'Ошибка', description: 'Ошибка'},
       metrics: {active_checks: 0},
     },
   ],

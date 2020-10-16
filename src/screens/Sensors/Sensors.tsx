@@ -36,8 +36,8 @@ export function Sensors() {
       <SensorsTileList>
         {sensors?.map(sensor => {
           return (
-            <Tile key={sensor.ref.id} onClick={() => history.push(`/sensors/${sensor.ref.id}`)}>
-              <VideoPreview companyId={companyId} sensorId={sensor.ref.id} />
+            <Tile css={{cursor: sensor.metrics.activeChecks > 0 ? 'pointer' : 'not-allowed'}} key={sensor.ref.id} onClick={sensor.metrics.activeChecks > 0 ? () => history.push(`/sensors/${sensor.ref.id}`) : undefined}>
+              <VideoPreview companyId={companyId} sensorId={sensor.ref.id} status={sensor.status}/>
               <SensorInfo
                 sensor={sensor}
                 incidentsCount={getCounts(sensor.ref.id).incidents}
