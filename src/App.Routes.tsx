@@ -3,7 +3,7 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import {Events} from '@/screens/Events';
 import {EventDetails} from '@/screens/EventDetails';
 import {Sensors} from '@/screens/Sensors';
-import {SensorDeatils} from '@/screens/SensorDetails';
+import {SensorDetails} from '@/screens/SensorDetails';
 
 export function AppRoutes() {
   return (
@@ -19,7 +19,7 @@ export function AppRoutes() {
         <Sensors />
       </Route>
       <Route path="/sensors/:id">
-        <SensorDeatils />
+        <SensorDetails />
       </Route>
     </Switch>
   );

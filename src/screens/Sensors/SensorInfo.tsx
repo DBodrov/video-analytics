@@ -46,6 +46,9 @@ export function SensorInfo({sensor, eventsCount, incidentsCount}: Props) {
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
         Расположение: <Span css={{fontSize: 12}}>{readLocation(sensor?.ref?.locationId)}</Span>
       </Span>
+      <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
+        Правил: <Span css={{fontSize: 12}}>{sensor.metrics.activeChecks}</Span>
+      </Span>
       <EventsCounts>
         <div
           css={{

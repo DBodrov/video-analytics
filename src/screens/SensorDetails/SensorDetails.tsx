@@ -6,13 +6,14 @@ import {AppLayout} from '../Layouts';
 import {EventsTable} from '../Events/EventsTable';
 import {CameraBox, CameraInfoBox} from './styles';
 
-export function SensorDeatils() {
+export function SensorDetails() {
   const [events, setEvents] = React.useState<TEventView[] | undefined>(undefined);
   const [showBoxes, setShowBoxes] = React.useState(true);
   const {companyId} = useAuth();
   const {id} = useParams<{id: string}>();
+  // const fetchClient = useFetch();
   const {getEventsViewBySensorId, isError, isIdle, isLoading, isSuccess, error} = useEvents();
-  const videoUrl = `/api/live/company/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`
+  const videoUrl = `/api/live/company/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`;
 
   React.useEffect(() => {
     if (!events && Number(id)) {
@@ -26,7 +27,7 @@ export function SensorDeatils() {
         <CameraBox>
           <div css={{position: 'relative'}}>
             <BoxToggle showBox={showBoxes} onToggle={() => setShowBoxes(!showBoxes)} />
-            <img src={videoUrl} alt="" width="100%" height="100%"/>
+            <img src={videoUrl} alt="" width="100%" height="100%" />
           </div>
           <CameraInfoBox>
             <div>Info</div>
