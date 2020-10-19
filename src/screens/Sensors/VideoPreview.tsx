@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4} from 'uuid';
 import {CompanySensorGetResponse200Status} from '@/backend/main';
 import {TEST_HOST} from '@/utils';
 import {Tag} from './styles';
@@ -17,8 +18,9 @@ const statusColor: Record<string, string> = {
 
 export function VideoPreview({companyId, sensorId, status}: TVideoPreviewProps) {
   const isTestHost = window.location.host === TEST_HOST;
+
   const url = isTestHost
-    ? `http://9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6${sensorId}.video.dev-va-0002.msk.mts.ru/api/video/companies/${companyId}/sensors/${sensorId}`
+    ? `http://${uuidv4()}.video.dev-va-0002.msk.mts.ru/api/video/companies/${companyId}/sensors/${sensorId}`
     : `/api/video/companies/${companyId}/sensors/${sensorId}`;
   return (
     <div css={{width: 338, height: 208, position: 'relative'}}>

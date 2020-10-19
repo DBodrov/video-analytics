@@ -1,19 +1,27 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
+import {v4 as uuidv4} from 'uuid';
 import {useEvents, TEventView, useAuth} from '@/context';
 import {BoxToggle} from '@/components';
+import {TEST_HOST} from '@/utils';
 import {AppLayout} from '../Layouts';
 import {EventsTable} from '../Events/EventsTable';
 import {CameraBox, CameraInfoBox} from './styles';
 
 export function SensorDetails() {
+  const isTestHost = window.location.host === TEST_HOST;
   const [events, setEvents] = React.useState<TEventView[] | undefined>(undefined);
   const [showBoxes, setShowBoxes] = React.useState(true);
   const {companyId} = useAuth();
   const {id} = useParams<{id: string}>();
-  // const fetchClient = useFetch();
   const {getEventsViewBySensorId, isError, isIdle, isLoading, isSuccess, error} = useEvents();
-  const videoUrl = `/api/live/company/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`;
+  const videoUrl = React.useMemo(() => {
+    return isTestHost
+    ? `http://${uuidv4()}.video.dev-va-0002.msk.mts.ru/api/live/company/${companyId}/sensors/${id}${
+        showBoxes ? '/boxes' : ''
+      }`
+    : `/api/live/company/${companyId}/sensors/${id}${showBoxes ? '/boxes' : ''}`;
+  }, [companyId, id, isTestHost, showBoxes])
 
   React.useEffect(() => {
     if (!events && Number(id)) {
