@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4} from 'uuid';
 import {CompanySensorGetResponse200Status} from '@/backend/main';
-import {TEST_HOST} from '@/utils';
+import {HOST} from '@/utils';
 import {Tag} from './styles';
 
 type TVideoPreviewProps = {
@@ -17,14 +17,11 @@ const statusColor: Record<string, string> = {
 };
 
 export function VideoPreview({companyId, sensorId, status}: TVideoPreviewProps) {
-  const isTestHost = window.location.host === TEST_HOST;
 
-  const url = isTestHost
-    ? `http://${uuidv4()}.video.dev-va-0002.msk.mts.ru/api/video/companies/${companyId}/sensors/${sensorId}`
-    : `/api/video/companies/${companyId}/sensors/${sensorId}`;
+  const previewUrl = `http://${uuidv4()}.video.${HOST}/api/video/companies/${companyId}/sensors/${sensorId}`;
   return (
     <div css={{width: 338, height: 208, position: 'relative'}}>
-      <img src={url} alt="" width="100%" height="100%" />
+      <img src={previewUrl} alt="" width="100%" height="100%" />
       <Tag css={{position: 'absolute', bottom: 10, left: 10, backgroundColor: statusColor[status.code]}}>
         {status.name}
       </Tag>

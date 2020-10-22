@@ -7,9 +7,10 @@ type TCounterProps = {
   isIncidents?: boolean;
   onFilter: (showIncidents: boolean) => void;
   isActive: boolean;
+  showEvents: (hour: number, isIncident: boolean) => void;
 };
 
-export function EventCounters({counts, isIncidents = false, isActive, onFilter}: TCounterProps) {
+export function EventCounters({counts, isIncidents = false, isActive, onFilter, showEvents}: TCounterProps) {
   const handleSetEventsType = React.useCallback(() => {
     onFilter(isIncidents);
   }, [isIncidents, onFilter]);
@@ -49,7 +50,11 @@ export function EventCounters({counts, isIncidents = false, isActive, onFilter}:
                     height: 24,
                     fontSize: 14,
                     fontWeight: 600,
+                    '&:hover': {
+                      cursor: 'pointer'
+                    }
                   }}
+                  onClick={() => showEvents(idx, isIncidents)}
                 >
                   {h}
                 </div>
