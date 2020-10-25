@@ -9,3 +9,4 @@ export * from './PlayerLastIcon';
 export * from './PlayerNextIcon';
 export * from './PlayerPrevIcon';
 export * from './PlayerStartIcon';
+export * from './RedWarningIcon';

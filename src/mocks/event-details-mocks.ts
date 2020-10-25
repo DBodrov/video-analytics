@@ -13,6 +13,7 @@ export const eventMock = {
       start_time: '2020-09-11 18:38:33',
       end_time: '2020-09-11 18:38:35',
       license_plate_number: null,
+      direction: "въезд",
     },
     thumbnail: {
       id: 95436,

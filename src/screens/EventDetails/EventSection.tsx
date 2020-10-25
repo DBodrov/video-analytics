@@ -1,9 +1,7 @@
 import React from 'react';
-import {css} from '@emotion/core';
-import {Switch, Span} from 'neutrino-ui';
 import {BoxToggle} from '@/components';
 import {DetectInfo} from './DetectInfo';
-import {EventBox, RectSwitch} from './styles';
+import {EventBox} from './styles';
 import {TDetectInfo} from './types';
 
 type TEventSectionProps = {

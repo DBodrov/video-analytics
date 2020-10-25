@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import {toCapitalize} from '@/utils';
 import {TDetectInfo} from './types';
 
 const InfoList = styled.ul`
@@ -49,6 +50,12 @@ export function DetectInfo({info}: Props) {
           <Caption>Правила:</Caption>
           <Value>{info?.check}</Value>
         </InfoItem>
+        {info?.direction ? (
+          <InfoItem>
+            <Caption>Направление:</Caption>
+            <Value>{toCapitalize(info.direction)}</Value>
+          </InfoItem>
+        ) : null}
         <InfoItem>
           <Caption>Площадка:</Caption>
           <Value>{info?.location}</Value>

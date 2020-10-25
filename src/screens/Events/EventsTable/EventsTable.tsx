@@ -56,7 +56,7 @@ export function EventsTable({eventsView, isIdle, isLoading, isError, isSuccess, 
                   history.push({pathname: '/events/details', state: {id: event!.eventCode}});
                 }}
               >
-                <EventThumbnail thumbnail={event!.thumbnail} />
+                <EventThumbnail thumbnail={event!.thumbnail} isIncident={event.isIncident ?? false} />
                 <EventInfo
                   check={event?.check}
                   checkCategory={event?.checkCategory}
