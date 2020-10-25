@@ -12,6 +12,7 @@ export type TDetectInfo = {
   startDetect?: string;
   endDetect?: string;
   eventStatus?: string;
+  direction?: string;
 };
 
 export type TEventType = 'events' | 'incidents';

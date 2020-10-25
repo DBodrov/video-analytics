@@ -70,6 +70,7 @@ export function useEventClient() {
         startDetect: eventData.trackedObject.startTime,
         endDetect: eventData.trackedObject.endTime,
         eventStatus: getEventStatusById(eventData.status?.currentId)?.name,
+        direction: eventData.trackedObject.direction,
       };
     }
     return undefined;
