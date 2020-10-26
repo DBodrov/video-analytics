@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
-import {SelectFilter, SwitchFilter, MultiSelectFilter} from '@/components';
+import {SelectFilter, SwitchFilter, MultiSelectGroupFilter} from '@/components';
 import {periodsList, createFilterList, createCheckAndCategoriesList} from './utils';
 import {Panel} from './styles';
 
@@ -10,12 +10,12 @@ export function EventsFilters() {
   const {checkCategories, checks} = useRefs();
 
   const locationsOptions = createFilterList(locations) ?? [];
-  locationsOptions.unshift({id: -1, title: 'Все'});
+  locationsOptions.unshift({id: -1, value: 'Все'});
   const sensorsList = sensors?.map(s => s.ref);
   const sensorsOptions = createFilterList(sensorsList) ?? [];
-  sensorsOptions.unshift({id: -1, title: 'Все'});
+  sensorsOptions.unshift({id: -1, value: 'Все'});
   const checkCategoriesOptions = createFilterList(checkCategories) ?? [];
-  checkCategoriesOptions?.unshift({id: -1, title: 'Любой'});
+  checkCategoriesOptions?.unshift({id: -1, value: 'Любой'});
 
   const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
 
@@ -37,7 +37,6 @@ export function EventsFilters() {
 
   const setCheckFilter = useCallback(
     (ids: number[] = []) => {
-
       setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, checkIds: ids}));
     },
     [setQueryParams],
@@ -71,14 +70,14 @@ export function EventsFilters() {
         options={locationsOptions}
         prefix="Площадки"
         css={{height: 36, flexBasis: 200, marginRight: 10}}
-        defaultValue={filtersState.locationFilter}
+        value={filtersState.locationFilter}
       />
       <SelectFilter
         onSelect={setSensorFilter}
         options={sensorsOptions}
         prefix="Камеры"
-        css={{height: 36, flexBasis: 200, marginRight: 10}}
-        defaultValue={filtersState.sensorFilter}
+        css={{height: 36, flexBasis: 220, marginRight: 10}}
+        value={filtersState.sensorFilter}
       />
       <SwitchFilter
         prefix="Инциденты"
@@ -91,9 +90,9 @@ export function EventsFilters() {
         options={periodsList}
         prefix="Период"
         css={{height: 36, flexBasis: 250, marginRight: 10}}
-        defaultValue={filtersState.periodFilter}
+        value={filtersState.periodFilter}
       />
-      <MultiSelectFilter
+      <MultiSelectGroupFilter
         onSelect={setCheckFilter}
         options={checkAndCategoriesOptions}
         prefix="Правила"

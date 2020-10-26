@@ -56,3 +56,14 @@ export const FilterOption = styled.li`
     cursor: pointer;
   }
 `;
+
+export const TextBox = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+`;

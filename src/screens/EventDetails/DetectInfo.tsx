@@ -52,7 +52,7 @@ export function DetectInfo({info}: Props) {
         </InfoItem>
         {info?.direction ? (
           <InfoItem>
-            <Caption>Направление:</Caption>
+            <Caption>Направление ТС:</Caption>
             <Value>{toCapitalize(info.direction)}</Value>
           </InfoItem>
         ) : null}

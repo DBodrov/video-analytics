@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackMerge = require('webpack-merge');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const utils = require('../scripts/loadersTests');
 const {resolveApp} = require('../scripts/paths');
 const DotEnv = require('dotenv-webpack');
@@ -58,6 +59,7 @@ module.exports = webpackMerge.merge(commonConfig, {
       hash: true,
       chunksSortMode: 'none',
     }),
+    new ReactRefreshWebpackPlugin(),
     new DotEnv()
   ],
 
