@@ -15,7 +15,9 @@ export const theme = createTheme({
       border: '#313d4f',
       body: '#3a3d43',
       formElements: '#222C3C',
-      formElementsActive: '#313D4F'
+      formElementsActive: '#313D4F',
+      activeBorder: '#289df5',
+      selectedItem: '#313D4F'
     },
   },
   typography: {
