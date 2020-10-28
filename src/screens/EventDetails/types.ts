@@ -3,17 +3,20 @@ import {TEventView} from '@/context/Events';
 
 export type TEvent = EventGetResponse200Event;
 export type TImageTrackBox = EventsGetResponse200ImageTrackBox;
-export type TDetectInfo = {
+
+export type TCommonDetectInfo = {
   sensor: string;
   check: string;
   checkCategory?: string;
   location: string;
-  object: string;
-  startDetect?: string;
-  endDetect?: string;
   eventStatus?: string;
-  direction?: string;
 };
+
+export type TExtraDetectInfo = {
+  name: string;
+  value: string;
+  id: number;
+}
 
 export type TEventType = 'events' | 'incidents';
 

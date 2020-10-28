@@ -23,7 +23,8 @@ export function EventDetails() {
     eventData,
     imageContent,
     boxRect,
-    detectInfo,
+    commonDetectInfo,
+    extraDetectInfo,
     error,
   } = useEventClient();
 
@@ -44,7 +45,7 @@ export function EventDetails() {
 
   React.useEffect(() => {
     fetchEvent(id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   React.useEffect(() => {
@@ -111,7 +112,14 @@ export function EventDetails() {
         </span>
       );
     }
-    return <EventSection boxRect={boxRect} imageContent={imageContent} detectInfo={detectInfo} />;
+    return (
+      <EventSection
+        boxRect={boxRect}
+        imageContent={imageContent}
+        commonDetectInfo={commonDetectInfo}
+        extraDetectInfo={extraDetectInfo}
+      />
+    );
   };
 
   const renderPlayer = () => {

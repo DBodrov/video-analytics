@@ -2,10 +2,11 @@ import React from 'react';
 import {BoxToggle} from '@/components';
 import {DetectInfo} from './DetectInfo';
 import {EventBox} from './styles';
-import {TDetectInfo} from './types';
+import {TCommonDetectInfo, TExtraDetectInfo} from './types';
 
 type TEventSectionProps = {
-  detectInfo?: TDetectInfo;
+  commonDetectInfo?: TCommonDetectInfo;
+  extraDetectInfo?: TExtraDetectInfo[];
   imageContent?: string;
   boxRect: {
     top: number;
@@ -15,7 +16,7 @@ type TEventSectionProps = {
   };
 };
 
-export function EventSection({imageContent, boxRect, detectInfo}: TEventSectionProps) {
+export function EventSection({imageContent, boxRect, commonDetectInfo, extraDetectInfo}: TEventSectionProps) {
   const [showTrackBox, setShowTrackBox] = React.useState(true);
   return (
     <EventBox>
@@ -26,7 +27,7 @@ export function EventSection({imageContent, boxRect, detectInfo}: TEventSectionP
           <div css={{position: 'absolute', border: '2px var(--color-secondary) solid', ...boxRect}}></div>
         ) : null}
       </div>
-      <DetectInfo info={detectInfo} />
+      <DetectInfo commonInfo={commonDetectInfo} extraInfo={extraDetectInfo} />
     </EventBox>
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import {EventGetResponse200EventFromJSON} from '@/backend/main';
 import {useAuth, useRefs, useCompany} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
-import {TEvent, TImageTrackBox, TDetectInfo} from './types';
+import {TEvent, TImageTrackBox, TCommonDetectInfo, TExtraDetectInfo} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -58,7 +58,7 @@ export function useEventClient() {
     height: (trackBox?.bottomY ?? 0) - (trackBox?.topY ?? 0),
   };
 
-  const createDetectInfo = React.useCallback((): TDetectInfo | undefined => {
+  const createCommonDetectInfo = React.useCallback((): TCommonDetectInfo | undefined => {
     if (eventData) {
       const checkData = getCheckById(eventData?.checkId);
       return {
@@ -66,15 +66,26 @@ export function useEventClient() {
         check: checkData?.name ?? '',
         checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
         location: getLocationById(eventData.locationId)?.name ?? '',
-        object: eventData.trackedObject.name,
-        startDetect: eventData.trackedObject.startTime,
-        endDetect: eventData.trackedObject.endTime,
         eventStatus: getEventStatusById(eventData.status?.currentId)?.name,
-        direction: eventData.trackedObject.direction,
       };
     }
     return undefined;
   }, [eventData, getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById]);
+
+  const createExtraInfo = React.useCallback((): TExtraDetectInfo[] | undefined => {
+    if (eventData) {
+      const extraInfo = eventData?.trackedObject.extra;
+      const orderedExtra = extraInfo?.sort((a, b) => a.displayOrder - b.displayOrder);
+      return orderedExtra?.map(extra => {
+        return {
+          id: extra.id,
+          name: extra.name,
+          value: extra.value
+        }
+      })
+    }
+    return undefined;
+  }, [eventData])
 
   return {
     isIdle: status === 'idle',
@@ -86,7 +97,8 @@ export function useEventClient() {
     imageContent,
     trackBox,
     boxRect,
-    detectInfo: createDetectInfo(),
+    commonDetectInfo: createCommonDetectInfo(),
+    extraDetectInfo: createExtraInfo(),
 
     error,
     fetchEvent,
