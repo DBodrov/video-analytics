@@ -76,13 +76,7 @@ export function useEventClient() {
     if (eventData) {
       const extraInfo = eventData?.trackedObject.extra;
       const orderedExtra = extraInfo?.sort((a, b) => a.displayOrder - b.displayOrder);
-      return orderedExtra?.map(extra => {
-        return {
-          id: extra.id,
-          name: extra.name,
-          value: extra.value
-        }
-      })
+      return orderedExtra;
     }
     return undefined;
   }, [eventData])

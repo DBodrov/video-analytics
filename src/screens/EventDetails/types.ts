@@ -1,4 +1,8 @@
-import {EventGetResponse200Event, EventsGetResponse200ImageTrackBox} from '@/backend/main';
+import {
+  EventGetResponse200Event,
+  EventsGetResponse200ImageTrackBox,
+  EventsGetResponse200TrackedObjectExtra,
+} from '@/backend/main';
 import {TEventView} from '@/context/Events';
 
 export type TEvent = EventGetResponse200Event;
@@ -12,11 +16,7 @@ export type TCommonDetectInfo = {
   eventStatus?: string;
 };
 
-export type TExtraDetectInfo = {
-  name: string;
-  value: string;
-  id: number;
-}
+export type TExtraDetectInfo = EventsGetResponse200TrackedObjectExtra;
 
 export type TEventType = 'events' | 'incidents';
 
