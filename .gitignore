@@ -1,12 +1,7 @@
 .DS_Store
 node_modules
 /dist
-/.env
 
-# local env files
-.env
-.env.local
-.env.*.local
 
 # Log files
 npm-debug.log*
@@ -26,3 +21,4 @@ yarn-error.log*
 /dev-files
 /temp
 /swagger/node_modules
+.env
