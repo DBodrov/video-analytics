@@ -8,12 +8,42 @@ export const eventMock = {
     check_id: 101,
     status: {current_id: 1, next_ids: [4, 3, 2]},
     tracked_object: {
-      code: '4e4483d1-a2dc-4eee-8c1d-f5e1373e3059',
-      name: '9137',
-      start_time: '2020-09-11 18:38:33',
-      end_time: '2020-09-11 18:38:35',
-      license_plate_number: null,
-      direction: "въезд",
+      // code: '4e4483d1-a2dc-4eee-8c1d-f5e1373e3059',
+      // name: '9137',
+      // start_time: '2020-09-11 18:38:33',
+      // end_time: '2020-09-11 18:38:35',
+      // license_plate_number: null,
+      // direction: "въезд",
+      id: 118,
+      code: '0',
+      extra: [
+        {
+          id: 4,
+          code: 'end_time',
+          name: 'Окончание детекта',
+          value: '2020-10-22 22:59:43',
+          display_order: 2,
+        },
+        {
+          id: 3,
+          code: 'start_time',
+          name: 'Начало детекта',
+          value: '2020-10-22 16:26:07',
+          display_order: 1,
+        },
+        {
+          code: "direction",
+          name: "Направление движение транспортного средства",
+          value: "выезд",
+          display_order: 4,
+        },
+        {
+          code: "license_plate_number",
+          name: "Регистрационный номер",
+          value: "1234567",
+          display_order: 3,
+        }
+      ],
     },
     thumbnail: {
       id: 95436,
