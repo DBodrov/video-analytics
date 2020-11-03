@@ -8,6 +8,7 @@ export const CameraBox = styled.div`
 `;
 
 export const CameraInfoBox = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 110px 120px 1fr 110px;
 `;

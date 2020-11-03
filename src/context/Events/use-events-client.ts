@@ -173,7 +173,7 @@ function createQueryToJSON(query: Record<string, any>) {
     queryParameters['end_time'] = query.endTime;
   }
 
-  if (query.checkIds.length > 0) {
+  if (query.checkIds?.length > 0) {
     queryParameters['check_ids'] = query.checkIds.join(',');
   }
   return queryParameters;
