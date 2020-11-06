@@ -1,12 +1,12 @@
 import {
   EventGetResponse200Event,
-  EventsGetResponse200ImageTrackBox,
+  EventsGetResponse200ImageTrackBoxes,
   EventsGetResponse200TrackedObjectExtra,
 } from '@/backend/main';
 import {TEventView} from '@/context/Events';
 
 export type TEvent = EventGetResponse200Event;
-export type TImageTrackBox = EventsGetResponse200ImageTrackBox;
+export type TImageTrackBoxes = EventsGetResponse200ImageTrackBoxes[];
 
 export type TCommonDetectInfo = {
   sensor: string;

@@ -22,7 +22,7 @@ export function EventDetails() {
     fetchEvent,
     eventData,
     imageContent,
-    boxRect,
+    boxRects,
     commonDetectInfo,
     extraDetectInfo,
     error,
@@ -114,7 +114,7 @@ export function EventDetails() {
     }
     return (
       <EventSection
-        boxRect={boxRect}
+        boxes={boxRects}
         imageContent={imageContent}
         commonDetectInfo={commonDetectInfo}
         extraDetectInfo={extraDetectInfo}
