@@ -40,7 +40,7 @@ export * from './EventsGetError';
 export * from './EventsGetResponse200';
 export * from './EventsGetResponse200Events';
 export * from './EventsGetResponse200Image';
-export * from './EventsGetResponse200ImageTrackBox';
+export * from './EventsGetResponse200ImageTrackBoxes';
 export * from './EventsGetResponse200Pagination';
 export * from './EventsGetResponse200Period';
 export * from './EventsGetResponse200Status';

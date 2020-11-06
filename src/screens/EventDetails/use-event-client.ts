@@ -2,13 +2,13 @@ import React from 'react';
 import {EventGetResponse200EventFromJSON} from '@/backend/main';
 import {useAuth, useRefs, useCompany} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
-import {TEvent, TImageTrackBox, TCommonDetectInfo, TExtraDetectInfo} from './types';
+import {TEvent, TImageTrackBoxes, TCommonDetectInfo, TExtraDetectInfo} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   eventData?: TEvent | undefined;
   imageContent?: string;
-  trackBox?: TImageTrackBox;
+  trackBoxes?: TImageTrackBoxes;
   error?: any;
 };
 
@@ -17,7 +17,7 @@ const initState: State = {
   status: 'idle',
   eventData: undefined,
   imageContent: '',
-  trackBox: undefined,
+  trackBoxes: undefined,
   error: null,
 };
 
@@ -26,7 +26,7 @@ export function useEventClient() {
   const {accessToken, companyId} = useAuth();
   const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
   const {getSensorById, getLocationById} = useCompany();
-  const [{status, eventData, imageContent, trackBox, error}, dispatch] = React.useReducer(
+  const [{status, eventData, imageContent, trackBoxes, error}, dispatch] = React.useReducer(
     eventReducer,
     initState,
   );
@@ -38,8 +38,9 @@ export function useEventClient() {
         response => {
           const eventData = EventGetResponse200EventFromJSON(response?.event);
           const imageContent = `data:image/${eventData.thumbnail?.compression};base64, ${eventData.thumbnail?.content}`;
-          const trackBox = eventData.thumbnail?.trackBox;
-          dispatch({status: 'resolved', eventData, imageContent, trackBox});
+          //const trackBox = eventData.thumbnail?.trackBox;
+          const trackBoxes = eventData.thumbnail?.trackBoxes;
+          dispatch({status: 'resolved', eventData, imageContent, trackBoxes});
           return response;
         },
         error => {
@@ -51,12 +52,14 @@ export function useEventClient() {
     [accessToken, companyId, fetchClient],
   );
 
-  const boxRect = {
-    top: trackBox?.topY ?? 0,
-    left: trackBox?.topX ?? 0,
-    width: (trackBox?.bottomX ?? 0) - (trackBox?.topX ?? 0),
-    height: (trackBox?.bottomY ?? 0) - (trackBox?.topY ?? 0),
-  };
+  const boxRects = trackBoxes?.map(box => {
+    return {
+      top: box?.topY ?? 0,
+      left: box?.topX ?? 0,
+      width: (box?.bottomX ?? 0) - (box?.topX ?? 0),
+      height: (box?.bottomY ?? 0) - (box?.topY ?? 0),
+    }
+  });
 
   const createCommonDetectInfo = React.useCallback((): TCommonDetectInfo | undefined => {
     if (eventData) {
@@ -89,8 +92,8 @@ export function useEventClient() {
 
     eventData,
     imageContent,
-    trackBox,
-    boxRect,
+    trackBoxes,
+    boxRects,
     commonDetectInfo: createCommonDetectInfo(),
     extraDetectInfo: createExtraInfo(),
 
