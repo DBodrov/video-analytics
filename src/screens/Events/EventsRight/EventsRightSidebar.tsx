@@ -1,5 +1,4 @@
 import React from 'react';
-import {useEvents} from '@/context';
 import {
   SidebarTextTitle,
   SidebarTextSubTitle,
@@ -15,60 +14,58 @@ import {
   IncidentRow,
   ImageWrapper,
 } from './styles';
-import {IncidentsChart} from './components';
+import {IncidentsDailyChart} from './components';
 import {CircleChart} from '@/components';
+import {useSummaryClient} from './use-summary-client';
 
 export function EventsRightSidebar() {
-  const {isIdle, isLoading, isError, isSuccess, error} = useEvents();
+  const {state, queryEventsCounts, eventsSummary = 0, incidentsSummary = 0} = useSummaryClient();
 
-  if (isIdle || isLoading) {
+  React.useEffect(() => {
+    if (!state?.counts) {
+      queryEventsCounts();
+    }
+  }, [queryEventsCounts, state?.counts]);
+
+  if (state.status === 'idle' || state.status === 'pending') {
     return (
       <div>
-        <div></div>
-        <span>Получаем события...</span>
+        <span>Получаем статистику...</span>
       </div>
     );
   }
 
-  if (isError) {
+  if (state.status === 'rejected') {
     return (
       <div>
         <div></div>
-        <span css={{color: 'var(--color-mts)'}}>{error?.message}</span>
+        <span css={{color: 'var(--color-secondary)'}}>Under construction...</span>
       </div>
     );
   }
 
-  if (isSuccess) {
+  if (state.status === 'resolved') {
+    const inOutPercent = (incidentsSummary / eventsSummary) * 100;
     return (
       <RightSidebar>
         <ChartsWrapper>
           <SidebarTextTitle>Суммарно за 1 день</SidebarTextTitle>
           <ChartContainer>
             <ChartBlock>
-              <CircleChart color="#2498f1" percent={85} />
+              <CircleChart color="#2498f1" emptyColor="var(--color-mts)" percent={inOutPercent} />
             </ChartBlock>
             <ChartTextContainer>
-              <ChartTextTitle>34 777 / 34 256</ChartTextTitle>
-              <SidebarTextMeta>Заехало / Выехало</SidebarTextMeta>
-            </ChartTextContainer>
-          </ChartContainer>
-          <ChartContainer>
-            <ChartBlock>
-              <CircleChart color="#e65e54" percent={25} />
-            </ChartBlock>
-            <ChartTextContainer>
-              <ChartTextTitle>1 242 / 316</ChartTextTitle>
-              <SidebarTextMeta>Пустых / Заполненых</SidebarTextMeta>
+              <ChartTextTitle>
+                {eventsSummary} / {incidentsSummary}
+              </ChartTextTitle>
+              <SidebarTextMeta>События / Инциденты</SidebarTextMeta>
             </ChartTextContainer>
           </ChartContainer>
         </ChartsWrapper>
         <SidebarBlockWrapper>
           <SidebarTextTitle>Инциденты</SidebarTextTitle>
           <SidebarTextMeta>Активность за сутки</SidebarTextMeta>
-          <div style={{marginTop: '25px'}}>
-            <IncidentsChart />
-          </div>
+          <IncidentsDailyChart counts={state.counts} />
         </SidebarBlockWrapper>
         <SidebarBlockWrapper>
           <SidebarTextTitle>Последние инциденты</SidebarTextTitle>

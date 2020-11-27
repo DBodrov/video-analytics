@@ -11,13 +11,7 @@ export function Sensors() {
   const history = useHistory();
   const {companyId = 1} = useAuth();
   const {sensors} = useCompany();
-  const {lists, queryEventsByCurrentDay} = useSensorsClient();
-
-  React.useEffect(() => {
-    if (!lists) {
-      // queryEventsByCurrentDay();
-    }
-  }, [lists, queryEventsByCurrentDay]);
+  const {lists} = useSensorsClient();
 
   const getCounts = React.useCallback(
     (sensorId: number) => {

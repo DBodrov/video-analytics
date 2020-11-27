@@ -1,1 +1,1 @@
-export * from './IncidentsChart'
+export * from './IncidentsDailyChart';

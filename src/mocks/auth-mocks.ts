@@ -9,7 +9,7 @@ export const loginMock: any = {
     short_name: 'Api A.',
     email: null,
     system: false,
-    company_id: 1,
+    company_id: 10,
   },
   access_token: {
     value:

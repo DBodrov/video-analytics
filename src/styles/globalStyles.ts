@@ -1,4 +1,4 @@
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 import SourceSansBoldTtf from '../assets/fonts/source_sans_pro/SourceSansPro-Bold.ttf';
 import SourceSansProRegularTtf from '../assets/fonts/source_sans_pro/SourceSansPro-Regular.ttf';
 

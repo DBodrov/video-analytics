@@ -1,12 +1,13 @@
 import React from 'react';
-import {css, keyframes} from '@emotion/core';
+import {css, keyframes} from '@emotion/react';
 
 export type CircleChartProps = {
   color?: string;
+  emptyColor?: string;
   percent?: number;
 };
 
-export function CircleChart({color = '#1991EB', percent = 100}: CircleChartProps) {
+export function CircleChart({color = '#1991EB', emptyColor = '#414F63', percent = 100}: CircleChartProps) {
   const progress = keyframes`
     0% {
       stroke-dasharray: 0 100;
@@ -20,7 +21,7 @@ export function CircleChart({color = '#1991EB', percent = 100}: CircleChartProps
   a 15.9155 15.9155 0 0 1 0 31.831
   a 15.9155 15.9155 0 0 1 0 -31.831"
         fill="none"
-        stroke="#414F63"
+        stroke={emptyColor}
         strokeWidth="3"
       />
       <path
