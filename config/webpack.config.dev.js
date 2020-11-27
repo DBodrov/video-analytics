@@ -48,7 +48,7 @@ module.exports = webpackMerge.merge(commonConfig, {
     runtimeChunk: {
       name: entrypoint => `runtime-${entrypoint.name}`,
     },
-    noEmitOnErrors: true,
+    emitOnErrors: false,
   },
   plugins: [
     new HtmlWebpackPlugin({

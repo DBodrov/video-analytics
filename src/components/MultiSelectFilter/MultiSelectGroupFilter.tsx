@@ -1,5 +1,5 @@
 import React from 'react';
-import {css} from '@emotion/core';
+import {css} from '@emotion/react';
 import {Combobox, useCombobox, useTheme, Span, Dropdown, Checkbox, Button} from 'neutrino-ui';
 import {LinkButton} from '@/components';
 import {SelectBox} from './SelectBox';

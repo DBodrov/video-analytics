@@ -1,5 +1,5 @@
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import {Switch, Span} from 'neutrino-ui';
 import {ToggleWrap} from './styles';
 

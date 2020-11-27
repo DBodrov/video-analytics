@@ -24,8 +24,8 @@ export function EventSection({imageContent, boxes, commonDetectInfo, extraDetect
         <BoxToggle showBox={showTrackBox} onToggle={() => setShowTrackBox(!showTrackBox)} />
         <img src={imageContent} alt="event" />
         {showTrackBox
-          ? boxes?.map(box => (
-              <div css={{position: 'absolute', border: '2px var(--color-secondary) solid', ...box}}></div>
+          ? boxes?.map((box, index) => (
+              <div key={index} css={{position: 'absolute', border: '2px var(--color-secondary) solid', ...box}}></div>
             ))
           : null}
       </div>

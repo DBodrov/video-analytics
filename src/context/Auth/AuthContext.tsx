@@ -1,21 +1,24 @@
-import React, { useEffect, createContext, useContext, useMemo } from 'react';
-import { useAuthClient } from './use-auth-client';
+import React, {useEffect, createContext, useContext, useMemo} from 'react';
+import {useAuthClient} from './use-auth-client';
 import {IAuthContext} from './types';
-
-
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
-export function AuthProvider({ children }: React.Props<{}>) {
-  const { run, login, isAuthorized, logout, isSuccess, isError, isIdle, isLoading, accessToken } = useAuthClient();
+export function AuthProvider({children}: {children: React.ReactNode}) {
+  const {run, login, isAuthorized, isLoading, accessToken, companyId} = useAuthClient();
 
   useEffect(() => {
     run();
-  }, [run])
+  }, [run]);
 
-  const contextValue = useMemo<IAuthContext>(() => ({ isAuthorized, login, accessToken, companyId: 1 }), [accessToken, isAuthorized, login]);
+  const contextValue = useMemo<IAuthContext>(() => ({isAuthorized, login, accessToken, companyId}), [
+    accessToken,
+    companyId,
+    isAuthorized,
+    login,
+  ]);
 
-  if (isLoading) return <span>Authentication...</span>
+  if (isLoading) return <span>Authentication...</span>;
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

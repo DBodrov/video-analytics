@@ -2,12 +2,17 @@ import React, {useState, useCallback} from 'react';
 import {H5, Input} from 'neutrino-ui';
 import {LoginFormData, useAuth} from '@/context/Auth';
 import {isEmptyString} from '@/utils/string.utils';
+import {USERNAME_KEY} from '@/utils/constants';
 import {Form, Label, SubmitButton, ErrorText} from './styles';
 
+const storedLogin = localStorage.getItem(USERNAME_KEY) ?? '';
+
 export function LoginForm() {
-  const [loginData, setLoginData] = useState<LoginFormData>({userName: '', password: ''});
+  const [loginData, setLoginData] = useState<LoginFormData>({userName: storedLogin, password: ''});
   const [errorState, setErrorState] = useState<LoginFormData>({userName: '', password: ''});
   const {login} = useAuth();
+  const userNameRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
   const handleChange = useCallback((value: string, event?: React.ChangeEvent<HTMLInputElement>) => {
     const field = event?.currentTarget.name;
     if (field) {
@@ -54,12 +59,21 @@ export function LoginForm() {
     [login, loginData, validateAllFields],
   );
 
+  React.useEffect(() => {
+    if (storedLogin) {
+      passwordRef?.current?.focus();
+    } else {
+      userNameRef?.current?.focus();
+    }
+  }, [])
+
   return (
     <Form onSubmit={handleLogin}>
       <H5>Авторизация</H5>
 
       <Label htmlFor="userName">Email</Label>
       <Input
+        ref={userNameRef}
         name="userName"
         autoComplete="username"
         onChangeHandler={handleChange}
@@ -71,6 +85,7 @@ export function LoginForm() {
       {errorState.userName && <ErrorText>{errorState.userName}</ErrorText>}
       <Label htmlFor="password">Пароль</Label>
       <Input
+        ref={passwordRef}
         name="password"
         onChangeHandler={handleChange}
         onBlurHandler={handleBlur}

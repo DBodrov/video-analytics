@@ -3,6 +3,7 @@ import {refreshTokenMock, checkTokenMock, loginMock} from './auth-mocks';
 import {locationsMock, sensorsMock, pipelinesMock} from './company-mock';
 import {checkCategories, checks, statuses} from './refs-mocks';
 import {events} from './events-mock';
+import {eventsCounts} from './events-counts';
 import {eventMock, timelineMock} from './event-details-mocks';
 
 const authHandlers = [
@@ -46,6 +47,9 @@ const refsHandlers = [
 const eventsHandlers = [
   rest.get('/api/va/companies/:companyId/events', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(events));
+  }),
+  rest.get('/api/va/companies/:companyId/events/counts', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(eventsCounts));
   }),
 ];
 

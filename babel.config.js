@@ -14,7 +14,7 @@ module.exports = api => {
     [
       '@emotion/babel-preset-css-prop',
       {
-        autoLabel: true,
+        autoLabel: 'dev-only',
         labelFormat: '[local]',
       },
     ],
@@ -27,7 +27,7 @@ module.exports = api => {
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
-    'emotion',
+    '@emotion',
     !api.env('production') && 'react-refresh/babel',
   ].filter(Boolean);
   return {presets, plugins};

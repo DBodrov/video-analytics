@@ -1,5 +1,5 @@
 import React from 'react';
-import {css} from '@emotion/core';
+import {css} from '@emotion/react';
 import {RedWarningIcon} from '@/assets/icons';
 
 export function EventThumbnail({thumbnail, isIncident}: {thumbnail: string; isIncident: boolean}) {

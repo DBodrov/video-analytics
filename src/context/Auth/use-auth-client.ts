@@ -1,5 +1,5 @@
-import { useReducer, useCallback, useEffect } from 'react';
-import { useFetch } from '@/utils';
+import {useReducer, useCallback, useEffect} from 'react';
+import {useFetch, ACCESS_TOKEN_KEY, REFRESH_TOKEN_INTERVAL, REFRESH_TOKEN_KEY, USERNAME_KEY} from '@/utils';
 import {
   LoginPostResponse201FromJSON,
   LoginPostRequestToJSON,
@@ -8,13 +8,7 @@ import {
   LoginPostErrorFromJSON,
   TokenPostResponse201FromJSON,
 } from '@/backend/auth/models';
-import {
-  LoginFormData,
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_INTERVAL,
-  REFRESH_TOKEN_KEY,
-  USERNAME_KEY,
-} from './types';
+import {LoginFormData} from './types';
 
 type TAuthState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -31,7 +25,7 @@ const setAccessToken = (token = '') => localStorage.setItem(ACCESS_TOKEN_KEY, to
 
 const setRefreshToken = (token = '') => localStorage.setItem(REFRESH_TOKEN_KEY, token);
 
-const authReducer = (s: TAuthState, a: TAuthState): TAuthState => ({ ...s, ...a });
+const authReducer = (s: TAuthState, a: TAuthState): TAuthState => ({...s, ...a});
 const initialAuthState: TAuthState = {
   status: 'idle',
   data: undefined,
@@ -39,7 +33,6 @@ const initialAuthState: TAuthState = {
   refreshToken: getRefreshToken(),
   error: undefined,
 };
-
 
 const storeLoginData = (loginResponse: LoginPostResponse201) => {
   setAccessToken(loginResponse.accessToken.value);
@@ -50,7 +43,10 @@ const storeLoginData = (loginResponse: LoginPostResponse201) => {
 let interval: any;
 
 export function useAuthClient() {
-  const [{ status, data, error, accessToken, refreshToken }, setAuthState] = useReducer(authReducer, initialAuthState);
+  const [{status, data, error, accessToken, refreshToken}, setAuthState] = useReducer(
+    authReducer,
+    initialAuthState,
+  );
   const fetchClient = useFetch();
 
   const logout = useCallback(() => {
@@ -60,19 +56,17 @@ export function useAuthClient() {
   }, []);
 
   const fetchRefreshToken = useCallback(() => {
-    console.log('fetchRefresh token');
     if (!refreshToken) {
       window.clearInterval(interval);
       return;
     }
-    fetchClient('/api/auth/token', { headers: { Authorization: `Bearer ${refreshToken}` }, body: {} }).then(
-      (response) => {
+    fetchClient('/api/auth/token', {headers: {Authorization: `Bearer ${refreshToken}`}, body: {}}).then(
+      response => {
         const token = TokenPostResponse201FromJSON(response);
-        console.log('refresh token', token.accessToken.value);
         setAccessToken(token.accessToken.value);
         return response;
       },
-      (error) => {
+      error => {
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         window.clearInterval(interval);
         return error;
@@ -81,12 +75,12 @@ export function useAuthClient() {
   }, [fetchClient, refreshToken]);
 
   const checkToken = useCallback(() => {
-    fetchClient('/api/auth/check-token', { headers: { Authorization: `Bearer ${accessToken}` } }).then(
-      (response) => {
-        setAuthState({ status: 'resolved' });
+    fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${accessToken}`}}).then(
+      response => {
+        setAuthState({status: 'resolved'});
         return response;
       },
-      (error) => {
+      error => {
         logout();
         return error;
       },
@@ -105,7 +99,7 @@ export function useAuthClient() {
 
   const login = useCallback(
     (loginData: LoginFormData) => {
-      setAuthState({ status: 'pending' });
+      setAuthState({status: 'pending'});
       fetchClient('/api/auth/login', {
         body: LoginPostRequestToJSON(loginData),
       }).then(
@@ -120,9 +114,9 @@ export function useAuthClient() {
           });
           return response;
         },
-        (error) => {
+        error => {
           const loginError = LoginPostErrorFromJSON(error);
-          setAuthState({ status: 'rejected', error: loginError });
+          setAuthState({status: 'rejected', error: loginError});
           return error;
         },
       );
@@ -145,6 +139,7 @@ export function useAuthClient() {
     login,
     logout,
     data,
+    companyId: data?.user?.companyId,
     accessToken,
     error,
   };
