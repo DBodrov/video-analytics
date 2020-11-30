@@ -46,6 +46,6 @@ export const refreshTokenMock: any = {
 export const checkTokenMock = {
   payload: {
     user_id: 2,
-    company_id: 1,
+    company_id: 11,
   },
 };

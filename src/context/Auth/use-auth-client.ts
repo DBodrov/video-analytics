@@ -7,12 +7,14 @@ import {
   LoginPostResponse201,
   LoginPostErrorFromJSON,
   TokenPostResponse201FromJSON,
+  CheckTokenResponse200FromJSON,
 } from '@/backend/auth/models';
 import {LoginFormData} from './types';
 
 type TAuthState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   data?: LoginPostResponse201;
+  companyId?: number;
   accessToken?: string;
   refreshToken?: string;
   error?: LoginPostError;
@@ -25,10 +27,11 @@ const setAccessToken = (token = '') => localStorage.setItem(ACCESS_TOKEN_KEY, to
 
 const setRefreshToken = (token = '') => localStorage.setItem(REFRESH_TOKEN_KEY, token);
 
-const authReducer = (s: TAuthState, a: TAuthState): TAuthState => ({...s, ...a});
+const authReducer = (s: TAuthState, a: Partial<TAuthState>): TAuthState => ({...s, ...a});
 const initialAuthState: TAuthState = {
   status: 'idle',
   data: undefined,
+  companyId: undefined,
   accessToken: getAccessToken(),
   refreshToken: getRefreshToken(),
   error: undefined,
@@ -43,7 +46,7 @@ const storeLoginData = (loginResponse: LoginPostResponse201) => {
 let interval: any;
 
 export function useAuthClient() {
-  const [{status, data, error, accessToken, refreshToken}, setAuthState] = useReducer(
+  const [{status, companyId, data, error, accessToken, refreshToken}, setAuthState] = useReducer(
     authReducer,
     initialAuthState,
   );
@@ -52,7 +55,7 @@ export function useAuthClient() {
   const logout = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-    setAuthState({status: 'resolved', accessToken: '', refreshToken: ''});
+    setAuthState({status: 'resolved', accessToken: '', refreshToken: '', companyId: undefined, data: undefined});
   }, []);
 
   const fetchRefreshToken = useCallback(() => {
@@ -64,6 +67,7 @@ export function useAuthClient() {
       response => {
         const token = TokenPostResponse201FromJSON(response);
         setAccessToken(token.accessToken.value);
+        setAuthState({companyId: token.user.companyId});
         return response;
       },
       error => {
@@ -77,7 +81,8 @@ export function useAuthClient() {
   const checkToken = useCallback(() => {
     fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${accessToken}`}}).then(
       response => {
-        setAuthState({status: 'resolved'});
+        const tokenData = CheckTokenResponse200FromJSON(response);
+        setAuthState({status: 'resolved', companyId: tokenData.payload.companyId});
         return response;
       },
       error => {
@@ -89,7 +94,6 @@ export function useAuthClient() {
 
   const run = useCallback(() => {
     if (accessToken) {
-      // setAuthState({status: 'resolved', data: {accessToken: {value: accessToken()}}})
       checkToken();
     }
     interval = window.setInterval(() => {
@@ -108,6 +112,7 @@ export function useAuthClient() {
           storeLoginData(loginResponse);
           setAuthState({
             status: 'resolved',
+            companyId: loginResponse.user.companyId,
             data: loginResponse,
             accessToken: loginResponse.accessToken.value,
             refreshToken: loginResponse.refreshToken.value,
@@ -139,7 +144,7 @@ export function useAuthClient() {
     login,
     logout,
     data,
-    companyId: data?.user?.companyId,
+    companyId: companyId,
     accessToken,
     error,
   };
