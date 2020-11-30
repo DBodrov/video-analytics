@@ -11,8 +11,6 @@ function run() {
     devServer.start();
   }
 
-  console.log(process.env.USE_API_MOCKS);
-
   render(
     <React.StrictMode>
       <Global styles={globalStyles} />
