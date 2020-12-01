@@ -50,7 +50,6 @@ module.exports = webpackMerge.merge(commonConfig, {
     runtimeChunk: {
       name: entrypoint => `runtime-${entrypoint.name}`,
     },
-    noEmitOnErrors: true,
     minimize: true,
     minimizer: [new TerserPlugin({})],
   },
