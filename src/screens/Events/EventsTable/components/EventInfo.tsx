@@ -1,5 +1,5 @@
 import React from 'react';
-import {TEventView} from '@/context';
+import {IEventView} from '@/context';
 
 type TEventInfoProps = {
   check?: string;
@@ -31,7 +31,7 @@ export function EventInfo(props: TEventInfoProps) {
   );
 }
 
-export function EventDetection({timeStamp}: {timeStamp: TEventView['timestamp']}) {
+export function EventDetection({timeStamp}: {timeStamp: IEventView['timestamp']}) {
   return (
     <div css={{display: 'flex', flexFlow: 'column nowrap', justifyContent: 'center'}}>
       <span css={{fontSize: 14}}>{timeStamp}</span>
@@ -40,7 +40,7 @@ export function EventDetection({timeStamp}: {timeStamp: TEventView['timestamp']}
   );
 }
 
-export function EventStatus({eventStatus}: {eventStatus: TEventView['eventStatus']}) {
+export function EventStatus({eventStatus}: {eventStatus: IEventView['eventStatus']}) {
   return (
     <div css={{display: 'flex', flexFlow: 'column nowrap', justifyContent: 'center'}}>
       <span css={{fontSize: 14}}>{eventStatus}</span>

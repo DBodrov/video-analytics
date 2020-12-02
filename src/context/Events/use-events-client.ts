@@ -1,41 +1,48 @@
 import React, {useReducer, useCallback} from 'react';
-import {EventsGetResponse200FromJSON} from '@/backend/main';
+import {EventsGetResponse200FromJSON, IncidentsGetResponse200FromJSON} from '@/backend/main';
 import {useAuth, useCompany, useRefs} from '@/context';
 import {useFetch, isEmptyString} from '@/utils';
-import {TEventsData, TEvents, TEventsQuery, TEventView} from './types';
+import {TEventsData, TEvents, TEventsQuery, IEventView, TIncidents, IIncidentView} from './types';
 
 type TEventsState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   events?: TEventsData['events'];
+  incidents?: TIncidents;
   pagination?: TEventsData['pagination'];
   period?: TEventsData['period'];
   error?: any;
+  view?: IEventView[] | IIncidentView[];
 };
+
+
 
 const initState: TEventsState = {
   status: 'idle',
   error: undefined,
   events: undefined,
+  incidents: undefined,
   pagination: undefined,
   period: undefined,
+  view: undefined,
 };
 
 export function useEventsClient() {
-  const [{status, events, error}, setEventsState] = useReducer(
-    (s: TEventsState, a: TEventsState) => ({...s, ...a}),
+  const [{status, events, error, view}, setEventsState] = useReducer(
+    (state: TEventsState, changes: Partial<TEventsState>) => ({...state, ...changes}),
     initState,
   );
   const fetchClient = useFetch();
   const {accessToken, companyId} = useAuth();
   const {getLocationById, getSensorById} = useCompany();
-  const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
+  const {getCheckById, getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId} = useRefs();
 
   const createEventsView = useCallback(
-    (events: TEvents): TEventView[] | undefined => {
+    (events: TEvents): IEventView[] | undefined => {
       if (events) {
         return events.map(event => {
           const checkData = getCheckById(event.checkId);
           return {
+            id: event.eventId,
             eventCode: event.eventCode,
             timestamp: event.eventTimestamp,
             locationName: getLocationById(event.locationId)?.name ?? '',
@@ -55,13 +62,41 @@ export function useEventsClient() {
     [getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById],
   );
 
+  const createIncidentsView = useCallback(
+    (incidents: TIncidents): IIncidentView[] | undefined => {
+      if (incidents) {
+        return incidents.map(incident => {
+          //const checkData = getCheckById(event.checkId);
+          return {
+            id: incident.id,
+            eventCode: String(incident.id),
+            timestamp: `${incident.period.start.time} - ${(incident.period.end as any).time}`,
+            locationName: getLocationById(incident.locationId)?.name ?? '',
+            sensorName: getSensorById(incident.sensorId)?.ref?.name ?? '',
+            thumbnail: incident.thumbnail?.content
+              ? `data:image/gif;base64, ${incident?.thumbnail.content}`
+              : 'N/A',
+            check: getIncidentNameByCategoryId(incident.categoryId),
+            checkCategory: getCheckCategoryById(incident.categoryId)?.name,
+            eventStatus: getEventStatusById(incident?.status?.currentId)?.name,
+            isIncident: true,
+          };
+        });
+      }
+      return undefined;
+    },
+    [getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId, getLocationById, getSensorById],
+  );
+
   const queryEvents = useCallback(
     (queryData: TEventsQuery) => {
       setEventsState({status: 'pending'});
       const query = encodeQueryData(queryData);
       const onlyIncidents = queryData.onlyIncidents;
 
-      let url = `/api/va/companies/${companyId}/events`;
+      let url = onlyIncidents
+        ? `/api/va/companies/${companyId}/incidents`
+        : `/api/va/companies/${companyId}/events`;
       if (!isEmptyString(query)) {
         url += `?sort_by=desc&${query}`;
       }
@@ -70,14 +105,15 @@ export function useEventsClient() {
       const fetchEvents = fetchClient(url, {headers});
       Promise.all([fetchEvents]).then(
         response => {
-          const [eventsRaw] = response;
-          const {events, pagination, period} = EventsGetResponse200FromJSON(eventsRaw);
           if (onlyIncidents) {
-            const incidents = events.filter(e => e.incident);
-            setEventsState({status: 'resolved', events: incidents, pagination, period});
+            const [incidentsResponse] = response;
+            const {incidents /*pagination, period*/} = IncidentsGetResponse200FromJSON(incidentsResponse);
+            setEventsState({status: 'resolved', incidents, view: createIncidentsView(incidents)});
             return response;
           }
-          setEventsState({status: 'resolved', events, pagination, period});
+          const [eventsRaw] = response;
+          const {events} = EventsGetResponse200FromJSON(eventsRaw);
+          setEventsState({status: 'resolved', events, view: createEventsView(events)});
           return response;
         },
         error => {
@@ -86,7 +122,7 @@ export function useEventsClient() {
         },
       );
     },
-    [accessToken, companyId, fetchClient],
+    [accessToken, companyId, createEventsView, createIncidentsView, fetchClient],
   );
 
   const getEventByCode = useCallback(
@@ -119,11 +155,13 @@ export function useEventsClient() {
     eventsView,
     getEventByCode,
     getEventsViewBySensorId,
+    view,
 
     isIdle: status === 'idle',
     isLoading: status === 'pending',
     isSuccess: status === 'resolved',
     isError: status === 'rejected',
+    status,
   };
 }
 

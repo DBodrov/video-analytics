@@ -1,20 +1,25 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import {TEventView} from '@/context';
+import {IEventView, IIncidentView} from '@/context';
 import {Event, List} from './styles';
 import {EventThumbnail, EventInfo, EventDetection, EventStatus} from './components';
 
 type TEventsTableProps = {
-  eventsView?: TEventView[];
-  isIdle: boolean;
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
+  eventsView?: IEventView[] | IIncidentView[];
   error?: Error;
+  status?: 'idle' | 'pending' | 'resolved' | 'rejected';
 };
 
-export function EventsTable({eventsView, isIdle, isLoading, isError, isSuccess, error}: TEventsTableProps) {
+export function EventsTable({
+  eventsView,
+  error,
+  status,
+}: TEventsTableProps) {
   const history = useHistory();
+  const isIdle = status === 'idle';
+  const isLoading = status === 'pending';
+  const isSuccess = status === 'resolved';
+  const isError = status === 'rejected';
 
   if (isIdle || isLoading) {
     return (
@@ -50,7 +55,7 @@ export function EventsTable({eventsView, isIdle, isLoading, isError, isSuccess, 
           eventsView.map(event => {
             return (
               <Event
-                key={event!.eventCode}
+                key={event.id}
                 value={event!.eventCode}
                 onClick={() => {
                   history.push({pathname: '/events/details', state: {id: event!.eventCode}});

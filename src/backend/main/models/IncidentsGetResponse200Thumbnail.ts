@@ -21,66 +21,66 @@ import {
 } from './';
 
 /**
- * Превью изображения по событию
+ * Превью изображения по инциденту
  * @export
- * @interface EventsGetResponse200Thumbnail
+ * @interface IncidentsGetResponse200Thumbnail
  */
-export interface EventsGetResponse200Thumbnail {
+export interface IncidentsGetResponse200Thumbnail {
     /**
      * Идентификатор категории изображения
      * @type {number}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     categoryId: number;
     /**
      * Формат изображения
      * @type {string}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     compression: string;
     /**
      * Содержимое изображения в формате Base64
      * @type {string}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     content: string;
     /**
      * Высота изображения
      * @type {number}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     height: number;
     /**
      * Идентификатор превью изображения
      * @type {number}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     id: number;
     /**
      * Идентификатор изображения
      * @type {number}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     imageId: number;
     /**
      * Разметка обнаруженных объектов
      * @type {Array<EventsGetResponse200ImageTrackBoxes>}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     trackBoxes?: Array<EventsGetResponse200ImageTrackBoxes>;
     /**
      * Ширина изображения
      * @type {number}
-     * @memberof EventsGetResponse200Thumbnail
+     * @memberof IncidentsGetResponse200Thumbnail
      */
     width: number;
 }
 
-export function EventsGetResponse200ThumbnailFromJSON(json: any): EventsGetResponse200Thumbnail {
-    return EventsGetResponse200ThumbnailFromJSONTyped(json, false);
+export function IncidentsGetResponse200ThumbnailFromJSON(json: any): IncidentsGetResponse200Thumbnail {
+    return IncidentsGetResponse200ThumbnailFromJSONTyped(json, false);
 }
 
-export function EventsGetResponse200ThumbnailFromJSONTyped(json: any, ignoreDiscriminator: boolean): EventsGetResponse200Thumbnail {
+export function IncidentsGetResponse200ThumbnailFromJSONTyped(json: any, ignoreDiscriminator: boolean): IncidentsGetResponse200Thumbnail {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -97,7 +97,7 @@ export function EventsGetResponse200ThumbnailFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-export function EventsGetResponse200ThumbnailToJSON(value?: EventsGetResponse200Thumbnail | null): any {
+export function IncidentsGetResponse200ThumbnailToJSON(value?: IncidentsGetResponse200Thumbnail | null): any {
     if (value === undefined) {
         return undefined;
     }

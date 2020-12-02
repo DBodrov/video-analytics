@@ -62,6 +62,7 @@ export function useTimelineClient() {
       return eventsList?.reduce((acc, current, i) => {
         const hour = new Date(current.eventTimestamp).getHours();
         const {
+          eventId,
           eventCode,
           thumbnail,
           incident,
@@ -73,6 +74,7 @@ export function useTimelineClient() {
         } = current;
         const checkData = getCheckById(checkId);
         const eventView: TEventView = {
+          id: eventId,
           thumbnail: `data:image/${thumbnail?.compression};base64, ${thumbnail?.content}`,
           eventCode,
           isIncident: incident ?? false,

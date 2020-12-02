@@ -1,9 +1,10 @@
-import {EventsGetResponse200, EventsGetResponse200Events} from '@/backend/main';
+import {EventsGetResponse200, EventsGetResponse200Events, IncidentsGetResponse200, IncidentsGetResponse200Incidents} from '@/backend/main';
 
 export type TEventsData = EventsGetResponse200;
 export type TEvents = EventsGetResponse200['events'] | undefined;
 export type TEvent = EventsGetResponse200Events;
-export type TEventView = {
+export interface IEventView {
+  id: number;
   locationName: string;
   sensorName: string;
   thumbnail: string;
@@ -15,18 +16,22 @@ export type TEventView = {
   isIncident?: boolean;
 };
 
+export interface IIncidentView extends IEventView {}
+
+export type TIncidentsData = IncidentsGetResponse200;
+export type TIncidents = IncidentsGetResponse200Incidents[];
+
 export type TEventsContext = {
-  eventsView?: TEventView[];
+  eventsView?: IEventView[];
+  view?: IEventView[] | IIncidentView[];
+  refreshView: () => void;
   setQueryParams: (queryParams: TEventsQuery | ((args: TEventsQuery) => TEventsQuery)) => void;
   setFiltersState: (filterState: TFiltersState | ((args: TFiltersState) => TFiltersState)) => void;
-  getEventByCode: (eventCode: string) => TEventView | undefined;
-  getEventsViewBySensorId: (sensorId: number) => TEventView[] | undefined;
+  getEventByCode: (eventCode: string) => IEventView | undefined;
+  getEventsViewBySensorId: (sensorId: number) => IEventView[] | undefined;
   filtersState: TFiltersState;
   error?: Error;
-  isIdle: boolean;
-  isLoading: boolean;
-  isSuccess: boolean;
-  isError: boolean;
+  status?: 'idle' | 'pending' | 'resolved' | 'rejected';
 };
 
 export type TEventsQuery = {

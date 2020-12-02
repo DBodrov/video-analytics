@@ -22,4 +22,6 @@ export type TRefsContext = {
   getCheckById(id: number): TCheck;
   getCheckCategoryById(id?: number): TCheckCategory;
   getEventStatusById(id?: number): TEventStatus;
+  getCheckByIncidentCategoryId(categoryId: number): TCheck;
+  getIncidentNameByCategoryId(categoryId: number): string | undefined;
 };

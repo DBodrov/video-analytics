@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, createContext, useContext } from 'react';
-import { useRefsClient } from './use-refs-client';
-import { TRefsContext } from './types';
+import React, {useEffect, useMemo, createContext, useContext} from 'react';
+import {useRefsClient} from './use-refs-client';
+import {TRefsContext} from './types';
 
 export const RefsContext = createContext<TRefsContext | undefined>(undefined);
 
@@ -18,6 +18,8 @@ export function RefsProvider(props: any) {
     getCheckById,
     getCheckCategoryById,
     getEventStatusById,
+    getCheckByIncidentCategoryId,
+    getIncidentNameByCategoryId,
   } = useRefsClient();
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export function RefsProvider(props: any) {
       fetchRefsData();
     }
   }, [eventStatuses, fetchRefsData]);
+
   const ctxValue = useMemo<TRefsContext>(
     () => ({
       eventStatuses,
@@ -33,8 +36,19 @@ export function RefsProvider(props: any) {
       getCheckById,
       getCheckCategoryById,
       getEventStatusById,
+      getCheckByIncidentCategoryId,
+      getIncidentNameByCategoryId,
     }),
-    [checkCategories, checks, eventStatuses, getCheckById, getCheckCategoryById, getEventStatusById],
+    [
+      checkCategories,
+      checks,
+      eventStatuses,
+      getCheckById,
+      getCheckByIncidentCategoryId,
+      getCheckCategoryById,
+      getEventStatusById,
+      getIncidentNameByCategoryId,
+    ],
   );
   if (isIdle || isLoading) {
     return <span>Загрузка ресурсов...</span>;

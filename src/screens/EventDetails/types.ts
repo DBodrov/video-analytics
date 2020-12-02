@@ -3,7 +3,7 @@ import {
   EventsGetResponse200ImageTrackBoxes,
   EventsGetResponse200TrackedObjectExtra,
 } from '@/backend/main';
-import {TEventView} from '@/context/Events';
+import {IEventView} from '@/context/Events';
 
 export type TEvent = EventGetResponse200Event;
 export type TImageTrackBoxes = EventsGetResponse200ImageTrackBoxes[];
@@ -21,5 +21,5 @@ export type TExtraDetectInfo = EventsGetResponse200TrackedObjectExtra;
 export type TEventType = 'events' | 'incidents';
 
 //export type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
-export type TEventsByHours = Record<number, TEventView[]>;
-export {TEventView};
+export type TEventsByHours = Record<number, IEventView[]>;
+export {IEventView as TEventView};

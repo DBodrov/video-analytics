@@ -22,14 +22,14 @@ const allDay = () => {
   return {
     beginDay: isoStart,
     endDay: isoEnd,
-  }
+  };
 };
 
 export function SensorDetails() {
   const [showBoxes, setShowBoxes] = React.useState(true);
   const {companyId} = useAuth();
   const {id} = useParams<{id: string}>();
-  const {queryEvents, isError, isIdle, isLoading, isSuccess, error, eventsView} = useEventsClient();
+  const {queryEvents, error, eventsView, status} = useEventsClient();
   const videoUrl = React.useMemo(
     () =>
       `http://${uuidv4()}.video.${HOST}/api/live/company/${companyId}/sensors/${id}${
@@ -39,11 +39,18 @@ export function SensorDetails() {
   );
 
   React.useEffect(() => {
-    if (eventsView?.length === 0 && !isSuccess) {
+    if (eventsView?.length === 0 && status !== 'resolved') {
       const today = allDay();
-      queryEvents({sensorIds: Number(id), tzOffset: TIMEZONE_OFFSET, startTime: today.beginDay, endTime: today.endDay, page: 1, pageSize: 50});
+      queryEvents({
+        sensorIds: Number(id),
+        tzOffset: TIMEZONE_OFFSET,
+        startTime: today.beginDay,
+        endTime: today.endDay,
+        page: 1,
+        pageSize: 50,
+      });
     }
-  }, [eventsView, id, isSuccess, queryEvents]);
+  }, [eventsView, id, queryEvents, status]);
 
   return (
     <AppLayout>
@@ -65,10 +72,7 @@ export function SensorDetails() {
           </CameraInfoBox>
         </CameraBox>
         <EventsTable
-          isError={isError}
-          isIdle={isIdle}
-          isLoading={isLoading}
-          isSuccess={isSuccess}
+          status={status}
           error={error}
           eventsView={eventsView}
         />

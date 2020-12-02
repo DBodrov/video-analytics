@@ -1,7 +1,7 @@
 import {useReducer, useCallback} from 'react';
 import {useAuth} from '@/context/Auth';
 import {useFetch} from '@/utils';
-import {StatusesGetResponse200FromJSON, ChecksGetResponse200FromJSON} from '@/backend/auth';
+import {StatusesGetResponse200FromJSON, ChecksGetResponse200FromJSON, IncidentsGetResponse200} from '@/backend/auth';
 import {TEventStatusList, TCheckList, TCheckCategoryList} from './types';
 
 type TRefsState = {
@@ -9,6 +9,7 @@ type TRefsState = {
   eventStatuses?: TEventStatusList;
   checks?: TCheckList;
   checkCategories?: TCheckCategoryList;
+  incidentsRefs?: IncidentsGetResponse200[];
   error?: any;
 };
 
@@ -17,13 +18,14 @@ const initialState: TRefsState = {
   eventStatuses: undefined,
   checkCategories: undefined,
   checks: undefined,
+  incidentsRefs: undefined,
   error: undefined,
 };
 
 export function useRefsClient() {
   const fetchClient = useFetch();
   const {accessToken} = useAuth();
-  const [{status, eventStatuses, checks, checkCategories, error}, setRefsState] = useReducer(
+  const [{status, eventStatuses, checks, checkCategories, error, incidentsRefs}, setRefsState] = useReducer(
     (s: TRefsState, a: TRefsState) => ({...s, ...a}),
     initialState,
   );
@@ -34,14 +36,18 @@ export function useRefsClient() {
     const fetchEventStatuses = fetchClient('/api/auth/refs/statuses', {headers});
     const fetchAllChecks = fetchClient('/api/auth/refs/checks', {headers});
     const fetchCheckCategories = fetchClient('/api/auth/refs/check_categories', {headers});
-    Promise.all([fetchEventStatuses, fetchAllChecks, fetchCheckCategories]).then(
+    const fetchRefsIncidents = fetchClient('/api/auth/refs/incidents', {headers});
+    Promise.all([fetchEventStatuses, fetchAllChecks, fetchCheckCategories, fetchRefsIncidents]).then(
       response => {
-        const [eventStatusesData, checksRawData, categoriesData] = response;
+        const [eventStatusesData, checksRawData, categoriesData, incidentsRefsResponse] = response;
         // console.log(eventStatusesData);
         const eventStatuses = StatusesGetResponse200FromJSON(eventStatusesData).statuses;
         const checksData = ChecksGetResponse200FromJSON(checksRawData);
         const checkCategories = categoriesData?.categories;
-        setRefsState({status: 'resolved', eventStatuses, checks: checksData.checks, checkCategories});
+        //FIXME: Fix typings open api
+        //const incidentsRefs = IncidentsGetResponse200FromJSON(incidentsRefsResponse);
+        const incidentsRefs = incidentsRefsResponse.incidents;
+        setRefsState({status: 'resolved', eventStatuses, checks: checksData.checks, checkCategories, incidentsRefs});
       },
       error => {
         setRefsState({status: 'rejected', error});
@@ -70,6 +76,16 @@ export function useRefsClient() {
     [checkCategories],
   );
 
+  const getCheckByIncidentCategoryId = useCallback((categoryId: number) => {
+    const checkId = incidentsRefs?.find(i => i.id === categoryId)?.checks[0].id;
+    return checkId ? getCheckById(checkId) : undefined;
+  }, [getCheckById, incidentsRefs]);
+
+  const getIncidentNameByCategoryId = useCallback((categoryId: number) => {
+    return incidentsRefs?.find(i => i.id === categoryId)?.name;
+  }, [incidentsRefs]);
+
+
   return {
     fetchRefsData,
     eventStatuses,
@@ -79,6 +95,8 @@ export function useRefsClient() {
     getEventStatusById,
     getCheckById,
     getCheckCategoryById,
+    getCheckByIncidentCategoryId,
+    getIncidentNameByCategoryId,
 
     isIdle: status === 'idle',
     isLoading: status === 'pending',
