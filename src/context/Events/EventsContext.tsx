@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useMemo, createContext, useState} from 'react';
+import React, {useContext, useMemo, createContext, useState} from 'react';
 import {useEventsClient} from './use-events-client';
 import {TEventsContext, TEventsQuery} from './types';
 
@@ -9,13 +9,12 @@ export function EventsProvider(props: any) {
     error,
     eventsView,
     queryEvents,
-    isError,
-    isIdle,
-    isLoading,
-    isSuccess,
     getEventByCode,
     getEventsViewBySensorId,
+    status,
+    view,
   } = useEventsClient();
+
   const [queryParams, setQueryParams] = useState<TEventsQuery>({
     startTime: undefined, //'2020-07-13T00:00:00',
     endTime: undefined, // '2020-07-14T00:00:00'
@@ -36,23 +35,26 @@ export function EventsProvider(props: any) {
     incidentFilter: false,
   });
 
-  useEffect(() => {
+  const refreshView = React.useCallback(() => {
     queryEvents(queryParams);
   }, [queryEvents, queryParams]);
+
+  // useEffect(() => {
+  //   queryEvents(queryParams);
+  // }, [queryEvents, queryParams]);
 
   const ctxValue = useMemo<TEventsContext>(
     () => ({
       eventsView,
       error,
       setQueryParams,
-      isIdle,
-      isLoading,
-      isSuccess,
-      isError,
       setFiltersState,
       filtersState,
       getEventByCode,
       getEventsViewBySensorId,
+      status,
+      view,
+      refreshView,
     }),
     [
       error,
@@ -60,10 +62,9 @@ export function EventsProvider(props: any) {
       filtersState,
       getEventByCode,
       getEventsViewBySensorId,
-      isError,
-      isIdle,
-      isLoading,
-      isSuccess,
+      refreshView,
+      status,
+      view,
     ],
   );
   return <EventsContext.Provider value={ctxValue} {...props} />;

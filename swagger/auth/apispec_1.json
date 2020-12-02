@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "0.12.dev77", 
+    "version": "0.12.dev78", 
     "title": "auth", 
     "description": "powered by Flasgger", 
     "termsOfService": "/tos"
@@ -214,27 +214,6 @@
       }
     }, 
     "/api/auth/refs/models": {
-      "get": {
-        "summary": "# Сведения о моделях расчета", 
-        "description": "# ", 
-        "responses": {
-          "200": {
-            "description": "Сведения о моделях расчета", 
-            "schema": {
-              "$ref": "#/definitions/models_get_response_200"
-            }
-          }
-        }, 
-        "tags": [
-          "Refs"
-        ], 
-        "consumes": [
-          "application/json"
-        ], 
-        "produces": [
-          "application/json"
-        ]
-      }, 
       "post": {
         "summary": "# Сохранение модели и категорий отслеживаемых объектов", 
         "description": "# ", 
@@ -257,6 +236,27 @@
             }
           }
         ], 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }, 
+      "get": {
+        "summary": "# Сведения о моделях расчета", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о моделях расчета", 
+            "schema": {
+              "$ref": "#/definitions/models_get_response_200"
+            }
+          }
+        }, 
         "tags": [
           "Refs"
         ], 
@@ -1002,6 +1002,67 @@
         }
       }
     }, 
+    "models_request": {
+      "type": "object", 
+      "required": [
+        "model", 
+        "tocs"
+      ], 
+      "properties": {
+        "model": {
+          "type": "object", 
+          "required": [
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Сведения о модели", 
+          "properties": {
+            "code": {
+              "type": "string", 
+              "description": "Код модели"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название модели"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание модели"
+            }
+          }
+        }, 
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Категория отслеживаемого объекта", 
+            "properties": {
+              "code": {
+                "type": "string", 
+                "description": "Код категории отслеживаемого объекта в рамках модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории отслеживаемого объекта"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории отслеживаемого объекта"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_response_201": {
+      "type": "object"
+    }, 
     "models_get_response_200": {
       "type": "object", 
       "required": [
@@ -1071,67 +1132,6 @@
           }
         }
       }
-    }, 
-    "models_request": {
-      "type": "object", 
-      "required": [
-        "model", 
-        "tocs"
-      ], 
-      "properties": {
-        "model": {
-          "type": "object", 
-          "required": [
-            "code", 
-            "name", 
-            "description"
-          ], 
-          "description": "Сведения о модели", 
-          "properties": {
-            "code": {
-              "type": "string", 
-              "description": "Код модели"
-            }, 
-            "name": {
-              "type": "string", 
-              "description": "Краткое название модели"
-            }, 
-            "description": {
-              "type": "string", 
-              "description": "Описание модели"
-            }
-          }
-        }, 
-        "tocs": {
-          "type": "array", 
-          "items": {
-            "type": "object", 
-            "required": [
-              "code", 
-              "name", 
-              "description"
-            ], 
-            "description": "Категория отслеживаемого объекта", 
-            "properties": {
-              "code": {
-                "type": "string", 
-                "description": "Код категории отслеживаемого объекта в рамках модели"
-              }, 
-              "name": {
-                "type": "string", 
-                "description": "Краткое название категории отслеживаемого объекта"
-              }, 
-              "description": {
-                "type": "string", 
-                "description": "Описание категории отслеживаемого объекта"
-              }
-            }
-          }
-        }
-      }
-    }, 
-    "models_response_201": {
-      "type": "object"
     }, 
     "tocs_get_response_200": {
       "type": "object", 

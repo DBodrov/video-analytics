@@ -135,3 +135,16 @@ export const checkCategories = {
     {id: 2, code: 'transport', name: 'Транспорт', description: 'Трансопрт', detector_id: 1, tracker_id: 1},
   ],
 };
+
+export const incidentsRefs = {
+  incidents: [
+    {
+      id: 1,
+      code: 'filled_track_out',
+      name: '1',
+      description: '1',
+      parameters: {},
+      checks: [{id: 101, parameters: {}}],
+    },
+  ],
+};

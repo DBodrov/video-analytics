@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack serve",
+    "start:mock": "webpack serve --env USE_API_MOCKS=true",
     "build": "rimraf dist && cross-env ENV=production webpack --config config/webpack.config.prod.js",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",

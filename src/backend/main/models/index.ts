@@ -54,6 +54,7 @@ export * from './IncidentsGetResponse200Pagination';
 export * from './IncidentsGetResponse200Period';
 export * from './IncidentsGetResponse200Period1';
 export * from './IncidentsGetResponse200Period1Start';
+export * from './IncidentsGetResponse200Thumbnail';
 export * from './InoutEventsStatsGetResponse200';
 export * from './InoutEventsStatsGetResponse200Location';
 export * from './InoutEventsStatsGetResponse200Sensor';

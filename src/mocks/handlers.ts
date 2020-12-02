@@ -1,8 +1,9 @@
 import {rest} from 'msw';
 import {refreshTokenMock, checkTokenMock, loginMock} from './auth-mocks';
 import {locationsMock, sensorsMock, pipelinesMock} from './company-mock';
-import {checkCategories, checks, statuses} from './refs-mocks';
+import {checkCategories, checks, statuses, incidentsRefs} from './refs-mocks';
 import {events} from './events-mock';
+import {incidentsMock} from './incidents-mocks';
 import {eventsCounts} from './events-counts';
 import {eventMock, timelineMock} from './event-details-mocks';
 
@@ -42,11 +43,17 @@ const refsHandlers = [
   rest.get('/api/auth/refs/check_categories', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(checkCategories));
   }),
+  rest.get('/api/auth/refs/incidents', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(incidentsRefs));
+  }),
 ];
 
 const eventsHandlers = [
   rest.get('/api/va/companies/:companyId/events', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(events));
+  }),
+  rest.get('/api/va/companies/:companyId/incidents', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(incidentsMock));
   }),
   rest.get('/api/va/companies/:companyId/events/counts', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(eventsCounts));
@@ -61,7 +68,6 @@ const eventDetailsHandlers = [
   rest.get('/api/va/companies/:companyId/events/:eventid', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(eventMock));
   }),
-
 ];
 
 export const handlers = [

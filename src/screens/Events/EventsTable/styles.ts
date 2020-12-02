@@ -13,7 +13,7 @@ export const List = styled.ul`
 
 export const Event = styled.li`
   display: grid;
-  grid-template: 1fr / 82px minmax(400px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 1fr;
+  grid-template: 1fr / 82px minmax(400px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
   column-gap: 30px;
   width: 100%;
   height: 80px;
