@@ -70,10 +70,17 @@ const eventDetailsHandlers = [
   }),
 ];
 
+const sensorDetailHandlers = [
+  rest.get('/api/va/companies/:companyId/sensors/:sensorId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(sensorsMock[0]));
+  }),
+]
+
 export const handlers = [
   ...authHandlers,
   ...companyHandlers,
   ...refsHandlers,
   ...eventsHandlers,
   ...eventDetailsHandlers,
+  ...sensorDetailHandlers,
 ];

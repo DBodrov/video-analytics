@@ -1,6 +1,6 @@
 import {
   CompanySensorsGetResponse200,
-  CompanySensorsGetResponse200Sensors,
+  SensorsGetResponse200Sensors,
   CompanyLocationsGetResponse200Locations,
 } from '@/backend/main';
 
@@ -8,7 +8,7 @@ export type TLocation = CompanyLocationsGetResponse200Locations;
 export type TLocations = TLocation[];
 
 export type TSensors = CompanySensorsGetResponse200['sensors'];
-export type TSensor = CompanySensorsGetResponse200Sensors;
+export type TSensor = SensorsGetResponse200Sensors;
 
 export interface ICompanyContext {
   locations?: TLocations;

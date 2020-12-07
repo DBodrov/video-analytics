@@ -41,13 +41,13 @@ export function SensorInfo({sensor, eventsCount, incidentsCount}: Props) {
     <InfoBlock>
       <Span css={{fontWeight: 600}}>{sensor?.ref?.name}</Span>
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-        URL: <Span css={{fontSize: 12}}>{sensor?.ref?.url}</Span>
+        URL: <Span css={{fontSize: 12, wordBreak: 'break-all'}}>{sensor?.ref?.url}</Span>
       </Span>
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
         Расположение: <Span css={{fontSize: 12}}>{readLocation(sensor?.ref?.locationId)}</Span>
       </Span>
       <Span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-        Правил: <Span css={{fontSize: 12}}>{sensor.metrics.activeChecks}</Span>
+        Правил: <Span css={{fontSize: 12}}>{sensor.metrics.activeCheckIds?.length}</Span>
       </Span>
       <EventsCounts>
         <div

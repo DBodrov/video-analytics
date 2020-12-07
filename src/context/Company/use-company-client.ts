@@ -4,7 +4,7 @@ import {
   CompanyLocationsGetResponse200,
   CompanyLocationsGetResponse200FromJSON,
   CompanySensorsGetResponse200FromJSON,
-  IncidentsGetResponse200Incidents,
+  /*IncidentsGetResponse200Incidents,*/
   PipelinesGetResponse200FromJSON,
   PipelinesGetResponse200Pipelines,
   // PipelinesGetResponse200BySensor
@@ -16,7 +16,7 @@ type TCompanyState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   locations?: TLocations;
   sensors?: TSensors;
-  incidents?: IncidentsGetResponse200Incidents;
+  incidents?: any/*IncidentsGetResponse200Incidents*/;
   pipelines?: PipelinesGetResponse200Pipelines[];
   data?: any;
   error?: any;
