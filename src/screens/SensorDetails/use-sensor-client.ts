@@ -21,7 +21,7 @@ export function useSensorClient() {
     const headers = authHeader;
     fetchClient(`/api/va/companies/${companyId}/sensors/${sensorId}`, {headers}).then(
       response => {
-        const sensorData = CompanySensorGetResponse200FromJSON(response);
+        const sensorData = CompanySensorGetResponse200FromJSON(response.sensor);
         setSensor(s => ({...s, status: 'resolved', sensor: sensorData}));
       },
       error => {
