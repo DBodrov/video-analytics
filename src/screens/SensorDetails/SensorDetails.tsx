@@ -69,7 +69,7 @@ export function SensorDetails() {
     }
   }, [getCheckById, sensorState.sensor]);
 
-  const tagColor = sensorState ? statusColor[sensorState!.sensor!.status!.code] : 'transparent';
+  const statusCode = sensorState.sensor?.status.code ?? 'unknown';
 
   return (
     <AppLayout>
@@ -79,7 +79,7 @@ export function SensorDetails() {
             <BoxToggle showBox={showBoxes} onToggle={() => setShowBoxes(!showBoxes)} />
             <img src={videoUrl} alt="" width="100%" height="100%" />
             <Tag
-              css={{position: 'absolute', bottom: 10, right: 10, backgroundColor: tagColor}}
+              css={{position: 'absolute', bottom: 10, right: 10, backgroundColor: statusColor[statusCode]}}
             >
               {sensorState.sensor?.status.name}
             </Tag>

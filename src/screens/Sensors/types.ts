@@ -10,4 +10,5 @@ export const statusColor: Record<string, string> = {
   in_use: '#36AF47',
   inactive: '#F7981C',
   error: '#F95359',
+  unknown: 'transparent'
 };
