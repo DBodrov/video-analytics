@@ -11,8 +11,8 @@ export const SensorsTileList = styled.div`
 `;
 
 export const Tile = styled.div`
-  width: 338px;
-  height: 348px;
+  width: 350px;
+  min-height: 350px;
   background-color: var(--color-form);
   margin-right: 30px;
   margin-top: 30px;

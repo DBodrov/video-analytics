@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import {Span} from 'neutrino-ui';
 import {CircleCheckIcon} from '@/assets/icons';
+import {TCheck} from '@/context/Refs/types';
 
 const CheckItem = styled.li`
   display: flex;
@@ -12,15 +13,24 @@ const CheckItem = styled.li`
   padding: 0;
 `;
 
-export function ActiveChecks() {
+type Props = {
+  checkList?: TCheck[];
+};
+
+export function ActiveChecks(props: Props) {
+  const {checkList} = props;
   return (
     <div css={{padding: '10px 0px 10px 30px', border: '1px var(--color-border) solid'}}>
       <Span css={{fontSize: 14}}>Активные правила</Span>
       <ul css={{margin: 0, padding: '10px 0'}}>
-        <CheckItem>
-          <CircleCheckIcon />
-          <Span css={{paddingLeft: 14, fontSize: 14}}>Active check block</Span>
-        </CheckItem>
+        {checkList
+          ? checkList.map((check) => (
+              <CheckItem key={check?.id}>
+                <CircleCheckIcon />
+                <Span css={{paddingLeft: 14, fontSize: 14}}>{check?.name}</Span>
+              </CheckItem>
+            ))
+          : null}
       </ul>
     </div>
   );

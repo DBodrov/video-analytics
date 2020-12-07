@@ -6,6 +6,7 @@ import {events} from './events-mock';
 import {incidentsMock} from './incidents-mocks';
 import {eventsCounts} from './events-counts';
 import {eventMock, timelineMock} from './event-details-mocks';
+import {sensorDetail} from './sensor-detail';
 
 const authHandlers = [
   rest.get('/api/auth/token', (req, res, ctx) => {
@@ -72,7 +73,7 @@ const eventDetailsHandlers = [
 
 const sensorDetailHandlers = [
   rest.get('/api/va/companies/:companyId/sensors/:sensorId', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(sensorsMock[0]));
+    return res(ctx.status(200), ctx.json(sensorDetail));
   }),
 ]
 

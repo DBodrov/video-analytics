@@ -25,7 +25,7 @@ export function EventSection({imageContent, boxes, commonDetectInfo, extraDetect
         <img src={imageContent} alt="event" />
         {showTrackBox
           ? boxes?.map((box, index) => (
-              <div key={index} css={{position: 'absolute', border: '2px var(--color-secondary) solid', ...box}}></div>
+              <div key={index} css={{position: 'absolute', border: '2px var(--color-box) solid', ...box}}></div>
             ))
           : null}
       </div>
