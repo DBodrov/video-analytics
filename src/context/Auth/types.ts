@@ -13,6 +13,7 @@ export interface IAuthContext {
   login: (loginData: LoginFormData) => void;
   accessToken?: string;
   companyId?: number;
+  authHeader?: {Authorization: string};
 }
 
 export const ACCESS_TOKEN_KEY = 'VA-access-token';

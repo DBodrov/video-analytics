@@ -11,12 +11,16 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     run();
   }, [run]);
 
-  const contextValue = useMemo<IAuthContext>(() => ({isAuthorized, login, accessToken, companyId}), [
-    accessToken,
-    companyId,
-    isAuthorized,
-    login,
-  ]);
+  const contextValue = useMemo<IAuthContext>(
+    () => ({
+      isAuthorized,
+      login,
+      accessToken,
+      companyId,
+      authHeader: {Authorization: `Bearer ${accessToken}`},
+    }),
+    [accessToken, companyId, isAuthorized, login],
+  );
 
   if (isLoading) return <span>Authentication...</span>;
 
