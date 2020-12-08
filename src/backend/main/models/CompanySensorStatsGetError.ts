@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface CompanySensorPatchError
+ * @interface CompanySensorStatsGetError
  */
-export interface CompanySensorPatchError {
+export interface CompanySensorStatsGetError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanySensorStatsGetError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanySensorStatsGetError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanySensorStatsGetError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanySensorStatsGetError
      */
     statusCode: number;
 }
 
-export function CompanySensorPatchErrorFromJSON(json: any): CompanySensorPatchError {
-    return CompanySensorPatchErrorFromJSONTyped(json, false);
+export function CompanySensorStatsGetErrorFromJSON(json: any): CompanySensorStatsGetError {
+    return CompanySensorStatsGetErrorFromJSONTyped(json, false);
 }
 
-export function CompanySensorPatchErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanySensorPatchError {
+export function CompanySensorStatsGetErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanySensorStatsGetError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function CompanySensorPatchErrorFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function CompanySensorPatchErrorToJSON(value?: CompanySensorPatchError | null): any {
+export function CompanySensorStatsGetErrorToJSON(value?: CompanySensorStatsGetError | null): any {
     if (value === undefined) {
         return undefined;
     }

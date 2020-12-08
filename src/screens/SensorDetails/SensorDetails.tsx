@@ -33,7 +33,7 @@ export function SensorDetails() {
   const {companyId} = useAuth();
   const {id} = useParams<{id: string}>();
   const {queryEvents, error, eventsView, status} = useEventsClient();
-  const {querySensorById, sensorState} = useSensorClient();
+  const {querySensorById, status: sensorStatus, sensor, sensorStats} = useSensorClient();
   const {getCheckById} = useRefs();
   const videoUrl = React.useMemo(
     () =>
@@ -44,7 +44,7 @@ export function SensorDetails() {
   );
 
   React.useEffect(() => {
-    if (eventsView?.length === 0 && status !== 'resolved') {
+    if (eventsView?.length === 0 && status === 'idle') {
       const today = allDay();
       queryEvents({
         sensorIds: Number(id),
@@ -55,21 +55,21 @@ export function SensorDetails() {
         pageSize: 50,
       });
     }
-    if (!sensorState.sensor && sensorState.status === 'idle') {
+    if (!sensor && sensorStatus === 'idle') {
       querySensorById(Number(id));
     }
-  }, [eventsView, id, queryEvents, querySensorById, sensorState.sensor, sensorState.status, status]);
+  }, [eventsView, id, queryEvents, querySensorById, status, sensor, sensorStatus]);
 
   const readCheckList = React.useCallback(() => {
-    if (sensorState.sensor) {
-      const checkIds = sensorState.sensor.metrics.activeCheckIds;
+    if (sensor) {
+      const checkIds = sensor.metrics.activeCheckIds;
       if (checkIds) {
         return checkIds.map(getCheckById);
       }
     }
-  }, [getCheckById, sensorState.sensor]);
+  }, [getCheckById, sensor]);
 
-  const statusCode = sensorState.sensor?.status.code ?? 'unknown';
+  const statusCode = sensor?.status.code ?? 'unknown';
 
   return (
     <AppLayout>
@@ -81,12 +81,12 @@ export function SensorDetails() {
             <Tag
               css={{position: 'absolute', bottom: 10, right: 10, backgroundColor: statusColor[statusCode]}}
             >
-              {sensorState.sensor?.status.name}
+              {sensor?.status.name}
             </Tag>
           </div>
           <CameraInfoBox>
-            <TechInfo sensor={sensorState.sensor} />
-            <DayStats />
+            <TechInfo sensor={sensor} />
+            <DayStats stats={sensorStats} />
             <ActiveChecks checkList={readCheckList()} />
             <div css={{paddingLeft: 30, paddingTop: 18}}>
               <Button flat variant="primary" css={{width: 170, fontSize: 14}}>
