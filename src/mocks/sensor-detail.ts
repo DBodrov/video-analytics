@@ -20,3 +20,18 @@ export const sensorDetail: any = {
     },
   },
 };
+
+export const sensorStats = {
+  stats: [
+    {
+      period: 'string',
+      location_id: 0,
+      sensor_id: 0,
+      toc_id: 0,
+      events: 10,
+      incidents: 20,
+    },
+  ],
+  //stats: [],
+  period: {tz_offset: 3, start_time: '2020-12-08 00:47:15', end_time: '2020-12-09 00:47:15'},
+};
