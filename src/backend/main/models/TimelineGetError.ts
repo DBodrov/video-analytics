@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface EventStatusPostError
+ * @interface TimelineGetError
  */
-export interface EventStatusPostError {
+export interface TimelineGetError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof EventStatusPostError
+     * @memberof TimelineGetError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof EventStatusPostError
+     * @memberof TimelineGetError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof EventStatusPostError
+     * @memberof TimelineGetError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof EventStatusPostError
+     * @memberof TimelineGetError
      */
     statusCode: number;
 }
 
-export function EventStatusPostErrorFromJSON(json: any): EventStatusPostError {
-    return EventStatusPostErrorFromJSONTyped(json, false);
+export function TimelineGetErrorFromJSON(json: any): TimelineGetError {
+    return TimelineGetErrorFromJSONTyped(json, false);
 }
 
-export function EventStatusPostErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): EventStatusPostError {
+export function TimelineGetErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): TimelineGetError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function EventStatusPostErrorFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-export function EventStatusPostErrorToJSON(value?: EventStatusPostError | null): any {
+export function TimelineGetErrorToJSON(value?: TimelineGetError | null): any {
     if (value === undefined) {
         return undefined;
     }

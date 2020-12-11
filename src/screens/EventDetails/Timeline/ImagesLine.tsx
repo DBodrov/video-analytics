@@ -1,9 +1,9 @@
 import React from 'react';
 import {OldCameraIcon} from '@/assets/icons';
-import {TEventsByHours} from '../types';
+import {TOccurrenceByHours} from '../types';
 import {HeaderCell, ImageBox} from './styles';
 
-type TImageLineProps = {events?: TEventsByHours};
+type TImageLineProps = {events?: TOccurrenceByHours};
 
 export function ImagesLine({events}: TImageLineProps) {
   return (
@@ -17,7 +17,7 @@ export function ImagesLine({events}: TImageLineProps) {
           return (
             <ImageBox key={hour}>
               {currentEvents.map(event => {
-                return <img key={event.eventCode} src={event.thumbnail} alt="thumb" />;
+                return <img key={event.eventId} src={event.thumbnail} alt="thumb" />;
               })}
             </ImageBox>
           );

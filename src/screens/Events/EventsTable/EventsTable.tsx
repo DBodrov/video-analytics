@@ -8,12 +8,14 @@ type TEventsTableProps = {
   eventsView?: IEventView[] | IIncidentView[];
   error?: Error;
   status?: 'idle' | 'pending' | 'resolved' | 'rejected';
+  viewType?: 'events' | 'incidents';
 };
 
 export function EventsTable({
   eventsView,
   error,
   status,
+  viewType = 'events'
 }: TEventsTableProps) {
   const history = useHistory();
   const isIdle = status === 'idle';
@@ -25,7 +27,7 @@ export function EventsTable({
     return (
       <div>
         <div></div>
-        <span>Получаем события...</span>
+        <span>{`Получаем ${viewType === 'events' ? 'события' : 'инциденты'}...`}</span>
       </div>
     );
   }
@@ -58,7 +60,7 @@ export function EventsTable({
                 key={event.id}
                 value={event!.eventCode}
                 onClick={() => {
-                  history.push({pathname: '/events/details', state: {id: event!.eventCode}});
+                  history.push({pathname: '/events/details', state: {id: viewType === 'events' ? event!.eventCode : event.id, viewType}});
                 }}
               >
                 <EventThumbnail thumbnail={event!.thumbnail} isIncident={event.isIncident ?? false} />

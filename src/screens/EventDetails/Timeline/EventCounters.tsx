@@ -12,7 +12,8 @@ type TCounterProps = {
 
 export function EventCounters({counts, isIncidents = false, isActive, onFilter, showEvents}: TCounterProps) {
   const handleSetEventsType = React.useCallback(() => {
-    onFilter(isIncidents);
+    return;
+    //onFilter(isIncidents);
   }, [isIncidents, onFilter]);
 
   return (

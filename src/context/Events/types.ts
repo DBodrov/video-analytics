@@ -1,4 +1,4 @@
-import {EventsGetResponse200, EventsGetResponse200Events, IncidentsGetResponse200, IncidentsGetResponse200Incidents} from '@/backend/main';
+import {EventsGetResponse200, EventsGetResponse200Events, IncidentsGetResponse200, IncidentGetResponse200Incident} from '@/backend/main';
 
 export type TEventsData = EventsGetResponse200;
 export type TEvents = EventsGetResponse200['events'] | undefined;
@@ -11,15 +11,14 @@ export interface IEventView {
   check?: string;
   checkCategory?: string;
   eventStatus?: string;
-  eventCode: string;
+  code?: string;
   timestamp: string;
-  isIncident?: boolean;
 };
 
 export interface IIncidentView extends IEventView {}
 
 export type TIncidentsData = IncidentsGetResponse200;
-export type TIncidents = IncidentsGetResponse200Incidents[];
+export type TIncidents = IncidentGetResponse200Incident[];
 
 export type TEventsContext = {
   eventsView?: IEventView[];
@@ -32,6 +31,7 @@ export type TEventsContext = {
   filtersState: TFiltersState;
   error?: Error;
   status?: 'idle' | 'pending' | 'resolved' | 'rejected';
+  viewType: 'events' | 'incidents';
 };
 
 export type TEventsQuery = {

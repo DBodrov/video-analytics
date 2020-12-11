@@ -1,12 +1,16 @@
 import {
   EventGetResponse200Event,
-  EventsGetResponse200ImageTrackBoxes,
-  EventsGetResponse200TrackedObjectExtra,
+  TimelineGetOccurrence200,
+  IncidentGetResponse200IncidentImageTrackBoxes,
+  IncidentGetResponse200IncidentTrackedObjectExtra,
+  IncidentGetResponse200Incident,
+  IncidentGetResponse200
 } from '@/backend/main';
 import {IEventView} from '@/context/Events';
 
 export type TEvent = EventGetResponse200Event;
-export type TImageTrackBoxes = EventsGetResponse200ImageTrackBoxes[];
+export type TIncident = IncidentGetResponse200Incident;
+export type TImageTrackBoxes = IncidentGetResponse200IncidentImageTrackBoxes[];
 
 export type TCommonDetectInfo = {
   sensor: string;
@@ -16,10 +20,13 @@ export type TCommonDetectInfo = {
   eventStatus?: string;
 };
 
-export type TExtraDetectInfo = EventsGetResponse200TrackedObjectExtra;
+export type TExtraDetectInfo = IncidentGetResponse200IncidentTrackedObjectExtra;
 
 export type TEventType = 'events' | 'incidents';
+export type TOccurrenceType = 'events' | 'incidents';
 
 //export type TEventView = {thumbnail: string; eventCode: string; isIncident: boolean};
-export type TEventsByHours = Record<number, IEventView[]>;
-export {IEventView as TEventView};
+export interface IOccurrenceView extends IEventView {eventId: string | number};
+// export type TEventsByHours = Record<number, IEventView[]>;
+export type TOccurrenceByHours = Record<number, IOccurrenceView[]>;
+export type TOccurrenceData = TEvent & {id: string} | TIncident;

@@ -7,7 +7,7 @@ import {EventsRightSidebar} from './EventsRight';
 import {WorkLayout, FiltersPlace, RightBar, TablePlace} from './styles';
 
 export function Events() {
-  const {error, status, view, refreshView} = useEvents();
+  const {error, status, view, refreshView, viewType} = useEvents();
 
   React.useEffect(() => {
     refreshView();
@@ -24,6 +24,7 @@ export function Events() {
             status={status}
             error={error}
             eventsView={view}
+            viewType={viewType}
           />
         </TablePlace>
         <RightBar>
