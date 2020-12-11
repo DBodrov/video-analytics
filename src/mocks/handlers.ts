@@ -5,7 +5,9 @@ import {checkCategories, checks, statuses, incidentsRefs} from './refs-mocks';
 import {events} from './events-mock';
 import {incidentsMock} from './incidents-mocks';
 import {eventsCounts} from './events-counts';
-import {eventMock, timelineMock} from './event-details-mocks';
+import {eventMock} from './event-details-mocks';
+import {timeline} from './timeline-mock';
+import {incidentDetailMock} from './incident-details-mocks';
 import {sensorDetail, sensorStats} from './sensor-detail';
 
 const authHandlers = [
@@ -62,12 +64,16 @@ const eventsHandlers = [
 ];
 
 const eventDetailsHandlers = [
-  rest.get('/api/va/companies/:companyId/events/timeline', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(timelineMock));
+  rest.get('/api/va/companies/:companyId/timeline', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(timeline));
   }),
 
   rest.get('/api/va/companies/:companyId/events/:eventid', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(eventMock));
+  }),
+
+  rest.get('/api/va/companies/:companyId/incidents/:id', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(incidentDetailMock));
   }),
 ];
 

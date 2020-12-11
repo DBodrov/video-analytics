@@ -1,46 +1,57 @@
 import React from 'react';
-import {EventGetResponse200EventFromJSON} from '@/backend/main';
+import {EventGetResponse200EventFromJSON, IncidentGetResponse200IncidentFromJSON} from '@/backend/main';
 import {useAuth, useRefs, useCompany} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
-import {TEvent, TImageTrackBoxes, TCommonDetectInfo, TExtraDetectInfo} from './types';
+import {TEvent, TIncident, TImageTrackBoxes, TCommonDetectInfo, TExtraDetectInfo, TOccurrenceData, TOccurrenceType} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
-  eventData?: TEvent | undefined;
+  eventData?: TOccurrenceData;
   imageContent?: string;
   trackBoxes?: TImageTrackBoxes;
   error?: any;
+  viewType: TOccurrenceType;
 };
 
-const eventReducer = (state: State, changes: State): State => ({...state, ...changes});
+const eventReducer = (state: State, changes: Partial<State>): State => ({...state, ...changes});
 const initState: State = {
   status: 'idle',
   eventData: undefined,
   imageContent: '',
   trackBoxes: undefined,
   error: null,
+  viewType: 'events',
 };
 
 export function useEventClient() {
   const fetchClient = useFetch();
-  const {accessToken, companyId} = useAuth();
-  const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
+  const {authHeader, companyId} = useAuth();
+  const {getCheckById, getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId} = useRefs();
   const {getSensorById, getLocationById} = useCompany();
-  const [{status, eventData, imageContent, trackBoxes, error}, dispatch] = React.useReducer(
+  const [{status, eventData, imageContent, trackBoxes, error, viewType}, dispatch] = React.useReducer(
     eventReducer,
     initState,
   );
   const fetchEvent = React.useCallback(
-    (id: string) => {
+    (id: string, typeOfView: 'events' | 'incidents') => {
+      // console.log('fetch event', id, typeOfView);
       dispatch({status: 'pending'});
-      const headers = {Authorization: `Bearer ${accessToken}`};
-      fetchClient(`/api/va/companies/${companyId}/events/${id}?tz_offset=${TIMEZONE_OFFSET}`, {headers}).then(
+
+      const url = `/api/va/companies/${companyId}/${typeOfView}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
+
+      fetchClient(url, {headers: authHeader}).then(
         response => {
-          const eventData = EventGetResponse200EventFromJSON(response?.event);
+          const eventData =
+            typeOfView === 'events'
+              ? EventGetResponse200EventFromJSON(response?.event)
+              : IncidentGetResponse200IncidentFromJSON(response?.incident);
           const imageContent = `data:image/${eventData.thumbnail?.compression};base64, ${eventData.thumbnail?.content}`;
           //const trackBox = eventData.thumbnail?.trackBox;
           const trackBoxes = eventData.thumbnail?.trackBoxes;
-          dispatch({status: 'resolved', eventData, imageContent, trackBoxes});
+          const id: string | number = typeOfView === 'events' ? (eventData as TEvent).eventCode : (eventData as TIncident).id
+          const eventWithId: TOccurrenceData = {...eventData, id } as TOccurrenceData;
+
+          dispatch({status: 'resolved', eventData: eventWithId, imageContent, trackBoxes, viewType: typeOfView});
           return response;
         },
         error => {
@@ -49,8 +60,15 @@ export function useEventClient() {
         },
       );
     },
-    [accessToken, companyId, fetchClient],
+    [authHeader, companyId, fetchClient],
   );
+
+  // React.useEffect(() => {
+  //   function fetchEvent() {
+  //     dispatch({status: 'pending'});
+  //     const url = `/api/va/companies/${companyId}/${occurrenceType}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
+  //   }
+  // }, [id, occurrenceType]);
 
   const boxRects = trackBoxes?.map(box => {
     return {
@@ -58,22 +76,43 @@ export function useEventClient() {
       left: box?.topX ?? 0,
       width: (box?.bottomX ?? 0) - (box?.topX ?? 0),
       height: (box?.bottomY ?? 0) - (box?.topY ?? 0),
-    }
+    };
   });
 
   const createCommonDetectInfo = React.useCallback((): TCommonDetectInfo | undefined => {
     if (eventData) {
-      const checkData = getCheckById(eventData?.checkId);
+      if (viewType === 'events') {
+        const checkData = getCheckById((eventData as TEvent)?.checkId);
+        return {
+          check: checkData?.name ?? '',
+          checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
+          sensor: getSensorById(eventData?.sensorId)?.ref?.name ?? '',
+          location: getLocationById(eventData.locationId)?.name ?? '',
+          eventStatus: getEventStatusById(eventData.status?.currentId)?.name,
+        };
+      }
+
+      const incidentData = eventData as TIncident;
+
       return {
-        sensor: getSensorById(eventData?.sensorId)?.ref?.name ?? '',
-        check: checkData?.name ?? '',
-        checkCategory: checkData ? getCheckCategoryById(checkData?.categoryId)?.name : undefined,
-        location: getLocationById(eventData.locationId)?.name ?? '',
-        eventStatus: getEventStatusById(eventData.status?.currentId)?.name,
+        check: getIncidentNameByCategoryId(incidentData?.categoryId) ?? '',
+        sensor: getSensorById(incidentData?.sensorId)?.ref?.name ?? '',
+        location: getLocationById(incidentData.locationId)?.name ?? '',
+        eventStatus: getEventStatusById(incidentData.status?.currentId)?.name,
+        checkCategory: getCheckCategoryById(incidentData.categoryId)?.name,
       };
     }
     return undefined;
-  }, [eventData, getCheckById, getCheckCategoryById, getEventStatusById, getLocationById, getSensorById]);
+  }, [
+    eventData,
+    getCheckById,
+    getCheckCategoryById,
+    getEventStatusById,
+    getIncidentNameByCategoryId,
+    getLocationById,
+    getSensorById,
+    viewType,
+  ]);
 
   const createExtraInfo = React.useCallback((): TExtraDetectInfo[] | undefined => {
     if (eventData) {
@@ -82,7 +121,7 @@ export function useEventClient() {
       return orderedExtra;
     }
     return undefined;
-  }, [eventData])
+  }, [eventData]);
 
   return {
     isIdle: status === 'idle',

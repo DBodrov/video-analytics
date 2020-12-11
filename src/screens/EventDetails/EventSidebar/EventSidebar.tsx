@@ -1,10 +1,11 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import {List, EventBox, EventInfo} from './styles';
-import {TEventView} from '../types';
+import {IOccurrenceView} from '../types';
 
 type Props = {
-  eventsList: TEventView[];
+  eventsList?: IOccurrenceView[];
+  viewType?: 'events' | 'incidents';
 };
 
 const formatTimestamp = (timestamp?: string) => {
@@ -19,43 +20,46 @@ const formatTimestamp = (timestamp?: string) => {
   return result;
 };
 
-export function EventSidebar({eventsList}: Props) {
+export function EventSidebar({eventsList, viewType}: Props) {
   const history = useHistory();
 
   return (
     <List>
-      {eventsList.map(event => {
-        return (
-          <EventBox
-            key={event.eventCode}
-            onClick={() =>
-              history.push({
-                pathname: '/events/details',
-                state: {
-                  id: event.eventCode,
-                },
-              })
-            }
-          >
-            <div
-              css={{
-                minWidth: 130,
-                height: 80,
-              }}
-            >
-              <img src={event.thumbnail} width="100%" height="100%" alt="thumb" css={{borderRadius: 4}} />
-            </div>
-            <EventInfo>
-              <span>{event.checkCategory}</span>
-              <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-                {formatTimestamp(event.timestamp)}
-              </span>
-              <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.check}</span>
-              <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.sensorName}</span>
-            </EventInfo>
-          </EventBox>
-        );
-      })}
+      {eventsList
+        ? eventsList.map(event => {
+            return (
+              <EventBox
+                key={event.id}
+                onClick={() =>
+                  history.push({
+                    pathname: '/events/details',
+                    state: {
+                      id: event.eventId,
+                      viewType
+                    },
+                  })
+                }
+              >
+                <div
+                  css={{
+                    minWidth: 130,
+                    height: 80,
+                  }}
+                >
+                  <img src={event.thumbnail} width="100%" height="100%" alt="thumb" css={{borderRadius: 4}} />
+                </div>
+                <EventInfo>
+                  <span>{event.checkCategory}</span>
+                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
+                    {formatTimestamp(event.timestamp)}
+                  </span>
+                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.check}</span>
+                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.sensorName}</span>
+                </EventInfo>
+              </EventBox>
+            );
+          })
+        : null}
     </List>
   );
 }

@@ -13,6 +13,7 @@ export function EventsProvider(props: any) {
     getEventsViewBySensorId,
     status,
     view,
+    viewType,
   } = useEventsClient();
 
   const [queryParams, setQueryParams] = useState<TEventsQuery>({
@@ -55,6 +56,7 @@ export function EventsProvider(props: any) {
       status,
       view,
       refreshView,
+      viewType,
     }),
     [
       error,
@@ -65,6 +67,7 @@ export function EventsProvider(props: any) {
       refreshView,
       status,
       view,
+      viewType,
     ],
   );
   return <EventsContext.Provider value={ctxValue} {...props} />;

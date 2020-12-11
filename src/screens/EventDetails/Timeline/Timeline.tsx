@@ -3,31 +3,48 @@ import {useHistory} from 'react-router-dom';
 import {HoursScale} from './HoursScale';
 import {ImagesLine} from './ImagesLine';
 import {EventCounters} from './EventCounters';
-import {TEventView} from '../types';
+import {IOccurrenceView, TOccurrenceByHours} from '../types';
 import {TimelineTable} from './styles';
 
 type TimelineProps = {
-  allEvents?: Record<number, TEventView[]> | undefined;
+  allEvents?: Record<number, IOccurrenceView[]> | undefined;
+  events?: TOccurrenceByHours;
+  incidents?: TOccurrenceByHours;
   eventsCount?: number[];
   incidentsCount?: number[];
-  onFilter: (showIncident: boolean) => void;
+  onFilter: (isIncident: boolean) => void;
   isIncident: boolean;
+  viewType?: 'events' | 'incidents';
 };
 
-export function Timeline({allEvents, eventsCount, incidentsCount, onFilter, isIncident}: TimelineProps) {
+export function Timeline({
+  allEvents,
+  events,
+  incidents,
+  eventsCount,
+  incidentsCount,
+  onFilter,
+  isIncident,
+  viewType = 'events',
+}: TimelineProps) {
   const history = useHistory();
   const handleShowEvents = React.useCallback(
     (hour: number, isIncident: boolean) => {
-      const eventsList = allEvents![hour].filter(e => e.isIncident === isIncident);
-      const firstEventInHour = eventsList[0].eventCode;
-      history.push({
-        pathname: '/events/details',
-        state: {
-          id: firstEventInHour,
-        },
-      });
+      return;
+      //console.log('isIncident', isIncident)
+      // if (events && incidents) {
+      //   const occurrenceList = isIncident ? incidents[hour] : events[hour];
+      //   const firstOccurrenceInHour = occurrenceList[0].eventId;
+      //   history.push({
+      //     pathname: '/events/details',
+      //     state: {
+      //       id: firstOccurrenceInHour,
+      //       viewType: isIncident ? 'incidents' : 'events',
+      //     },
+      //   });
+      // }
     },
-    [allEvents, history],
+    [],
   );
   return (
     <div css={{padding: 20, width: '100%'}}>
@@ -37,14 +54,14 @@ export function Timeline({allEvents, eventsCount, incidentsCount, onFilter, isIn
         <EventCounters
           counts={eventsCount}
           onFilter={onFilter}
-          isActive={!isIncident}
+          isActive={viewType === 'events'}
           showEvents={handleShowEvents}
         />
         <EventCounters
           counts={incidentsCount}
           isIncidents
           onFilter={onFilter}
-          isActive={isIncident}
+          isActive={viewType === 'incidents'}
           showEvents={handleShowEvents}
         />
       </TimelineTable>
