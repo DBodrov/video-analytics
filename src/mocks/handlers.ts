@@ -9,6 +9,7 @@ import {eventMock} from './event-details-mocks';
 import {timeline} from './timeline-mock';
 import {incidentDetailMock} from './incident-details-mocks';
 import {sensorDetail, sensorStats} from './sensor-detail';
+//import {sensorStats} from './sensors-stats';
 
 const authHandlers = [
   rest.get('/api/auth/token', (req, res, ctx) => {

@@ -34,7 +34,7 @@ export function EventSidebar({eventsList, viewType}: Props) {
                   history.push({
                     pathname: '/events/details',
                     state: {
-                      id: event.eventId,
+                      eventId: event.eventId,
                       viewType
                     },
                   })

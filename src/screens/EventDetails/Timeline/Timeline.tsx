@@ -3,64 +3,66 @@ import {useHistory} from 'react-router-dom';
 import {HoursScale} from './HoursScale';
 import {ImagesLine} from './ImagesLine';
 import {EventCounters} from './EventCounters';
-import {IOccurrenceView, TOccurrenceByHours} from '../types';
+import {TOccurrenceByHours} from '../types';
 import {TimelineTable} from './styles';
 
 type TimelineProps = {
-  allEvents?: Record<number, IOccurrenceView[]> | undefined;
+  currentDate?: string;
   events?: TOccurrenceByHours;
   incidents?: TOccurrenceByHours;
   eventsCount?: number[];
   incidentsCount?: number[];
-  onFilter: (isIncident: boolean) => void;
-  isIncident: boolean;
+  // onFilter: (isIncident: boolean) => void;
+  // isIncident: boolean;
   viewType?: 'events' | 'incidents';
 };
 
 export function Timeline({
-  allEvents,
+  currentDate,
   events,
   incidents,
   eventsCount,
   incidentsCount,
-  onFilter,
-  isIncident,
+  // onFilter,
+  //isIncident,
   viewType = 'events',
 }: TimelineProps) {
   const history = useHistory();
+  const currentHour = new Date(currentDate!).getHours();
+
   const handleShowEvents = React.useCallback(
     (hour: number, isIncident: boolean) => {
-      return;
-      //console.log('isIncident', isIncident)
-      // if (events && incidents) {
-      //   const occurrenceList = isIncident ? incidents[hour] : events[hour];
-      //   const firstOccurrenceInHour = occurrenceList[0].eventId;
-      //   history.push({
-      //     pathname: '/events/details',
-      //     state: {
-      //       id: firstOccurrenceInHour,
-      //       viewType: isIncident ? 'incidents' : 'events',
-      //     },
-      //   });
-      // }
+      let id;
+      let viewType;
+      if (isIncident && hour >= 0) {
+        id = String(incidents![hour][0].id);
+        viewType = 'incidents';
+      } else if (!isIncident && hour >= 0) {
+        id = events![hour][0].code;
+        viewType = 'events';
+      }
+      history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
     },
-    [],
+    [events, history, incidents],
   );
+
   return (
     <div css={{padding: 20, width: '100%'}}>
       <TimelineTable>
-        <HoursScale />
-        <ImagesLine events={allEvents} />
+        <HoursScale currentHour={currentHour} />
+        <ImagesLine events={viewType === 'events' ? events : incidents} />
         <EventCounters
           counts={eventsCount}
-          onFilter={onFilter}
+          currentHour={currentHour}
+          // onFilter={onFilter}
           isActive={viewType === 'events'}
           showEvents={handleShowEvents}
         />
         <EventCounters
           counts={incidentsCount}
           isIncidents
-          onFilter={onFilter}
+          currentHour={currentHour}
+          // onFilter={onFilter}
           isActive={viewType === 'incidents'}
           showEvents={handleShowEvents}
         />

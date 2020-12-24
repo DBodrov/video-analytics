@@ -1,5 +1,5 @@
 import React from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useHistory} from 'react-router-dom';
 
 import {DetailsLayout} from '@/screens/Layouts';
 import {useEventClient} from './use-event-client';
@@ -9,25 +9,25 @@ import {Timeline} from './Timeline';
 import {Player} from './Player';
 import {EventSidebar} from './EventSidebar';
 import {EventContent} from './styles';
-import {TEvent, TIncident} from './types';
+// import {TEvent, TIncident} from './types';
 
 export function EventDetails() {
   const {
-    state: {id, viewType},
-  } = useLocation<{id: string; viewType: 'events' | 'incidents'}>();
+    state: {eventId, viewType},
+  } = useLocation<{eventId: string; viewType: 'events' | 'incidents'}>();
+  const history = useHistory();
 
   const {
     isIdle,
     isLoading,
     isError,
-    fetchEvent,
     eventData,
     imageContent,
     boxRects,
     commonDetectInfo,
     extraDetectInfo,
     error,
-  } = useEventClient();
+  } = useEventClient(eventId, viewType);
 
   const {
     eventsByHours,
@@ -39,48 +39,19 @@ export function EventDetails() {
     incidents,
   } = useTimelineClient();
 
-  const [isIncident, setIsIncident] = React.useState(viewType === 'incidents');
+  //const [isIncident, setIsIncident] = React.useState(viewType === 'incidents');
   const hasOccurrenceByHour = viewType === 'events' ? Boolean(eventsByHours) : Boolean(incidentsByHours);
-
-  const getTimeStamp = React.useCallback(
-    () =>
-      viewType === 'events'
-        ? (eventData as TEvent)?.eventTimestamp
-        : (eventData as TIncident)?.period.start.time,
-    [eventData, viewType],
-  );
-
-  React.useEffect(() => {
-    setIsIncident(viewType === 'incidents');
-  }, [viewType]);
-
-  React.useEffect(() => {
-    fetchEvent(id, viewType);
-  }, [fetchEvent, id, viewType]);
 
   React.useEffect(() => {
     if (eventData) {
-      const needFetchTimeline = isIncident ? Boolean(!incidentsByHours) : Boolean(!eventsByHours);
-      if (needFetchTimeline) {
-        const timeStamp = getTimeStamp();
-        queryTimeline(timeStamp);
-      }
+      queryTimeline(eventData.date);
     }
-  }, [
-    eventData,
-    eventsByHours,
-    fetchEvent,
-    getTimeStamp,
-    id,
-    incidentsByHours,
-    isIncident,
-    queryTimeline,
-    viewType,
-  ]);
+  }, [eventData, queryTimeline]);
 
+  /**Список для боковой панели */
   const getEventsInCurrentHour = React.useCallback(() => {
     if (hasOccurrenceByHour && eventData) {
-      const eventHour = new Date(getTimeStamp()).getHours();
+      const eventHour = new Date(eventData.date!).getHours();
       const eventId = eventData.id;
       const occurrences = viewType === 'events' ? eventsByHours : incidentsByHours;
       const occurrenceInHour =
@@ -94,26 +65,26 @@ export function EventDetails() {
       return occurrenceInHour;
     }
     return [];
-  }, [eventData, eventsByHours, getTimeStamp, hasOccurrenceByHour, incidentsByHours, viewType]);
+  }, [eventData, eventsByHours, hasOccurrenceByHour, incidentsByHours, viewType]);
 
   const handleFirstEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
       const id = viewType === 'events' ? events![0].code : incidents![0].id;
       if (id) {
-        fetchEvent(String(id), viewType);
+        history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
       }
     }
-  }, [events, fetchEvent, hasOccurrenceByHour, incidents, viewType]);
+  }, [events, hasOccurrenceByHour, history, incidents, viewType]);
 
   const handleLastEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
       const id =
         viewType === 'events' ? events![events!.length - 1].code : incidents![incidents!.length - 1].id;
       if (id) {
-        fetchEvent(String(id), viewType);
+        history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
       }
     }
-  }, [events, fetchEvent, hasOccurrenceByHour, incidents, viewType]);
+  }, [events, hasOccurrenceByHour, history, incidents, viewType]);
 
   const handlePrevEvent = React.useCallback(() => {
     if (events && incidents && eventData) {
@@ -125,10 +96,10 @@ export function EventDetails() {
           ? events[currentEventCodeIndex - 1].code
           : incidents[currentIncidentIdIndex - 1].id.toString();
       if (prevId) {
-        fetchEvent(prevId, viewType);
+        history.push({pathname: '/events/details', state: {eventId: String(prevId), viewType}});
       }
     }
-  }, [eventData, events, fetchEvent, incidents, viewType]);
+  }, [eventData, events, history, incidents, viewType]);
 
   const handleNextEvent = React.useCallback(() => {
     if (events && incidents && eventData) {
@@ -148,20 +119,16 @@ export function EventDetails() {
       }
 
       if (nextId) {
-        fetchEvent(String(nextId), viewType);
+        history.push({pathname: '/events/details', state: {eventId: String(nextId), viewType}});
       }
     }
-  }, [eventData, events, fetchEvent, incidents, viewType]);
+  }, [eventData, events, history, incidents, viewType]);
 
-  const changeOccurrenceType = (isIncidentView: boolean) => setIsIncident(isIncidentView);
+  //const changeOccurrenceType = (isIncidentView: boolean) => setIsIncident(isIncidentView);
 
   const renderEventSection = () => {
     if (isIdle || isLoading) {
-      return (
-        <span css={{display: 'flex', height: 500, width: 800, margin: 'auto'}}>
-          {`Загрузка ${viewType === 'events' ? 'события' : 'инцидента'}...`}
-        </span>
-      );
+      return <span css={{display: 'flex', height: 500, width: 800, margin: 'auto'}}>Загрузка...</span>;
     }
     if (isError) {
       return (
@@ -200,17 +167,16 @@ export function EventDetails() {
           {renderEventSection()}
           {renderPlayer()}
           <Timeline
-            allEvents={eventsByHours}
             incidents={incidentsByHours}
             events={eventsByHours}
             eventsCount={eventsCount}
             incidentsCount={incidentsCount}
-            onFilter={changeOccurrenceType}
-            isIncident={isIncident}
-            viewType={isIncident ? 'incidents' : 'events'}
+            // onFilter={changeOccurrenceType}
+            viewType={viewType}
+            currentDate={eventData?.date}
           />
         </div>
-        <EventSidebar eventsList={getEventsInCurrentHour()} viewType={isIncident ? 'incidents' : 'events'} />
+        <EventSidebar eventsList={getEventsInCurrentHour()} viewType={viewType} />
       </EventContent>
     </DetailsLayout>
   );

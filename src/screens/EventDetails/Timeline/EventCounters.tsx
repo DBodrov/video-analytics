@@ -1,29 +1,22 @@
 import React from 'react';
 import {CircleWarningIcon, FlagIcon} from '@/assets/icons';
-import {HeaderCellButton} from './styles';
+import {HeaderCell} from './styles';
 
 type TCounterProps = {
   counts?: number[];
   isIncidents?: boolean;
-  onFilter: (showIncidents: boolean) => void;
+  currentHour?: number;
+  // onFilter: (showIncidents: boolean) => void;
   isActive: boolean;
   showEvents: (hour: number, isIncident: boolean) => void;
 };
 
-export function EventCounters({counts, isIncidents = false, isActive, onFilter, showEvents}: TCounterProps) {
-  const handleSetEventsType = React.useCallback(() => {
-    return;
-    //onFilter(isIncidents);
-  }, [isIncidents, onFilter]);
-
+export function EventCounters({counts, isIncidents = false, isActive, showEvents, currentHour}: TCounterProps) {
   return (
     <>
-      <HeaderCellButton
-        onClick={handleSetEventsType}
-        css={{backgroundColor: isActive ? '#364357' : 'transparent'}}
-      >
+      <HeaderCell css={{backgroundColor: isActive ? '#364357' : 'transparent'}}>
         {isIncidents ? <CircleWarningIcon /> : <FlagIcon />}
-      </HeaderCellButton>
+      </HeaderCell>
       {counts &&
         counts.map((h, idx) => {
           return (
@@ -33,7 +26,7 @@ export function EventCounters({counts, isIncidents = false, isActive, onFilter, 
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: '1px var(--color-border) solid',
+                border: `1px ${isActive && idx === currentHour ? isIncidents ? 'var(--color-secondary)' : 'var(--color-primary)' : 'var(--color-border)'} solid`,
               }}
             >
               {h > 0 ? (
@@ -52,8 +45,8 @@ export function EventCounters({counts, isIncidents = false, isActive, onFilter, 
                     fontSize: 14,
                     fontWeight: 600,
                     '&:hover': {
-                      cursor: 'pointer'
-                    }
+                      cursor: 'pointer',
+                    },
                   }}
                   onClick={() => showEvents(idx, isIncidents)}
                 >

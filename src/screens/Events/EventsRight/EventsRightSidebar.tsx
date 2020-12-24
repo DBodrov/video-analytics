@@ -16,18 +16,28 @@ import {
 } from './styles';
 import {IncidentsDailyChart} from './components';
 import {CircleChart} from '@/components';
-import {useSummaryClient} from './use-summary-client';
+import {useSensorsStats} from './use-sensors-stats';
 
 export function EventsRightSidebar() {
-  const {state, queryEventsCounts, eventsSummary = 0, incidentsSummary = 0} = useSummaryClient();
+  const {
+    totalStats,
+    counts,
+    fetchSensorsStats,
+    isIdle,
+    isError,
+    isLoading,
+    isSuccess,
+    error,
+    totalIncidents,
+  } = useSensorsStats();
 
   React.useEffect(() => {
-    if (!state?.counts) {
-      queryEventsCounts();
+    if (!counts) {
+      fetchSensorsStats();
     }
-  }, [queryEventsCounts, state?.counts]);
+  }, [counts, fetchSensorsStats]);
 
-  if (state.status === 'idle' || state.status === 'pending') {
+  if (isIdle || isLoading) {
     return (
       <div>
         <span>Получаем статистику...</span>
@@ -35,17 +45,20 @@ export function EventsRightSidebar() {
     );
   }
 
-  if (state.status === 'rejected') {
+  if (isError) {
     return (
       <div>
         <div></div>
-        <span css={{color: 'var(--color-secondary)'}}>Under construction...</span>
+        <span css={{color: 'var(--color-secondary)'}}>{error.message}</span>
       </div>
     );
   }
 
-  if (state.status === 'resolved') {
-    const inOutPercent = (incidentsSummary / eventsSummary) * 100;
+  if (isSuccess) {
+    const inOutPercent = totalStats
+      ? (totalStats?.allIncidents / (totalStats?.allIncidents + totalStats.allEvents)) * 100
+      : 0;
+
     return (
       <RightSidebar>
         <ChartsWrapper>
@@ -56,7 +69,7 @@ export function EventsRightSidebar() {
             </ChartBlock>
             <ChartTextContainer>
               <ChartTextTitle>
-                {eventsSummary} / {incidentsSummary}
+                {totalStats?.allEvents} / {totalStats?.allIncidents}
               </ChartTextTitle>
               <SidebarTextMeta>События / Инциденты</SidebarTextMeta>
             </ChartTextContainer>
@@ -65,7 +78,7 @@ export function EventsRightSidebar() {
         <SidebarBlockWrapper>
           <SidebarTextTitle>Инциденты</SidebarTextTitle>
           <SidebarTextMeta>Активность за сутки</SidebarTextMeta>
-          <IncidentsDailyChart counts={state.counts} />
+          <IncidentsDailyChart incidentsCounts={totalIncidents} />
         </SidebarBlockWrapper>
         <SidebarBlockWrapper>
           <SidebarTextTitle>Последние инциденты</SidebarTextTitle>

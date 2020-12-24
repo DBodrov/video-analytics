@@ -2,7 +2,15 @@ import React from 'react';
 import {EventGetResponse200EventFromJSON, IncidentGetResponse200IncidentFromJSON} from '@/backend/main';
 import {useAuth, useRefs, useCompany} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
-import {TEvent, TIncident, TImageTrackBoxes, TCommonDetectInfo, TExtraDetectInfo, TOccurrenceData, TOccurrenceType} from './types';
+import {
+  TEvent,
+  TIncident,
+  TImageTrackBoxes,
+  TCommonDetectInfo,
+  TExtraDetectInfo,
+  TOccurrenceData,
+  TOccurrenceType,
+} from './types';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
@@ -10,7 +18,6 @@ type State = {
   imageContent?: string;
   trackBoxes?: TImageTrackBoxes;
   error?: any;
-  viewType: TOccurrenceType;
 };
 
 const eventReducer = (state: State, changes: Partial<State>): State => ({...state, ...changes});
@@ -20,38 +27,44 @@ const initState: State = {
   imageContent: '',
   trackBoxes: undefined,
   error: null,
-  viewType: 'events',
 };
 
-export function useEventClient() {
+export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
   const fetchClient = useFetch();
   const {authHeader, companyId} = useAuth();
   const {getCheckById, getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId} = useRefs();
   const {getSensorById, getLocationById} = useCompany();
-  const [{status, eventData, imageContent, trackBoxes, error, viewType}, dispatch] = React.useReducer(
+  const [{status, eventData, imageContent, trackBoxes, error}, dispatch] = React.useReducer(
     eventReducer,
     initState,
   );
-  const fetchEvent = React.useCallback(
-    (id: string, typeOfView: 'events' | 'incidents') => {
-      // console.log('fetch event', id, typeOfView);
+
+  React.useEffect(() => {
+    const fetchEvent = () => {
       dispatch({status: 'pending'});
 
-      const url = `/api/va/companies/${companyId}/${typeOfView}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
+      const url = `/api/va/companies/${companyId}/${occurrenceType}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
 
       fetchClient(url, {headers: authHeader}).then(
         response => {
           const eventData =
-            typeOfView === 'events'
+            occurrenceType === 'events'
               ? EventGetResponse200EventFromJSON(response?.event)
               : IncidentGetResponse200IncidentFromJSON(response?.incident);
           const imageContent = `data:image/${eventData.thumbnail?.compression};base64, ${eventData.thumbnail?.content}`;
           //const trackBox = eventData.thumbnail?.trackBox;
           const trackBoxes = eventData.thumbnail?.trackBoxes;
-          const id: string | number = typeOfView === 'events' ? (eventData as TEvent).eventCode : (eventData as TIncident).id
-          const eventWithId: TOccurrenceData = {...eventData, id } as TOccurrenceData;
+          const timeStamp = occurrenceType === 'events' ? (eventData as TEvent).eventTimestamp : (eventData as TIncident).period.start.time;
+          const id: string | number =
+            occurrenceType === 'events' ? (eventData as TEvent).eventCode : (eventData as TIncident).id;
+          const eventWithId: TOccurrenceData = {...eventData, id, date: timeStamp} as TOccurrenceData;
 
-          dispatch({status: 'resolved', eventData: eventWithId, imageContent, trackBoxes, viewType: typeOfView});
+          dispatch({
+            status: 'resolved',
+            eventData: eventWithId,
+            imageContent,
+            trackBoxes,
+          });
           return response;
         },
         error => {
@@ -59,16 +72,10 @@ export function useEventClient() {
           return error;
         },
       );
-    },
-    [authHeader, companyId, fetchClient],
-  );
+    };
 
-  // React.useEffect(() => {
-  //   function fetchEvent() {
-  //     dispatch({status: 'pending'});
-  //     const url = `/api/va/companies/${companyId}/${occurrenceType}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
-  //   }
-  // }, [id, occurrenceType]);
+    fetchEvent();
+  }, [authHeader, companyId, fetchClient, id, occurrenceType]);
 
   const boxRects = trackBoxes?.map(box => {
     return {
@@ -81,7 +88,7 @@ export function useEventClient() {
 
   const createCommonDetectInfo = React.useCallback((): TCommonDetectInfo | undefined => {
     if (eventData) {
-      if (viewType === 'events') {
+      if (occurrenceType === 'events') {
         const checkData = getCheckById((eventData as TEvent)?.checkId);
         return {
           check: checkData?.name ?? '',
@@ -111,7 +118,7 @@ export function useEventClient() {
     getIncidentNameByCategoryId,
     getLocationById,
     getSensorById,
-    viewType,
+    occurrenceType,
   ]);
 
   const createExtraInfo = React.useCallback((): TExtraDetectInfo[] | undefined => {
@@ -137,6 +144,5 @@ export function useEventClient() {
     extraDetectInfo: createExtraInfo(),
 
     error,
-    fetchEvent,
   };
 }

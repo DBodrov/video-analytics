@@ -43,7 +43,7 @@ export function useEventsClient() {
           const checkData = getCheckById(event.checkId);
           return {
             id: event.eventId,
-            eventCode: event.eventCode,
+            code: event.eventCode,
             timestamp: event.eventTimestamp,
             locationName: getLocationById(event.locationId)?.name ?? '',
             sensorName: getSensorById(event.sensorId)?.ref?.name ?? '',
@@ -53,6 +53,7 @@ export function useEventsClient() {
             check: checkData?.name,
             checkCategory: getCheckCategoryById(checkData?.categoryId)?.name,
             eventStatus: getEventStatusById(event?.status?.currentId)?.name,
+            eventType: 'events'
           };
         });
       }
@@ -65,10 +66,9 @@ export function useEventsClient() {
     (incidents: TIncidents): IIncidentView[] | undefined => {
       if (incidents) {
         return incidents.map(incident => {
-          //const checkData = getCheckById(event.checkId);
           return {
             id: incident.id,
-            eventCode: String(incident.id),
+            code: String(incident.id),
             timestamp: `${incident.period.start.time} - ${(incident.period.end as any).time}`,
             locationName: getLocationById(incident.locationId)?.name ?? '',
             sensorName: getSensorById(incident.sensorId)?.ref?.name ?? '',
@@ -78,6 +78,7 @@ export function useEventsClient() {
             check: getIncidentNameByCategoryId(incident.categoryId),
             checkCategory: getCheckCategoryById(incident.categoryId)?.name,
             eventStatus: getEventStatusById(incident?.status?.currentId)?.name,
+            eventType: 'incidents'
           };
         });
       }
@@ -128,21 +129,24 @@ export function useEventsClient() {
     [authHeader, companyId, createEventsView, createIncidentsView, fetchClient],
   );
 
+  /**@deprecated */
   const getEventByCode = useCallback(
     (eventCode: string) => {
       if (events) {
         return createEventsView(events)?.find(event => {
-          return event.eventCode === eventCode;
+          return event.code === eventCode;
         });
       }
     },
     [createEventsView, events],
   );
 
+  /**@deprecated */
   const eventsView = React.useMemo(() => {
     return events ? createEventsView(events) : [];
   }, [createEventsView, events]);
 
+  /**@deprecated */
   const getEventsViewBySensorId = React.useCallback(
     (sensorId: number) => {
       const eventsBySensor = events?.filter(event => event.sensorId === sensorId);
