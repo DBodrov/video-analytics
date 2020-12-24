@@ -1,17 +1,18 @@
 import React from 'react';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid} from 'recharts';
-import {TCount} from '../use-summary-client';
+
 
 type TChartProps = {
-  counts?: TCount[];
+  incidentsCounts?: {[x: number]: number};
 };
 export function IncidentsDailyChart(props: TChartProps) {
-  const {counts} = props;
+  const {incidentsCounts} = props;
+  const chartData = incidentsCounts ? Object.keys(incidentsCounts).map(hour => ({hour, incidents: incidentsCounts[Number(hour)]})) : [];
   return (
     <AreaChart
       width={250}
       height={250}
-      data={counts}
+      data={chartData}
       margin={{
         top: 10,
         right: 0,

@@ -29,4 +29,4 @@ export type TOccurrenceType = 'events' | 'incidents';
 export interface IOccurrenceView extends IEventView {eventId: string | number};
 // export type TEventsByHours = Record<number, IEventView[]>;
 export type TOccurrenceByHours = Record<number, IOccurrenceView[]>;
-export type TOccurrenceData = TEvent & {id: string} | TIncident;
+export type TOccurrenceData = TEvent & {id: string; date?: string} | TIncident & {date?: string};

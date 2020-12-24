@@ -57,7 +57,7 @@ export function useTimelineClient() {
   ] = React.useReducer(timelineReducer, initState);
   const {authHeader, companyId} = useAuth();
   const {getLocationById, getSensorById} = useCompany();
-  const {getCheckById, getCheckCategoryById, getEventStatusById} = useRefs();
+  const {getCheckById, getCheckCategoryById} = useRefs();
 
   const groupEventsByHours = React.useCallback(
     (eventsOrIncidents: TimelineGetOccurrence200[]) => {

@@ -13,6 +13,7 @@ export interface IEventView {
   eventStatus?: string;
   code?: string;
   timestamp: string;
+  eventType?: 'events' | 'incidents';
 };
 
 export interface IIncidentView extends IEventView {}

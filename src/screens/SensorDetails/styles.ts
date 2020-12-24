@@ -10,5 +10,5 @@ export const CameraBox = styled.div`
 export const CameraInfoBox = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 110px 120px 1fr 110px;
+  grid-template-rows: 110px 120px auto 1fr;
 `;

@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 
-export const HourCell = styled.span`
+export const HourCell = styled.span<{isActive: boolean}>`
   display: inline-flex;
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
   font-size: 10px;
+  background-color: ${props => props.isActive ? 'var(--color-primary)' : 'transparent'}
 `;
 
 export const HeaderCell = styled.div`

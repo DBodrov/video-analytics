@@ -9,7 +9,7 @@ const CheckItem = styled.li`
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-  margin: 0;
+  margin: 0 0 10px;
   padding: 0;
 `;
 
