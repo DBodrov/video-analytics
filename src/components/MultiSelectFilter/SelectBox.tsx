@@ -1,10 +1,10 @@
 import React from 'react';
 import {css} from '@emotion/react';
-import {useCombobox, useTheme, ArrowIcon} from 'neutrino-ui';
+import {useTheme, useToggle, ToggleArrowIcon} from 'neutrino-ui';
 import {TextBox} from './styles';
 
 export function SelectBox({children}: {children: React.ReactNode}) {
-  const {handleToggle, isOpen} = useCombobox();
+  const {handleToggle, isOpen} = useToggle();
   const {colors} = useTheme();
   const baseCss = css({
     border: `1px ${
@@ -19,7 +19,7 @@ export function SelectBox({children}: {children: React.ReactNode}) {
   return (
     <TextBox onClick={handleToggle} css={[baseCss]}>
       {children}
-      <ArrowIcon css={{width: 10, height: 10}}/>
+      <ToggleArrowIcon css={{width: 10, height: 10}}/>
     </TextBox>
   );
 }

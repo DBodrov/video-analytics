@@ -11,3 +11,4 @@ export * from './PlayerPrevIcon';
 export * from './PlayerStartIcon';
 export * from './RedWarningIcon';
 export * from './CircleCheckIcon';
+export * from './ReportIcon';

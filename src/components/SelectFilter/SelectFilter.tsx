@@ -1,10 +1,10 @@
 import React from 'react';
 import {css} from '@emotion/react';
-import {Combobox, useCombobox, useTheme, Span, Dropdown} from 'neutrino-ui';
+import {useTheme, Span, Dropdown, ToggleProvider, useToggle} from 'neutrino-ui';
 import {SelectBox} from '../MultiSelectFilter/SelectBox';
 
 type TFilterItem = {
-  id: number;
+  id: number | string;
   value: string;
 };
 
@@ -15,12 +15,12 @@ type SelectFilterProps = {
   onSelect: (id: number) => void;
   className?: string;
   prefix?: string;
-  value?: number;
+  value?: number | string;
 };
 
 export function Select({onSelect, options, className, prefix, value = -1}: SelectFilterProps) {
   const [selectRect, setSelectRect] = React.useState<DOMRect | undefined>(undefined);
-  const {handleClose, isOpen} = useCombobox();
+  const {handleClose, isOpen} = useToggle();
   const {colors} = useTheme();
   const selectRef = React.useRef<HTMLDivElement>(null);
   const optionsRef = React.useRef<HTMLDivElement>(null);
@@ -132,8 +132,8 @@ export function Select({onSelect, options, className, prefix, value = -1}: Selec
 
 export function SelectFilter(props: SelectFilterProps) {
   return (
-    <Combobox>
+    <ToggleProvider>
       <Select {...props} />
-    </Combobox>
+    </ToggleProvider>
   );
 }
