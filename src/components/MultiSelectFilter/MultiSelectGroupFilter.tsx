@@ -1,6 +1,6 @@
 import React from 'react';
 import {css} from '@emotion/react';
-import {Combobox, useCombobox, useTheme, Span, Dropdown, Checkbox, Button} from 'neutrino-ui';
+import {useTheme, Span, Dropdown, Checkbox, Button, ToggleProvider, useToggle} from 'neutrino-ui';
 import {LinkButton} from '@/components';
 import {SelectBox} from './SelectBox';
 import {FilterOption, FilterOptionsList, Panel} from './styles';
@@ -13,7 +13,7 @@ function Select({options, value = [], onSelect, className, prefix}: TMultiSelect
   const theme = useTheme();
   const mSelectRef = React.useRef<HTMLDivElement>(null);
   const optionsRef = React.useRef<HTMLDivElement>(null);
-  const {isOpen, handleClose} = useCombobox();
+  const {isOpen, handleClose} = useToggle();
 
   const listBaseCss = css({
     margin: 0,
@@ -187,8 +187,8 @@ function Select({options, value = [], onSelect, className, prefix}: TMultiSelect
 
 export function MultiSelectGroupFilter(props: TMultiSelectProps) {
   return (
-    <Combobox>
+    <ToggleProvider>
       <Select {...props} />
-    </Combobox>
+    </ToggleProvider>
   );
 }

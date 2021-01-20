@@ -1,5 +1,5 @@
 import React from 'react';
-import {CustomerIcon, HomeIcon, OldCameraIcon} from '@/assets/icons';
+import {CustomerIcon, HomeIcon, OldCameraIcon, ReportIcon} from '@/assets/icons';
 import {NavList} from './styles';
 import {MenuLink} from './MenuLink';
 
@@ -32,6 +32,10 @@ export function NavMenu() {
         <MenuLink to="/sensors" activeClassName="isActive">
           <OldCameraIcon fill="currentColor" />
           <span css={{paddingLeft: 18}}>Все камеры</span>
+        </MenuLink>
+        <MenuLink to="/reports" activeClassName="isActive">
+          <ReportIcon fill="currentColor" />
+          <span css={{paddingLeft: 18}}>Отчеты</span>
         </MenuLink>
       </NavList>
     </div>
