@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface CompanySensorPatchError
+ * @interface CompanyReportsPostError
  */
-export interface CompanySensorPatchError {
+export interface CompanyReportsPostError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanyReportsPostError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanyReportsPostError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanyReportsPostError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof CompanySensorPatchError
+     * @memberof CompanyReportsPostError
      */
     statusCode: number;
 }
 
-export function CompanySensorPatchErrorFromJSON(json: any): CompanySensorPatchError {
-    return CompanySensorPatchErrorFromJSONTyped(json, false);
+export function CompanyReportsPostErrorFromJSON(json: any): CompanyReportsPostError {
+    return CompanyReportsPostErrorFromJSONTyped(json, false);
 }
 
-export function CompanySensorPatchErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanySensorPatchError {
+export function CompanyReportsPostErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanyReportsPostError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function CompanySensorPatchErrorFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function CompanySensorPatchErrorToJSON(value?: CompanySensorPatchError | null): any {
+export function CompanyReportsPostErrorToJSON(value?: CompanyReportsPostError | null): any {
     if (value === undefined) {
         return undefined;
     }
