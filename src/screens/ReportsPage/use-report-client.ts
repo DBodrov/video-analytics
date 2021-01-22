@@ -1,28 +1,38 @@
 import React from 'react';
 import {useAuth} from '@/context';
-import {useFetch} from '@/utils';
+import {IReportsPostRequest, ReportsPostRequestToJSON} from './types';
 
 export function useReportsClient() {
-  const fetchClient = useFetch();
   const {companyId, authHeader} = useAuth();
 
   const getReportFile = React.useCallback(
-    (query: any) => {
+    (query: IReportsPostRequest) => {
       const reportId = 2;
-      const body: any = {};
-      Object.keys(query).filter(p => Boolean(query[p])).forEach(param => body[param] = query[param]);
+      const body = ReportsPostRequestToJSON(query);
+      let filename = 'report.xlsx';
 
-      fetchClient(`/companies/${companyId}/reports/${reportId}`, {
-        headers: authHeader,
-        body,
-      }).then(
-        response => {
-          return response;
-        },
-        error => error,
-      );
+      window
+        .fetch(`/api/va/companies/${companyId}/reports/${reportId}`, {
+          body: JSON.stringify(body),
+          headers: authHeader,
+          method: 'POST',
+        })
+        .then(response => {
+          const header = response.headers.get('content-disposition');
+          if (header) {
+            filename = header.split('filename=')[1];
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          link.click();
+        });
     },
-    [authHeader, companyId, fetchClient],
+    [authHeader, companyId],
   );
 
   return {

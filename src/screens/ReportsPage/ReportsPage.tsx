@@ -1,8 +1,10 @@
 import React from 'react';
 import {Span, Button} from 'neutrino-ui';
+import {IReportsPostRequest} from './types';
 import {AppLayout} from '@/screens/Layouts';
 import {SelectFilter} from '@/components';
 import {useCompany, useRefs} from '@/context';
+import {TIMEZONE_OFFSET} from '@/utils';
 import {createFilterList} from '../Events/EventsFilters/utils';
 import {useReportsClient} from './use-report-client';
 import {ReportCard, ReportCardTitle, ReportFilters} from './styles';
@@ -14,19 +16,20 @@ const typesList = [
 ];
 
 const allDay = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const monthNumber = now.getMonth() + 1;
-  const month = String(monthNumber).padStart(2, '0');
-  const date = String(now.getDate()).padStart(2, '0');
-  // startTime.setHours(0, 0, 0, 0);
-  // const isoStart = startTime.toDateString();
-  // let endTime = new Date();
-  // endTime.setHours(23, 59, 59, 999);
-  // const isoEnd = endTime.toLocaleString();
+  //const now = new Date();
+  // const year = now.getFullYear();
+  // const monthNumber = now.getMonth() + 1;
+  // const month = String(monthNumber).padStart(2, '0');
+  // const date = String(now.getDate()).padStart(2, '0');
+  const startTime = new Date();
+  startTime.setHours(0, 0, 0, 0);
+  const isoStart = startTime.toISOString();
+  let endTime = new Date();
+  endTime.setHours(23, 59, 59, 999);
+  const isoEnd = endTime.toISOString();
   return {
-    beginDay: `${year}-${month}-${date}`,
-    endDay: `${year}-${month}-${date}`,
+    beginDay: isoStart,
+    endDay: isoEnd,
   };
 };
 
@@ -61,14 +64,15 @@ export function ReportsPage() {
 
   const readReportFile = React.useCallback(() => {
     const day = allDay();
-    const query = {
-      start_period: day.beginDay,
-      end_period: day.endDay,
-      locations: location > -1 ? location : undefined,
-      sensors: sensor > -1 ? sensor : undefined,
-      templates: template > -1 ? template : undefined,
-      rules: rule > -1 ? rule : undefined,
-      types: typesList.find(t => t.id === types)?.type,
+    const query: IReportsPostRequest = {
+      startTime: day.beginDay,
+      endTime: day.endDay,
+      locationIds: location > -1 ? [location] : undefined,
+      sensorIds: sensor > -1 ? [sensor] : undefined,
+      checkCategoryIds: template > -1 ? [template] : undefined,
+      checkIds: rule > -1 ? [rule] : undefined,
+      entityTypes: typesList.find(t => t.id === types)!.type,
+      tzOffset: TIMEZONE_OFFSET
     };
     getReportFile(query);
   }, [getReportFile, location, rule, sensor, template, types])
