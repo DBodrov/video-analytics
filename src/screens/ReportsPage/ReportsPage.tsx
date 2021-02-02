@@ -2,9 +2,9 @@ import React from 'react';
 import {Span, Button} from 'neutrino-ui';
 import {IReportsPostRequest} from './types';
 import {AppLayout} from '@/screens/Layouts';
-import {SelectFilter} from '@/components';
+import {SelectFilter, DatesFilter} from '@/components';
 import {useCompany, useRefs} from '@/context';
-import {TIMEZONE_OFFSET} from '@/utils';
+import {TIMEZONE_OFFSET, dayIsoString} from '@/utils';
 import {createFilterList} from '../Events/EventsFilters/utils';
 import {useReportsClient} from './use-report-client';
 import {ReportCard, ReportCardTitle, ReportFilters} from './styles';
@@ -15,34 +15,29 @@ const typesList = [
   {id: 2, value: 'Инциденты', type: ['incident']},
 ];
 
-const allDay = () => {
-  //const now = new Date();
-  // const year = now.getFullYear();
-  // const monthNumber = now.getMonth() + 1;
-  // const month = String(monthNumber).padStart(2, '0');
-  // const date = String(now.getDate()).padStart(2, '0');
-  const startTime = new Date();
-  startTime.setHours(0, 0, 0, 0);
-  const isoStart = startTime.toISOString();
-  let endTime = new Date();
-  endTime.setHours(23, 59, 59, 999);
-  const isoEnd = endTime.toISOString();
-  return {
-    beginDay: isoStart,
-    endDay: isoEnd,
-  };
+type TQueryState = {
+  location: number;
+  sensor: number;
+  template: number;
+  rule: number;
+  types: number;
+  dates?: [startDate: string, endDate: string];
 };
 
 export function ReportsPage() {
-  const [{location, sensor, rule, template, types}, setState] = React.useState({
+  const [{location, sensor, rule, template, types, dates}, setState] = React.useState<TQueryState>({
     location: -1,
     sensor: -1,
     template: -1,
     rule: -1,
     types: -1,
+    dates: undefined,
   });
 
   const {getReportFile} = useReportsClient();
+
+  const hasDates = Boolean(dates && dates[0] && dates[1]);
+
 
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -61,21 +56,25 @@ export function ReportsPage() {
   const setTemplate = React.useCallback((id: number) => setState(s => ({...s, template: id})), []);
   const setRule = React.useCallback((id: number) => setState(s => ({...s, rule: id})), []);
   const setType = React.useCallback((id: number) => setState(s => ({...s, types: id})), []);
+  const setDates = React.useCallback((dates: [startDate: string, endDate: string]) => {
+    setState(s => ({...s, dates}));
+  }, []);
 
   const readReportFile = React.useCallback(() => {
-    const day = allDay();
-    const query: IReportsPostRequest = {
-      startTime: day.beginDay,
-      endTime: day.endDay,
-      locationIds: location > -1 ? [location] : undefined,
-      sensorIds: sensor > -1 ? [sensor] : undefined,
-      checkCategoryIds: template > -1 ? [template] : undefined,
-      checkIds: rule > -1 ? [rule] : undefined,
-      entityTypes: typesList.find(t => t.id === types)!.type,
-      tzOffset: TIMEZONE_OFFSET
-    };
-    getReportFile(query);
-  }, [getReportFile, location, rule, sensor, template, types])
+    if (hasDates) {
+      const query: IReportsPostRequest = {
+        startTime: dayIsoString(dates![0], 'begin'),
+        endTime: dayIsoString(dates![1], 'end'),
+        locationIds: location > -1 ? [location] : undefined,
+        sensorIds: sensor > -1 ? [sensor] : undefined,
+        checkCategoryIds: template > -1 ? [template] : undefined,
+        checkIds: rule > -1 ? [rule] : undefined,
+        entityTypes: typesList.find(t => t.id === types)!.type,
+        tzOffset: TIMEZONE_OFFSET,
+      };
+      getReportFile(query);
+    }
+  }, [hasDates, dates, location, sensor, template, rule, getReportFile, types]);
 
   return (
     <AppLayout>
@@ -120,6 +119,7 @@ export function ReportsPage() {
               css={{height: 36, flexBasis: 200, marginRight: 10}}
               value={types}
             />
+            <DatesFilter name="reportDates" onSelect={setDates} dates={dates} />
           </ReportFilters>
           <div
             css={{
@@ -128,10 +128,16 @@ export function ReportsPage() {
               display: 'flex',
               flexFlow: 'row nowrap',
               alignItems: 'center',
-              paddingLeft: 30
+              paddingLeft: 30,
             }}
           >
-            <Button variant="primary" flat css={{minHeight: 36, height: 36, fontSize: 14}} onClick={readReportFile}>
+            <Button
+              variant="primary"
+              flat
+              css={{minHeight: 36, height: 36, fontSize: 14}}
+              onClick={readReportFile}
+              disabled={!hasDates}
+            >
               Скачать отчет
             </Button>
           </div>

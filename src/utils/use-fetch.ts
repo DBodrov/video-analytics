@@ -37,7 +37,6 @@ export function useFetch() {
             config.body = JSON.stringify(body);
         }
         const response = await window.fetch(endpoint, config);
-        console.log(response)
         const data = await response.json();
         if (response.ok) {
             return data;
