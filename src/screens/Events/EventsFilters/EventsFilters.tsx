@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
 import {SelectFilter, SwitchFilter, MultiSelectGroupFilter} from '@/components';
-import {periodsList, createFilterList, createCheckAndCategoriesList} from './utils';
+import {createFilterList, createCheckAndCategoriesList} from './utils';
 import {Panel} from './styles';
 
 export function EventsFilters() {
@@ -50,18 +50,13 @@ export function EventsFilters() {
     [setFiltersState, setQueryParams],
   );
 
-  const setPeriodFilter = useCallback(
-    (periodId: number) => {
-      setFiltersState(s => ({...s, periodFilter: periodId}));
-      if (periodId === -1) {
-        setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, startTime: undefined, endTime: undefined}));
-        return;
-      }
-      const {startTime, endTime} = periodsList[periodId]?.filterDate?.();
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, startTime, endTime}));
-    },
-    [setFiltersState, setQueryParams],
-  );
+  // const setPeriodFilter = useCallback(
+  //   (period: [startDate: string, endDate: string]) => {
+  //     setFiltersState(s => ({...s, periodFilter: period}));
+  //     setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, dates: period}));
+  //   },
+  //   [setFiltersState, setQueryParams],
+  // );
 
   return (
     <Panel>
@@ -85,19 +80,13 @@ export function EventsFilters() {
         on={filtersState.incidentFilter}
         css={{marginRight: 10}}
       />
-      <SelectFilter
-        onSelect={setPeriodFilter}
-        options={periodsList}
-        prefix="Период"
-        css={{height: 36, flexBasis: 250, marginRight: 10}}
-        value={filtersState.periodFilter}
-      />
       <MultiSelectGroupFilter
         onSelect={setCheckFilter}
         options={checkAndCategoriesOptions}
         prefix="Правила"
         css={{height: 36, flexBasis: 300, marginRight: 10}}
       />
+      {/* <DatesFilter name="eventsPeriod" onSelect={setPeriodFilter} dates={filtersState.periodFilter} /> */}
     </Panel>
   );
 }

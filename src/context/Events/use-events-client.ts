@@ -211,12 +211,12 @@ function createQueryToJSON(query: Record<string, any>) {
     queryParameters['tz_offset'] = query.tzOffset;
   }
 
-  if (query.startTime !== undefined) {
-    queryParameters['start_time'] = query.startTime;
+  if (query.dates !== undefined) {
+    queryParameters['start_time'] = query.dates[0];
   }
 
-  if (query.endTime !== undefined) {
-    queryParameters['end_time'] = query.endTime;
+  if (query.dates !== undefined) {
+    queryParameters['end_time'] = query.dates[1];
   }
 
   if (query.checkIds?.length > 0) {
