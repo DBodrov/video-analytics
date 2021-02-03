@@ -43,8 +43,7 @@ export type TEventsQuery = {
   sensorIds?: number;
   tocIds?: number;
   tzOffset?: number;
-  startTime?: string;
-  endTime?: string;
+  dates?: [startDate: string, endDate: string];
   onlyIncidents?: boolean;
   checkIds?: number[];
 };
@@ -52,6 +51,6 @@ export type TEventsQuery = {
 export type TFiltersState = {
   locationFilter: number;
   sensorFilter: number;
-  periodFilter: number;
+  periodFilter?: [startDate: string, endDate: string];
   incidentFilter: boolean;
 };

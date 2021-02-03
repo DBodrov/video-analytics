@@ -24,6 +24,16 @@ type TQueryState = {
   dates?: [startDate: string, endDate: string];
 };
 
+const datesValidation = (dates: TQueryState['dates']) => {
+  if (dates) {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[1]);
+    const isValidDates = startDate < endDate;
+    return isValidDates;
+  }
+  return false;
+};
+
 export function ReportsPage() {
   const [{location, sensor, rule, template, types, dates}, setState] = React.useState<TQueryState>({
     location: -1,
@@ -37,7 +47,6 @@ export function ReportsPage() {
   const {getReportFile} = useReportsClient();
 
   const hasDates = Boolean(dates && dates[0] && dates[1]);
-
 
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -59,6 +68,11 @@ export function ReportsPage() {
   const setDates = React.useCallback((dates: [startDate: string, endDate: string]) => {
     setState(s => ({...s, dates}));
   }, []);
+
+  const getValidationState = React.useCallback(() => {
+    const isValidDates = datesValidation(dates);
+    return hasDates && isValidDates;
+  }, [dates, hasDates]);
 
   const readReportFile = React.useCallback(() => {
     if (hasDates) {
@@ -136,7 +150,7 @@ export function ReportsPage() {
               flat
               css={{minHeight: 36, height: 36, fontSize: 14}}
               onClick={readReportFile}
-              disabled={!hasDates}
+              disabled={!getValidationState()}
             >
               Скачать отчет
             </Button>
