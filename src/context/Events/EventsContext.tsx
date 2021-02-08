@@ -1,5 +1,5 @@
 import React, {useContext, useMemo, createContext, useState} from 'react';
-import {TIMEZONE_OFFSET} from '@/utils';
+import {TIMEZONE_OFFSET, defaultPeriod} from '@/utils';
 import {useEventsClient} from './use-events-client';
 import {TEventsContext, TEventsQuery, TFiltersState} from './types';
 
@@ -17,7 +17,7 @@ export function EventsProvider(props: any) {
   } = useEventsClient();
 
   const [queryParams, setQueryParams] = useState<TEventsQuery>({
-    dates: undefined,
+    dates: defaultPeriod(),
     locationIds: -1,
     sensorIds: -1,
     tocIds: -1,
@@ -31,7 +31,7 @@ export function EventsProvider(props: any) {
   const [filtersState, setFiltersState] = useState<TFiltersState>({
     locationFilter: -1,
     sensorFilter: -1,
-    periodFilter: undefined,
+    periodFilter: defaultPeriod(),
     incidentFilter: false,
   });
 

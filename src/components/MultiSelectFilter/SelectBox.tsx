@@ -19,7 +19,7 @@ export function SelectBox({children}: {children: React.ReactNode}) {
   return (
     <TextBox onClick={handleToggle} css={[baseCss]}>
       {children}
-      <ToggleArrowIcon css={{width: 10, height: 10}}/>
+      <ToggleArrowIcon css={{position: 'absolute', top: 15, right: 8, width: 10, height: 10}}/>
     </TextBox>
   );
 }

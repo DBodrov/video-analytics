@@ -2,9 +2,9 @@ import React from 'react';
 import {Span, Button} from 'neutrino-ui';
 import {IReportsPostRequest} from './types';
 import {AppLayout} from '@/screens/Layouts';
-import {SelectFilter, DatesFilter} from '@/components';
+import {SelectFilter, DatesFilter, TDateRange} from '@/components';
 import {useCompany, useRefs} from '@/context';
-import {TIMEZONE_OFFSET, dayIsoString} from '@/utils';
+import {TIMEZONE_OFFSET, dayIsoString, defaultPeriod} from '@/utils';
 import {createFilterList} from '../Events/EventsFilters/utils';
 import {useReportsClient} from './use-report-client';
 import {ReportCard, ReportCardTitle, ReportFilters} from './styles';
@@ -21,7 +21,7 @@ type TQueryState = {
   template: number;
   rule: number;
   types: number;
-  dates?: [startDate: string, endDate: string];
+  dates?: TDateRange;
 };
 
 const datesValidation = (dates: TQueryState['dates']) => {
@@ -41,7 +41,7 @@ export function ReportsPage() {
     template: -1,
     rule: -1,
     types: -1,
-    dates: undefined,
+    dates: defaultPeriod(),
   });
 
   const {getReportFile} = useReportsClient();
@@ -66,7 +66,8 @@ export function ReportsPage() {
   const setRule = React.useCallback((id: number) => setState(s => ({...s, rule: id})), []);
   const setType = React.useCallback((id: number) => setState(s => ({...s, types: id})), []);
   const setDates = React.useCallback((dates: [startDate: string, endDate: string]) => {
-    setState(s => ({...s, dates}));
+    const period: TDateRange = [dayIsoString(dates[0], 'begin'), dayIsoString(dates[1], 'end')];
+    setState(s => ({...s, dates: period}));
   }, []);
 
   const getValidationState = React.useCallback(() => {
@@ -123,7 +124,7 @@ export function ReportsPage() {
               onSelect={setRule}
               options={rulesList}
               prefix="Правила"
-              css={{height: 36, flexBasis: 'auto', marginRight: 10}}
+              css={{height: 36, minWidth: 'fit-content', marginRight: 10}}
               value={rule}
             />
             <SelectFilter

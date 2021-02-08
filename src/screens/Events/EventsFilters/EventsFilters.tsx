@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
-import {SelectFilter, SwitchFilter, MultiSelectGroupFilter} from '@/components';
+import {SelectFilter, SwitchFilter, MultiSelectGroupFilter, DatesFilter, TDateRange} from '@/components';
+import {dayIsoString} from '@/utils';
 import {createFilterList, createCheckAndCategoriesList} from './utils';
 import {Panel} from './styles';
 
@@ -50,13 +51,14 @@ export function EventsFilters() {
     [setFiltersState, setQueryParams],
   );
 
-  // const setPeriodFilter = useCallback(
-  //   (period: [startDate: string, endDate: string]) => {
-  //     setFiltersState(s => ({...s, periodFilter: period}));
-  //     setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, dates: period}));
-  //   },
-  //   [setFiltersState, setQueryParams],
-  // );
+  const setPeriodFilter = useCallback(
+    (period: [startDate: string, endDate: string]) => {
+      const eventPeriod: TDateRange = [dayIsoString(period[0], 'begin'), dayIsoString(period[1], 'end')];
+      setFiltersState(s => ({...s, periodFilter: eventPeriod}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, dates: eventPeriod}));
+    },
+    [setFiltersState, setQueryParams],
+  );
 
   return (
     <Panel>
@@ -86,7 +88,7 @@ export function EventsFilters() {
         prefix="Правила"
         css={{height: 36, flexBasis: 300, marginRight: 10}}
       />
-      {/* <DatesFilter name="eventsPeriod" onSelect={setPeriodFilter} dates={filtersState.periodFilter} /> */}
+      <DatesFilter name="eventsPeriod" onSelect={setPeriodFilter} dates={filtersState.periodFilter} />
     </Panel>
   );
 }

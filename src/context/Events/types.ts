@@ -1,4 +1,5 @@
 import {EventsGetResponse200, EventsGetResponse200Events, IncidentsGetResponse200, IncidentGetResponse200Incident} from '@/backend/main';
+import {TDateRange} from '@/components';
 
 export type TEventsData = EventsGetResponse200;
 export type TEvents = EventsGetResponse200['events'] | undefined;
@@ -43,7 +44,7 @@ export type TEventsQuery = {
   sensorIds?: number;
   tocIds?: number;
   tzOffset?: number;
-  dates?: [startDate: string, endDate: string];
+  dates?: TDateRange;
   onlyIncidents?: boolean;
   checkIds?: number[];
 };
@@ -51,6 +52,6 @@ export type TEventsQuery = {
 export type TFiltersState = {
   locationFilter: number;
   sensorFilter: number;
-  periodFilter?: [startDate: string, endDate: string];
+  periodFilter?: TDateRange;
   incidentFilter: boolean;
 };

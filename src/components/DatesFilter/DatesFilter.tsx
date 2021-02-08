@@ -2,7 +2,7 @@ import React from 'react';
 import {css} from '@emotion/react';
 import {DateRangePicker} from 'neutrino-ui/lib/sealed';
 
-type TDateRange = [startDate: string, endDate: string];
+export type TDateRange = [startDate: string, endDate: string];
 
 type TDatesFilterProps = {
   name: string;
@@ -17,7 +17,8 @@ export function DatesFilter(props: TDatesFilterProps) {
       const selectedDates: TDateRange = [dates[0], dates[1]];
       onSelect(selectedDates);
     }
-  }, []);
+  }, [onSelect]);
+
   return (
     <DateRangePicker
       name={name}
