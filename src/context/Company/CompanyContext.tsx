@@ -9,6 +9,7 @@ export function CompanyProvider({children}: {children: React.ReactNode}) {
     fetchData,
     locations,
     sensors,
+    pipelines,
     isError,
     isIdle,
     error,
@@ -23,12 +24,10 @@ export function CompanyProvider({children}: {children: React.ReactNode}) {
       fetchData();
     }
   }, [fetchData, locations, sensors]);
-  const value = useMemo<ICompanyContext>(() => ({locations, sensors, getLocationById, getSensorById}), [
-    getLocationById,
-    getSensorById,
-    locations,
-    sensors,
-  ]);
+  const value = useMemo<ICompanyContext>(
+    () => ({locations, sensors, getLocationById, getSensorById, pipelines}),
+    [getLocationById, getSensorById, locations, pipelines, sensors],
+  );
 
   if (isIdle || isLoading) return <span>Загрузка ресурсов...</span>;
   if (isSuccess) {

@@ -37,6 +37,9 @@ export function NavMenu() {
           <ReportIcon fill="currentColor" />
           <span css={{paddingLeft: 18}}>Отчеты</span>
         </MenuLink>
+        <MenuLink to="/settings" activeClassName="isActive">
+          <span css={{textTransform: 'uppercase'}}>Настройки шаблонов</span>
+        </MenuLink>
       </NavList>
     </div>
   );

@@ -49,8 +49,7 @@ export function SensorDetails() {
       queryEvents({
         sensorIds: Number(id),
         tzOffset: TIMEZONE_OFFSET,
-        startTime: today.beginDay,
-        endTime: today.endDay,
+        dates: [today.beginDay, today.endDay],
         page: 1,
         pageSize: 50,
       });
