@@ -7,7 +7,9 @@ import {
 
 export type TLocation = CompanyLocationsGetResponse200Locations;
 export type TLocations = TLocation[];
-export type TPipelines = PipelinesGetResponse200Pipelines;
+
+export type TPipeline = PipelinesGetResponse200Pipelines;
+export type TPipelines = TPipeline[];
 
 export type TSensors = CompanySensorsGetResponse200['sensors'];
 export type TSensor = SensorsGetResponse200Sensors;

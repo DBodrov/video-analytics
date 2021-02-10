@@ -74,11 +74,8 @@ models/PipelineGetResponse200.ts
 models/PipelineGetResponse200BySensor.ts
 models/PipelineGetResponse200Checks.ts
 models/PipelineGetResponse200Detector.ts
-models/PipelineGetResponse200DetectorModel.ts
 models/PipelineGetResponse200Incidents.ts
-models/PipelineGetResponse200Model.ts
 models/PipelineGetResponse200Tracker.ts
-models/PipelineGetResponse200TrackerModel.ts
 models/PipelineSensorPatchRequest.ts
 models/PipelinesGetResponse200.ts
 models/PipelinesGetResponse200BySensor.ts
