@@ -85,7 +85,14 @@ const sensorDetailHandlers = [
   rest.get('/api/va/companies/:companyId/sensors/:sensorId/stats', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(sensorStats));
   }),
+];
+
+const pipelinesHandlers = [
+  rest.put('/api/va/companies/:companyId/pipelines/:pipelineId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
+  })
 ]
+
 
 export const handlers = [
   ...authHandlers,
@@ -94,4 +101,5 @@ export const handlers = [
   ...eventsHandlers,
   ...eventDetailsHandlers,
   ...sensorDetailHandlers,
+  ...pipelinesHandlers,
 ];

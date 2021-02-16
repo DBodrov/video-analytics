@@ -1,10 +1,20 @@
 import styled from '@emotion/styled';
 
-export const TemplatesPage = styled.div`
+export const SettingsLayout = styled.div`
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 310px;
+  width: 100%;
+  height: 100%;
+`;
+
+export const HelperPanel = styled.aside`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
   height: 100%;
+  background-color: var(--color-form);
+  padding: 20px 30px;
 `;
