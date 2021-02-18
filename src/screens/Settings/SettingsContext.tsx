@@ -5,7 +5,7 @@ import {ISettingsContext} from './types';
 const SettingsContext = React.createContext<ISettingsContext | undefined>(undefined);
 
 export function SettingsProvider(props: any) {
-  const {updatePipeline, stepConfig, stepsStatuses, activeStep} = useSettingsClient();
+  const {updatePipeline, stepConfig, stepsStatuses, activeStep, currentTemplateId} = useSettingsClient();
 
   const handleSetTemplate = React.useCallback(
     (templateId: number) => {
@@ -15,8 +15,8 @@ export function SettingsProvider(props: any) {
   );
 
   const ctxValue = React.useMemo<ISettingsContext>(
-    () => ({handleSetTemplate, stepsStatuses, stepConfig, activeStep}),
-    [activeStep, handleSetTemplate, stepConfig, stepsStatuses],
+    () => ({handleSetTemplate, stepsStatuses, stepConfig, activeStep, currentTemplateId}),
+    [activeStep, currentTemplateId, handleSetTemplate, stepConfig, stepsStatuses],
   );
 
   return <SettingsContext.Provider value={ctxValue} {...props} />;

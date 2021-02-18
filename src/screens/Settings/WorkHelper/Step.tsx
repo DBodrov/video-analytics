@@ -69,7 +69,7 @@ export function Step(props: TStepProps) {
         <Span
           css={{
             fontSize: 14,
-            color: status === 'inactive' ? 'var(--color-text-secondary)' : 'var(--color-text)',
+            color: status === 'active' ? 'var(--color-text)' : 'var(--color-text-secondary)',
           }}
         >
           {title}

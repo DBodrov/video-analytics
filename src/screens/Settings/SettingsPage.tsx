@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSettings} from './SettingsContext';
 import {TemplatesPage} from './TemplatesPage';
+import {RulesPage} from './RulesPage';
 
 export function SettingsPage() {
   const {activeStep} = useSettings();
@@ -10,7 +11,7 @@ export function SettingsPage() {
   }
 
   if (activeStep === 'RULE_ACTIVATE') {
-    return <div>RULE ACTIVATE</div>
+    return <RulesPage />
   }
   return null;
 }

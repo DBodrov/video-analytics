@@ -22,6 +22,7 @@ export const theme = createTheme({
   },
   typography: {
     h5: { color: textColor, fontWeight: 'normal' },
+    h6: { color: textColor, fontWeight: 'normal' },
     p: { color: textColor },
     span: { color: textColor },
   },

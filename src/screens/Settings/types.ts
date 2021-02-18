@@ -9,6 +9,7 @@ export interface ISettingsContext {
   stepConfig: TStepConfig;
   stepsStatuses: TStepsStatuses;
   activeStep: TStep;
+  currentTemplateId?: number;
   handleSetTemplate: (templateId: number) => void;
 }
 
