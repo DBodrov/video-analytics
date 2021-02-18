@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface CompanyReportsPostError
+ * @interface PipelineCheckPatchError
  */
-export interface CompanyReportsPostError {
+export interface PipelineCheckPatchError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineCheckPatchError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineCheckPatchError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineCheckPatchError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineCheckPatchError
      */
     statusCode: number;
 }
 
-export function CompanyReportsPostErrorFromJSON(json: any): CompanyReportsPostError {
-    return CompanyReportsPostErrorFromJSONTyped(json, false);
+export function PipelineCheckPatchErrorFromJSON(json: any): PipelineCheckPatchError {
+    return PipelineCheckPatchErrorFromJSONTyped(json, false);
 }
 
-export function CompanyReportsPostErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanyReportsPostError {
+export function PipelineCheckPatchErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineCheckPatchError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function CompanyReportsPostErrorFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function CompanyReportsPostErrorToJSON(value?: CompanyReportsPostError | null): any {
+export function PipelineCheckPatchErrorToJSON(value?: PipelineCheckPatchError | null): any {
     if (value === undefined) {
         return undefined;
     }

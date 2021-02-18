@@ -16,32 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface EventStatusPostRequest
+ * @interface PipelinePutRequest
  */
-export interface EventStatusPostRequest {
+export interface PipelinePutRequest {
     /**
-     * Идентификатор нового статуса
-     * @type {number}
-     * @memberof EventStatusPostRequest
+     * Признак активного конвейера
+     * @type {boolean}
+     * @memberof PipelinePutRequest
      */
-    statusId: number;
+    enabled: boolean;
 }
 
-export function EventStatusPostRequestFromJSON(json: any): EventStatusPostRequest {
-    return EventStatusPostRequestFromJSONTyped(json, false);
+export function PipelinePutRequestFromJSON(json: any): PipelinePutRequest {
+    return PipelinePutRequestFromJSONTyped(json, false);
 }
 
-export function EventStatusPostRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): EventStatusPostRequest {
+export function PipelinePutRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelinePutRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'statusId': json['status_id'],
+        'enabled': json['enabled'],
     };
 }
 
-export function EventStatusPostRequestToJSON(value?: EventStatusPostRequest | null): any {
+export function PipelinePutRequestToJSON(value?: PipelinePutRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +50,7 @@ export function EventStatusPostRequestToJSON(value?: EventStatusPostRequest | nu
     }
     return {
         
-        'status_id': value.statusId,
+        'enabled': value.enabled,
     };
 }
 

@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface CompanyReportsPostError
+ * @interface PipelineSensorCheckPatchError
  */
-export interface CompanyReportsPostError {
+export interface PipelineSensorCheckPatchError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineSensorCheckPatchError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineSensorCheckPatchError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineSensorCheckPatchError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof CompanyReportsPostError
+     * @memberof PipelineSensorCheckPatchError
      */
     statusCode: number;
 }
 
-export function CompanyReportsPostErrorFromJSON(json: any): CompanyReportsPostError {
-    return CompanyReportsPostErrorFromJSONTyped(json, false);
+export function PipelineSensorCheckPatchErrorFromJSON(json: any): PipelineSensorCheckPatchError {
+    return PipelineSensorCheckPatchErrorFromJSONTyped(json, false);
 }
 
-export function CompanyReportsPostErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CompanyReportsPostError {
+export function PipelineSensorCheckPatchErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineSensorCheckPatchError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function CompanyReportsPostErrorFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function CompanyReportsPostErrorToJSON(value?: CompanyReportsPostError | null): any {
+export function PipelineSensorCheckPatchErrorToJSON(value?: PipelineSensorCheckPatchError | null): any {
     if (value === undefined) {
         return undefined;
     }
