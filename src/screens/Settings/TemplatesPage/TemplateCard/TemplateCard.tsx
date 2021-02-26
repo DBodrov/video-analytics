@@ -11,13 +11,13 @@ type Props = {
 
 export function TemplateCard(props: Props) {
   const {handleSetTemplate} = useSettings();
-  const {id} = props;
+  const {id, enabled} = props;
   const {getCheckCategoryById} = useRefs();
   const category = getCheckCategoryById(id);
 
   const addOrRemoveTemplate = React.useCallback(() => {
-    handleSetTemplate(id);
-  }, [handleSetTemplate, id]);
+    handleSetTemplate(id, !enabled);
+  }, [enabled, handleSetTemplate, id]);
 
   return (
     <Card>
@@ -46,7 +46,7 @@ export function TemplateCard(props: Props) {
           css={{minHeight: 36, height: 36, fontSize: 14}}
           onClick={addOrRemoveTemplate}
         >
-          Добавить
+          {enabled ? 'Отключить' : 'Добавить'}
         </Button>
       </CardFooter>
     </Card>

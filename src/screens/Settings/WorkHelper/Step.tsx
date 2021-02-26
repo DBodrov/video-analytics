@@ -44,7 +44,7 @@ function StepMarker({status = 'inactive'}: TStepMarkerProps) {
         <defs>
           <linearGradient id="paint0_linear" x1="16" y1="16" x2="16" y2="0" gradientUnits="userSpaceOnUse">
             <stop stopColor="#29B311" />
-            <stop offset="1" stop-color="#57D841" />
+            <stop offset="1" stopColor="#57D841" />
           </linearGradient>
         </defs>
       </svg>

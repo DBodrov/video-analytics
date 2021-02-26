@@ -13,5 +13,8 @@ export function SettingsPage() {
   if (activeStep === 'RULE_ACTIVATE') {
     return <RulesPage />
   }
+  if (activeStep === 'SET_SENSOR') {
+    return <div>SENSORS</div>
+  }
   return null;
 }

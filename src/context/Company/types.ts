@@ -17,7 +17,6 @@ export type TSensor = SensorsGetResponse200Sensors;
 export interface ICompanyContext {
   locations?: TLocations;
   sensors?: TSensors;
-  pipelines?: TPipelines;
   getLocationById(id: number): TLocation | undefined;
   getSensorById(id: number): TSensor | undefined;
 }

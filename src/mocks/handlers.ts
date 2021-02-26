@@ -1,6 +1,6 @@
 import {rest} from 'msw';
 import {refreshTokenMock, checkTokenMock, loginMock} from './auth-mocks';
-import {locationsMock, sensorsMock, pipelinesMock} from './company-mock';
+import {locationsMock, sensorsMock} from './company-mock';
 import {checkCategories, checks, statuses, incidentsRefs} from './refs-mocks';
 import {events} from './events-mock';
 import {incidentsMock} from './incidents-mocks';
@@ -9,6 +9,7 @@ import {eventMock} from './event-details-mocks';
 import {timeline} from './timeline-mock';
 import {incidentDetailMock} from './incident-details-mocks';
 import {sensorDetail, sensorStats} from './sensor-detail';
+import {pipelineChecksMock, pipelinesMock} from './settings-mocks';
 //import {sensorStats} from './sensors-stats';
 
 const authHandlers = [
@@ -31,9 +32,6 @@ const companyHandlers = [
   }),
   rest.get('/api/va/companies/:companyId/sensors', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(sensorsMock));
-  }),
-  rest.get('/api/va/companies/:companyId/pipelines', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(pipelinesMock));
   }),
 ];
 
@@ -87,10 +85,18 @@ const sensorDetailHandlers = [
   }),
 ];
 
-const pipelinesHandlers = [
+const settingsHandlers = [
+  rest.get('/api/va/companies/:companyId/pipelines', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(pipelinesMock));
+  }),
+  rest.get('/api/va/companies/:companyId/pipelines/:pipelineId/checks', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(pipelineChecksMock));
+  }),
+
   rest.put('/api/va/companies/:companyId/pipelines/:pipelineId', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({}));
-  })
+  }),
+
 ]
 
 
@@ -101,5 +107,5 @@ export const handlers = [
   ...eventsHandlers,
   ...eventDetailsHandlers,
   ...sensorDetailHandlers,
-  ...pipelinesHandlers,
+  ...settingsHandlers,
 ];

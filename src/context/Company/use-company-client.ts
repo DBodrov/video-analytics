@@ -31,7 +31,6 @@ const initialState: TCompanyState = {
   locations: undefined,
   sensors: undefined,
   incidents: undefined,
-  pipelines: undefined,
   error: undefined,
 };
 
@@ -46,7 +45,7 @@ const initialState: TCompanyState = {
 // }
 
 export function useCompanyClient() {
-  const [{status, locations, sensors, pipelines, error}, setCompanyState] = useReducer(companyReducer, initialState);
+  const [{status, locations, sensors, error}, setCompanyState] = useReducer(companyReducer, initialState);
   const {accessToken, companyId} = useAuth();
   const fetchClient = useFetch();
 
@@ -59,18 +58,18 @@ export function useCompanyClient() {
       {headers},
     );
     const fetchSensors = fetchClient(`/api/va/companies/${companyId}/sensors`, {headers});
-    const fetchPipelines = fetchClient(`/api/va/companies/${companyId}/pipelines`, {headers});
+    // const fetchPipelines = fetchClient(`/api/va/companies/${companyId}/pipelines`, {headers});
     // const fetchIncidents = fetchClient(`/api/va/companies/${companyId}/refs/incidents`, {headers});
-    Promise.all([fetchLocations, fetchSensors, fetchPipelines]).then(
+    Promise.all([fetchLocations, fetchSensors]).then(
       response => {
-        const [locationsData, sensorsData, pipelinesData] = response;
+        const [locationsData, sensorsData] = response;
         const locations = CompanyLocationsGetResponse200FromJSON(locationsData).locations;
         const sensors = CompanySensorsGetResponse200FromJSON(sensorsData).sensors;
-        const pipelines = PipelinesGetResponse200FromJSON(pipelinesData).pipelines;
+        // const pipelines = PipelinesGetResponse200FromJSON(pipelinesData).pipelines;
 
 
         // const incidents = RefIncidentsGetResponse200FromJSON(incidentsData).incidents;
-        setCompanyState({status: 'resolved', locations, sensors, pipelines});
+        setCompanyState({status: 'resolved', locations, sensors});
       },
       error => {
         setCompanyState({status: 'rejected', error});
@@ -97,7 +96,6 @@ export function useCompanyClient() {
     error,
     locations,
     sensors,
-    pipelines,
     getLocationById,
     getSensorById,
 

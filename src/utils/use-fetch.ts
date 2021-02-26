@@ -37,12 +37,16 @@ export function useFetch() {
             config.body = JSON.stringify(body);
         }
         const response = await window.fetch(endpoint, config);
-        const data = await response.json();
+        let data: unknown;
+        if (response.status !== 204) {
+          data = await response.json();
+        }
         if (response.ok) {
             return data;
         } else {
             return Promise.reject(data);
         }
+
     }, [getSignal]);
 
     return fetchClient;

@@ -15,8 +15,14 @@ export function WorkHelper() {
       <StepList>
         {steps.map(s => {
           return (
-            <Step step={s} status={stepsStatuses[s]} title={stepConfig[s].title} description={stepConfig[s].description} />
-          )
+            <Step
+              key={s}
+              step={s}
+              status={stepsStatuses[s]}
+              title={stepConfig[s].title}
+              description={stepConfig[s].description}
+            />
+          );
         })}
       </StepList>
     </Panel>
