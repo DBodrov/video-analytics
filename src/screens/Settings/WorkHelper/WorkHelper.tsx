@@ -5,7 +5,7 @@ import {Panel, StepList} from './styles';
 import {Step} from './Step';
 import {TStep} from '../types';
 
-const steps: TStep[] = ['ADD_TEMPLATE', 'RULE_ACTIVATE', 'CONFIG_RULE', 'SET_SENSOR'];
+const steps: TStep[] = ['ADD_TEMPLATE', 'RULE_ACTIVATE', 'SET_SENSOR', 'CONFIG_RULE'];
 
 export function WorkHelper() {
   const {stepConfig, stepsStatuses} = useSettings();

@@ -5,7 +5,7 @@ import {
   StatusesGetResponse200Statuses,
 } from '@/backend/auth';
 
-// export type TEventStatuses = EventStatusesGetResponse200EventStatuses | undefined; // FIXME: Deprecated
+
 export type TEventStatus = StatusesGetResponse200Statuses | undefined;
 export type TEventStatusList = TEventStatus[];
 // export type TChecks = ChecksGetResponse200Checks | undefined;

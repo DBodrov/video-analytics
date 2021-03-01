@@ -27,3 +27,26 @@ export const Section = styled.section`
   gap: 30px;
   padding: 30px;
 `;
+
+/**PAGES */
+
+export const SectionBlock = styled.article`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  background-color: var(--color-form);
+`;
+
+export const SectionHeader = styled.header`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 80px;
+  background-color: var(--color-border);
+  padding: 20px 30px;
+`;

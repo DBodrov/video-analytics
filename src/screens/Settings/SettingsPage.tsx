@@ -2,6 +2,7 @@ import React from 'react';
 import {useSettings} from './SettingsContext';
 import {TemplatesPage} from './TemplatesPage';
 import {RulesPage} from './RulesPage';
+import {SensorsPage} from './SensorsPage';
 
 export function SettingsPage() {
   const {activeStep} = useSettings();
@@ -14,7 +15,7 @@ export function SettingsPage() {
     return <RulesPage />
   }
   if (activeStep === 'SET_SENSOR') {
-    return <div>SENSORS</div>
+    return <SensorsPage />
   }
   return null;
 }

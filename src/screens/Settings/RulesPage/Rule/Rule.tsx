@@ -2,6 +2,7 @@ import React from 'react';
 import {css} from '@emotion/react';
 import {Switch, Span, Checkbox} from 'neutrino-ui';
 import {TCheck} from '@/context/Refs/types';
+import {PlayerStopIcon} from '@/assets/icons';
 import {RulesTableRow, RulesTableCell} from '../styles';
 
 type Props = {
@@ -11,11 +12,12 @@ type Props = {
   pipelineId?: number;
   onUpdate: (pipelineId: number, checkId: number, enabled: boolean) => void;
   onSelect: (ruleId: number, isSelected: boolean) => void;
+  onSetup: (ruleId: number) => void;
   isSelected: boolean;
 };
 
 export function Rule(props: Props) {
-  const {check, enabled, sensorCount, pipelineId, onUpdate, onSelect, isSelected} = props;
+  const {check, enabled, sensorCount, pipelineId, onUpdate, onSelect, onSetup, isSelected} = props;
 
   const handleToggleRule = React.useCallback(() => {
     if (pipelineId && check && check.hasOwnProperty('id')) {
@@ -31,6 +33,12 @@ export function Rule(props: Props) {
     },
     [check, onSelect],
   );
+
+  const handleRuleSetup = React.useCallback(() => {
+    if(check) {
+      onSetup(check.id);
+    }
+  }, [check, onSetup]);
 
   return (
     <RulesTableRow>
@@ -49,7 +57,25 @@ export function Rule(props: Props) {
         <Span>{sensorCount ?? '-'}</Span>
       </RulesTableCell>
       <RulesTableCell css={{justifyContent: 'center'}}>status</RulesTableCell>
-      <RulesTableCell>настроить</RulesTableCell>
+      <RulesTableCell>
+        <button
+          css={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            width: '100%',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            cursor: 'pointer',
+            border: 0,
+            outline: 0,
+            backgroundColor: 'transparent',
+          }}
+          onClick={handleRuleSetup}
+        >
+          <PlayerStopIcon css={{marginRight: 10}}/>
+          <Span css={{fontSize: 14, fontWeight: 600, color: '#686F7B'}}>Настроить</Span>
+        </button>
+      </RulesTableCell>
       <RulesTableCell>
         <Checkbox
           onChangeHandler={handleSelect}

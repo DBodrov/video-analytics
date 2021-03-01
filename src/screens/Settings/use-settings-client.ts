@@ -24,7 +24,7 @@ const initState: TSettingsState = {
 };
 
 const settingsReducer = (state: TSettingsState, changes: Partial<TSettingsState>): TSettingsState => {
-  console.log('dispatch', changes);
+  // console.log('dispatch', changes);
   return {
     ...state,
     ...changes,
@@ -122,10 +122,10 @@ export function useSettingsClient() {
       if (ruleId) {
         dispatch({
           currentChecksIds: [ruleId],
-          stepsStatuses: {...stepsStatuses, RULE_ACTIVATE: 'inactive', SET_SENSOR: 'active'},
+          stepsStatuses: {...stepsStatuses, RULE_ACTIVATE: 'done', SET_SENSOR: 'active'},
         });
       } else {
-        dispatch({stepsStatuses: {...stepsStatuses, RULE_ACTIVATE: 'inactive', SET_SENSOR: 'active'}});
+        dispatch({stepsStatuses: {...stepsStatuses, RULE_ACTIVATE: 'done', SET_SENSOR: 'active'}});
       }
     },
     [stepsStatuses],

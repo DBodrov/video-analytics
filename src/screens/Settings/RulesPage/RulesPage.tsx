@@ -3,9 +3,9 @@ import {H6, Span} from 'neutrino-ui';
 import {useRefs} from '@/context';
 import {useSettings} from '../SettingsContext';
 import {useRulesClient} from './use-rules-client';
-import {Section} from '../styles';
+import {Section, SectionBlock, SectionHeader} from '../styles';
 import {Rule} from './Rule';
-import {RulesBlock, RulesHeader, RulesTableRow, RulesTableCell} from './styles';
+import {RulesTableRow, RulesTableCell} from './styles';
 
 export function RulesPage() {
   const {currentTemplateId, pipelines, setCheckId, currentChecksIds, openSensorSettings} = useSettings();
@@ -29,7 +29,7 @@ export function RulesPage() {
 
   const handleGoToSensorsSettings = React.useCallback(() => {
     openSensorSettings();
-  }, [openSensorSettings])
+  }, [openSensorSettings]);
 
   React.useEffect(() => {
     if (currentTemplateId && !pipelineChecks) {
@@ -37,45 +37,50 @@ export function RulesPage() {
     }
   }, [currentTemplateId, fetchRulesByTemplateId, pipelineChecks]);
 
+  const hasSelectedRules = currentChecksIds && currentChecksIds.length > 0;
+
   return (
     <Section>
-      <RulesBlock>
-        <RulesHeader>
+      <SectionBlock>
+        <SectionHeader>
           <H6 css={{fontSize: 18, fontWeight: 400}}>{category?.name}</H6>
           <Span css={{fontSize: 12, color: 'var(--color-text-secondary)', paddingTop: 5}}>
             Доп.информация
           </Span>
-        </RulesHeader>
+        </SectionHeader>
         <RulesTableRow>
           <RulesTableCell></RulesTableCell>
           <RulesTableCell>
-            <Span css={{fontSize: 14, color: 'var(--color-text-secondary)'}}>Бизнес-правила</Span>
+            <Span css={{fontSize: 14, fontWeight: 600, color: 'var(--color-text-secondary)'}}>
+              Бизнес-правила
+            </Span>
           </RulesTableCell>
           <RulesTableCell css={{justifyContent: 'center'}}>
-            <Span css={{fontSize: 14, color: 'var(--color-text-secondary)'}}>Камеры</Span>
+            <Span css={{fontSize: 14, fontWeight: 600, color: 'var(--color-text-secondary)'}}>Камеры</Span>
           </RulesTableCell>
           <RulesTableCell css={{justifyContent: 'center'}}>
-            <Span css={{fontSize: 14, color: 'var(--color-text-secondary)'}}>Статус</Span>
+            <Span css={{fontSize: 14, fontWeight: 600, color: 'var(--color-text-secondary)'}}>Статус</Span>
           </RulesTableCell>
           <RulesTableCell></RulesTableCell>
           <RulesTableCell></RulesTableCell>
         </RulesTableRow>
-        <div>
-          {pipelineChecks?.map(check => {
-            return (
-              <Rule
-                key={check.checkId}
-                check={getCheckById(check.checkId)}
-                enabled={check.enabled}
-                pipelineId={check.pipelineId}
-                sensorCount={getSensorCount(check.pipelineId)}
-                onUpdate={updateRule}
-                onSelect={handleSelectRule}
-                isSelected={currentChecksIds?.includes(check.checkId) ?? false}
-              />
-            );
-          })}
-        </div>
+
+        {pipelineChecks?.map(check => {
+          return (
+            <Rule
+              key={check.checkId}
+              check={getCheckById(check.checkId)}
+              enabled={check.enabled}
+              pipelineId={check.pipelineId}
+              sensorCount={getSensorCount(check.pipelineId)}
+              onUpdate={updateRule}
+              onSelect={handleSelectRule}
+              onSetup={openSensorSettings}
+              isSelected={currentChecksIds?.includes(check.checkId) ?? false}
+            />
+          );
+        })}
+
         <div
           css={{
             display: 'flex',
@@ -85,26 +90,22 @@ export function RulesPage() {
             height: 50,
             width: '100%',
             borderTop: '1px var(--color-border) solid',
-            padding: '30px 16px'
+            padding: '30px 16px',
           }}
         >
           <button
             css={{
+              cursor: 'pointer',
               border: 0,
               outline: 0,
               backgroundColor: 'transparent',
-              color:
-                currentChecksIds && currentChecksIds?.length > 0
-                  ? 'var(--color-text)'
-                  : 'var(--color-text-secondary)',
-              fontSize: 14
+              color: hasSelectedRules ? 'var(--color-text)' : 'var(--color-text-secondary)',
+              fontSize: 14,
             }}
-            onClick={handleGoToSensorsSettings}
-          >{`Настроить выделенные (${
-            currentChecksIds && currentChecksIds?.length > 0 ? currentChecksIds?.length : ''
-          }) >>`}</button>
+            onClick={hasSelectedRules ? handleGoToSensorsSettings : undefined}
+          >{`Настроить выделенные ${hasSelectedRules ? `(${currentChecksIds?.length})` : ''} >>`}</button>
         </div>
-      </RulesBlock>
+      </SectionBlock>
     </Section>
   );
 }

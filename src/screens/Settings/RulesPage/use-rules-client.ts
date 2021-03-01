@@ -15,7 +15,7 @@ const initState: TRulesState = {
 };
 
 const rulesReducer = (state: TRulesState, changes: Partial<TRulesState>) => {
-  console.log('changes', changes)
+  // console.log('changes', changes)
   return {
     ...state,
     ...changes,
