@@ -4,12 +4,17 @@ import { Logo } from './Logo';
 import { PageTitle } from './PageTitle';
 import { Aside, Content, Header, Main, PageLayout } from './styles';
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+type Props = {
+  children: React.ReactNode;
+  pageTitle?: string | React.ReactNode;
+}
+
+export function AppLayout({ children, pageTitle}: Props) {
   return (
     <PageLayout>
       <Header>
         <Logo />
-        <PageTitle />
+        <PageTitle title={pageTitle} />
       </Header>
       <Main>
         <Aside>

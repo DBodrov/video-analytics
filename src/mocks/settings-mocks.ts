@@ -19,6 +19,20 @@ export const pipelinesMock = {
           ],
           incidents: [{id: 1, check_ids: [101], parameters: {}}],
         },
+        {
+          id: 2,
+          status_id: 6,
+          detector: {id: 1, parameters: {}},
+          tracker: {id: 1, parameters: {}},
+          deploy: {},
+          checks: [
+            {id: 101, enabled: true, parameters: {}, next_ids: []},
+            {id: 103, enabled: true, parameters: {}, next_ids: []},
+            {id: 104, enabled: true, parameters: {}, next_ids: []},
+            {id: 105, enabled: true, parameters: {}, next_ids: []},
+          ],
+          incidents: [],
+        },
       ],
     },
     {

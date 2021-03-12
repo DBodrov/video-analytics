@@ -50,3 +50,26 @@ export const SectionHeader = styled.header`
   background-color: var(--color-border);
   padding: 20px 30px;
 `;
+
+export const SectionFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 50px;
+  width: 100%;
+  border-top: 1px var(--color-border) solid;
+  padding: 30px 16px;
+`;
+
+export const SectionTip = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 65px;
+  width: 100%;
+  border-top: 1px var(--color-border) solid;
+  padding: 30px 16px;
+  background-color: var(--color-form);
+`;

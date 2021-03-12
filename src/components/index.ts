@@ -7,3 +7,4 @@ export * from './MultiSelectFilter';
 export * from './LinkButton';
 export * from './BoxToggle';
 export * from './DatesFilter';
+export * from './Badge';

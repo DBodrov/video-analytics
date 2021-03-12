@@ -2,8 +2,12 @@ import React from 'react';
 import {useLocation} from 'react-router-dom';
 import {useUI} from '@/context/UIContext';
 
-export function PageTitle() {
-  const {title} = useUI();
+type Props = {
+  title?: string | React.ReactNode;
+}
+
+export function PageTitle({title}: Props) {
+  const {title: titlePage} = useUI();
   const location = useLocation();
   if (location.pathname === '/settings') {
     return (
@@ -12,5 +16,5 @@ export function PageTitle() {
       </span>
     );
   }
-  return <span css={{color: '#B4C2D7', fontSize: 18, paddingLeft: 30}}>{title}</span>;
+  return <span css={{color: '#B4C2D7', fontSize: 18, paddingLeft: 30}}>{title ? title : titlePage}</span>;
 }

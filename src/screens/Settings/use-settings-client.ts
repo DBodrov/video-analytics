@@ -2,7 +2,6 @@ import React from 'react';
 import {PipelinesGetResponse200FromJSON} from '@/backend/main';
 import {useFetch} from '@/utils';
 import {useAuth} from '@/context';
-import {stepsConfig} from './utils';
 import {TSettingsState, TStepsStatuses, TStep} from './types';
 
 const initState: TSettingsState = {
@@ -15,11 +14,10 @@ const initState: TSettingsState = {
     RULE_ACTIVATE: 'inactive',
     SET_SENSOR: 'inactive',
   },
-  stepConfig: stepsConfig,
   enabledTemplatesIds: [],
   currentTemplateId: undefined,
   currentChecksIds: [],
-  currentSensorsIds: undefined,
+  currentSensorsIds: [],
   pipelines: undefined,
 };
 
@@ -36,7 +34,6 @@ export function useSettingsClient() {
     {
       step,
       stepStatus,
-      stepConfig,
       status,
       enabledTemplatesIds,
       currentTemplateId,
@@ -83,6 +80,7 @@ export function useSettingsClient() {
             ADD_TEMPLATE: needEnable ? 'done' : 'active',
             RULE_ACTIVATE: needEnable ? 'active' : 'inactive',
           };
+
           dispatch({
             status: 'resolved',
             currentTemplateId: templateId,
@@ -98,6 +96,32 @@ export function useSettingsClient() {
       );
     },
     [authHeader, companyId, enabledTemplatesIds, fetchClient, fetchPipelines, stepsStatuses],
+  );
+
+  const toggleSensor = React.useCallback(
+    (sensorId: number, isEnabled: boolean) => {
+      dispatch({status: 'pending'});
+      const updaters = currentChecksIds.map(checkId => {
+        return fetchClient(
+          `/api/va/companies/${companyId}/pipelines/${currentTemplateId}/sensors/${sensorId}/checks/${checkId}`,
+          {
+            method: 'patch',
+            headers: authHeader,
+            body: {
+              enabled: isEnabled,
+            },
+          },
+        );
+      });
+      Promise.all(updaters).then(
+        () => {
+          dispatch({status: 'resolved'});
+          fetchPipelines();
+        },
+        error => dispatch({status: 'rejected'}),
+      );
+    },
+    [authHeader, companyId, currentChecksIds, currentTemplateId, fetchClient, fetchPipelines],
   );
 
   const setCheckId = React.useCallback(
@@ -131,15 +155,23 @@ export function useSettingsClient() {
     [stepsStatuses],
   );
 
+  const openRuleEditor = React.useCallback(() => {
+    dispatch({stepsStatuses: {...stepsStatuses, SET_SENSOR: 'done', CONFIG_RULE: 'active'}});
+  }, [stepsStatuses]);
+
   const setSensorId = React.useCallback(
-    (sensorId: number) => {
+    (sensorId: number, isSelected: boolean) => {
       let updateSensorsIds: number[] | undefined;
-      if (currentSensorsIds?.includes(sensorId)) {
+      if (isSelected) {
+        if (currentSensorsIds.includes(sensorId)) {
+          return;
+        } else {
+          updateSensorsIds = [...currentSensorsIds, sensorId];
+        }
+      } else if (!isSelected) {
         updateSensorsIds = currentSensorsIds.filter(id => id !== sensorId);
-      } else if (currentSensorsIds) {
-        updateSensorsIds = [...currentSensorsIds, sensorId];
       }
-      dispatch({currentChecksIds: updateSensorsIds});
+      dispatch({currentSensorsIds: updateSensorsIds});
     },
     [currentSensorsIds],
   );
@@ -147,16 +179,17 @@ export function useSettingsClient() {
   return {
     fetchPipelines,
     updatePipeline,
+    toggleSensor,
     setCheckId,
     setSensorId,
     openSensorSettings,
+    openRuleEditor,
     currentTemplateId,
     currentChecksIds,
     currentSensorsIds,
     step,
     pipelines,
     stepStatus,
-    stepConfig,
     stepsStatuses,
     activeStep: Object.keys(stepsStatuses).find(s => stepsStatuses[s as TStep] === 'active') as TStep,
 

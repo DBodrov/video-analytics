@@ -5,7 +5,7 @@ import {EventDetails} from '@/screens/EventDetails';
 import {Sensors} from '@/screens/Sensors';
 import {SensorDetails} from '@/screens/SensorDetails';
 import {ReportsPage} from '@/screens/ReportsPage';
-import {Settings} from '@/screens/Settings';
+import {Settings, AddSensorsPage} from '@/screens/Settings';
 
 export function AppRoutes() {
   return (
@@ -28,6 +28,9 @@ export function AppRoutes() {
       </Route>
       <Route exact path="/settings">
         <Settings />
+      </Route>
+      <Route exact path="/settings/addsensor">
+        <AddSensorsPage />
       </Route>
     </Switch>
   );

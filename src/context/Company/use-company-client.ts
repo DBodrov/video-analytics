@@ -49,11 +49,10 @@ export function useCompanyClient() {
   const {accessToken, companyId} = useAuth();
   const fetchClient = useFetch();
 
-
   const fetchData = useCallback(() => {
     const headers = {Authorization: `Bearer ${accessToken}`};
     setCompanyState({status: 'pending'});
-    const fetchLocations: Promise<CompanyLocationsGetResponse200> = fetchClient(
+    const fetchLocations = fetchClient(
       `/api/va/companies/${companyId}/locations`,
       {headers},
     );

@@ -7,7 +7,6 @@ const SettingsContext = React.createContext<ISettingsContext | undefined>(undefi
 export function SettingsProvider(props: any) {
   const {
     updatePipeline,
-    stepConfig,
     stepsStatuses,
     activeStep,
     currentTemplateId,
@@ -18,6 +17,7 @@ export function SettingsProvider(props: any) {
     fetchPipelines,
     pipelines,
     openSensorSettings,
+    openRuleEditor,
   } = useSettingsClient();
 
   const handleSetTemplate = React.useCallback(
@@ -39,7 +39,6 @@ export function SettingsProvider(props: any) {
       pipelines,
       fetchPipelines,
       stepsStatuses,
-      stepConfig,
       activeStep,
       currentTemplateId,
       setCheckId,
@@ -47,6 +46,7 @@ export function SettingsProvider(props: any) {
       currentChecksIds,
       currentSensorsIds,
       openSensorSettings,
+      openRuleEditor,
     }),
     [
       activeStep,
@@ -55,11 +55,11 @@ export function SettingsProvider(props: any) {
       currentTemplateId,
       fetchPipelines,
       handleSetTemplate,
+      openRuleEditor,
       openSensorSettings,
       pipelines,
       setCheckId,
       setSensorId,
-      stepConfig,
       stepsStatuses,
     ],
   );
