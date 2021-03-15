@@ -23,46 +23,53 @@ import {
 /**
  * Сведения о правиле физического конвейера компании
  * @export
- * @interface PipelineSensorCheckPatchRequest
+ * @interface PipelineSensorCheckGetResponse200
  */
-export interface PipelineSensorCheckPatchRequest {
+export interface PipelineSensorCheckGetResponse200 {
+    /**
+     * Идентификатор правила
+     * @type {number}
+     * @memberof PipelineSensorCheckGetResponse200
+     */
+    id: number;
     /**
      * Признак активного правила
      * @type {boolean}
-     * @memberof PipelineSensorCheckPatchRequest
+     * @memberof PipelineSensorCheckGetResponse200
      */
-    enabled?: boolean;
+    enabled: boolean;
     /**
-     * Дополнительные параметры правила в JSON-формате
+     * Дополнительные параметры правила
      * @type {object}
-     * @memberof PipelineSensorCheckPatchRequest
+     * @memberof PipelineSensorCheckGetResponse200
      */
-    extra?: object;
+    parameters?: object;
     /**
      * 
      * @type {PipelineSensorCheckPatchRequestMarkup}
-     * @memberof PipelineSensorCheckPatchRequest
+     * @memberof PipelineSensorCheckGetResponse200
      */
     markup?: PipelineSensorCheckPatchRequestMarkup;
 }
 
-export function PipelineSensorCheckPatchRequestFromJSON(json: any): PipelineSensorCheckPatchRequest {
-    return PipelineSensorCheckPatchRequestFromJSONTyped(json, false);
+export function PipelineSensorCheckGetResponse200FromJSON(json: any): PipelineSensorCheckGetResponse200 {
+    return PipelineSensorCheckGetResponse200FromJSONTyped(json, false);
 }
 
-export function PipelineSensorCheckPatchRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineSensorCheckPatchRequest {
+export function PipelineSensorCheckGetResponse200FromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineSensorCheckGetResponse200 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
-        'extra': !exists(json, 'extra') ? undefined : json['extra'],
+        'id': json['id'],
+        'enabled': json['enabled'],
+        'parameters': !exists(json, 'parameters') ? undefined : json['parameters'],
         'markup': !exists(json, 'markup') ? undefined : PipelineSensorCheckPatchRequestMarkupFromJSON(json['markup']),
     };
 }
 
-export function PipelineSensorCheckPatchRequestToJSON(value?: PipelineSensorCheckPatchRequest | null): any {
+export function PipelineSensorCheckGetResponse200ToJSON(value?: PipelineSensorCheckGetResponse200 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -71,8 +78,9 @@ export function PipelineSensorCheckPatchRequestToJSON(value?: PipelineSensorChec
     }
     return {
         
+        'id': value.id,
         'enabled': value.enabled,
-        'extra': value.extra,
+        'parameters': value.parameters,
         'markup': PipelineSensorCheckPatchRequestMarkupToJSON(value.markup),
     };
 }

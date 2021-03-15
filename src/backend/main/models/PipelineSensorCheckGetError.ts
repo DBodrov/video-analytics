@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface PipelineCheckPatchError
+ * @interface PipelineSensorCheckGetError
  */
-export interface PipelineCheckPatchError {
+export interface PipelineSensorCheckGetError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof PipelineCheckPatchError
+     * @memberof PipelineSensorCheckGetError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof PipelineCheckPatchError
+     * @memberof PipelineSensorCheckGetError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof PipelineCheckPatchError
+     * @memberof PipelineSensorCheckGetError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof PipelineCheckPatchError
+     * @memberof PipelineSensorCheckGetError
      */
     statusCode: number;
 }
 
-export function PipelineCheckPatchErrorFromJSON(json: any): PipelineCheckPatchError {
-    return PipelineCheckPatchErrorFromJSONTyped(json, false);
+export function PipelineSensorCheckGetErrorFromJSON(json: any): PipelineSensorCheckGetError {
+    return PipelineSensorCheckGetErrorFromJSONTyped(json, false);
 }
 
-export function PipelineCheckPatchErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineCheckPatchError {
+export function PipelineSensorCheckGetErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): PipelineSensorCheckGetError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function PipelineCheckPatchErrorFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function PipelineCheckPatchErrorToJSON(value?: PipelineCheckPatchError | null): any {
+export function PipelineSensorCheckGetErrorToJSON(value?: PipelineSensorCheckGetError | null): any {
     if (value === undefined) {
         return undefined;
     }
