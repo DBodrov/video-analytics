@@ -39,7 +39,7 @@ export function SensorsPage() {
               </SensorsTableCell>
               <SensorsTableCell>
                 <Span css={{fontSize: 14, fontWeight: 600, color: 'var(--color-text-secondary)'}}>
-                  IP адрес
+                  Адрес камеры
                 </Span>
               </SensorsTableCell>
               <SensorsTableCell>

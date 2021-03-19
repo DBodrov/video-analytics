@@ -3,6 +3,7 @@ import {useSettings} from './SettingsContext';
 import {TemplatesPage} from './TemplatesPage';
 import {RulesPage} from './RulesPage';
 import {SensorsPage} from './SensorsPage';
+import {MarkupEditPage} from './MarkupEditPage';
 
 export function SettingsPage() {
   const {activeStep} = useSettings();
@@ -16,6 +17,9 @@ export function SettingsPage() {
   }
   if (activeStep === 'SET_SENSOR') {
     return <SensorsPage />
+  }
+  if (activeStep === 'CONFIG_RULE') {
+    return <MarkupEditPage />
   }
   return null;
 }
