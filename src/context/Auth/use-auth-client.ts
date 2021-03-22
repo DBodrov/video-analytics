@@ -8,6 +8,7 @@ import {
   LoginPostErrorFromJSON,
   TokenPostResponse201FromJSON,
   CheckTokenResponse200FromJSON,
+  LogoutDeleteErrorFromJSON,
 } from '@/backend/auth/models';
 import {LoginFormData} from './types';
 
@@ -53,10 +54,42 @@ export function useAuthClient() {
   const fetchClient = useFetch();
 
   const logout = useCallback(() => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    setAuthState({status: 'resolved', accessToken: '', refreshToken: '', companyId: undefined, data: undefined});
-  }, []);
+    fetchClient('/api/auth/logout', {
+      headers: {Authorization: `Bearer ${accessToken}`},
+      body: {METHOD: 'DELETE'},
+    }).then(
+      response => {
+        setAuthState({
+          status: 'resolved',
+          accessToken: '',
+          refreshToken: '',
+          companyId: undefined,
+          data: undefined,
+        });
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        return response;
+      },
+      error => {
+        const logoutError = LogoutDeleteErrorFromJSON(error);
+
+        if (logoutError.statusCode === 401) {
+          setAuthState({
+            status: 'rejected',
+            accessToken: '',
+            refreshToken: '',
+            companyId: undefined,
+            data: undefined,
+            error: logoutError,
+          });
+          localStorage.removeItem(ACCESS_TOKEN_KEY);
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
+        } else setAuthState({status: 'rejected', error: logoutError});
+
+        return error;
+      },
+    );
+  }, [fetchClient, accessToken]);
 
   const fetchRefreshToken = useCallback(() => {
     if (!refreshToken) {
@@ -73,10 +106,11 @@ export function useAuthClient() {
       error => {
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         window.clearInterval(interval);
+        logout();
         return error;
       },
     );
-  }, [fetchClient, refreshToken]);
+  }, [fetchClient, refreshToken, logout]);
 
   const checkToken = useCallback(() => {
     fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${accessToken}`}}).then(
@@ -86,11 +120,11 @@ export function useAuthClient() {
         return response;
       },
       error => {
-        logout();
+        fetchRefreshToken();
         return error;
       },
     );
-  }, [accessToken, fetchClient, logout]);
+  }, [accessToken, fetchClient, fetchRefreshToken]);
 
   const run = useCallback(() => {
     if (accessToken) {

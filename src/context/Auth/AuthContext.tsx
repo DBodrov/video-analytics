@@ -5,7 +5,7 @@ import {IAuthContext} from './types';
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
-  const {run, login, isAuthorized, isLoading, accessToken, companyId} = useAuthClient();
+  const {run, login, logout, isAuthorized, isLoading, accessToken, companyId} = useAuthClient();
 
   useEffect(() => {
     run();
@@ -15,11 +15,12 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     () => ({
       isAuthorized,
       login,
+      logout,
       accessToken,
       companyId,
       authHeader: {Authorization: `Bearer ${accessToken}`},
     }),
-    [accessToken, companyId, isAuthorized, login],
+    [accessToken, companyId, isAuthorized, login, logout],
   );
 
   if (isLoading) return <span>Authentication...</span>;

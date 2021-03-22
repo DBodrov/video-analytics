@@ -1,5 +1,5 @@
 import {rest} from 'msw';
-import {refreshTokenMock, checkTokenMock, loginMock} from './auth-mocks';
+import {refreshTokenMock, checkTokenMock, loginMock, logoutMock} from './auth-mocks';
 import {locationsMock, sensorsMock, pipelinesMock} from './company-mock';
 import {checkCategories, checks, statuses, incidentsRefs} from './refs-mocks';
 import {events} from './events-mock';
@@ -23,6 +23,10 @@ const authHandlers = [
   rest.post('/api/auth/login', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(loginMock));
   }),
+
+  rest.delete('/api/auth/logout', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(logoutMock));
+  })
 ];
 
 const companyHandlers = [

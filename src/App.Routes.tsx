@@ -3,6 +3,7 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import {Events} from '@/screens/Events';
 import {EventDetails} from '@/screens/EventDetails';
 import {Sensors} from '@/screens/Sensors';
+import {Faq} from '@/screens/Faq';
 import {SensorDetails} from '@/screens/SensorDetails';
 import {ReportsPage} from '@/screens/ReportsPage';
 
@@ -24,6 +25,9 @@ export function AppRoutes() {
       </Route>
       <Route exact path="/reports">
         <ReportsPage />
+      </Route>
+      <Route exact path="/faq">
+        <Faq/>
       </Route>
     </Switch>
   );

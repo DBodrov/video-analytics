@@ -9,6 +9,7 @@ const routeMap = new Map([
   ['/sensors', 'Все камеры'],
   ['/sensors/:id', 'Все камеры'],
   ['/reports', 'Отчеты'],
+  ['/faq','FAQ']
 ]);
 
 export function UIProvider(props: any) {
@@ -17,7 +18,8 @@ export function UIProvider(props: any) {
   const sensors = useRouteMatch({path: '/sensors', exact: true});
   const sensorDetails = useRouteMatch({path: '/sensors/:id', exact: true});
   const reports = useRouteMatch({path: '/reports', exact: true})
-  const currentPath = [dashboard, events, sensors, sensorDetails, reports].find(match => match !== null)?.path ?? '/';
+  const faq = useRouteMatch({path: '/faq', exact: true})
+  const currentPath = [dashboard, events, sensors, sensorDetails, reports, faq].find(match => match !== null)?.path ?? '/';
   const title = routeMap.get(currentPath);
   const contextValue = {title};
   return <UIContext.Provider value={contextValue} {...props} />;

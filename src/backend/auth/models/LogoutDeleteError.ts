@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * Сведения об ошибке
  * @export
- * @interface CheckTokenError
+ * @interface LogoutDeleteError
  */
-export interface CheckTokenError {
+export interface LogoutDeleteError {
     /**
      * Контекст выполнения и значение переменных
      * @type {object}
-     * @memberof CheckTokenError
+     * @memberof LogoutDeleteError
      */
     details: object;
     /**
      * Сообщение об ошибке
      * @type {string}
-     * @memberof CheckTokenError
+     * @memberof LogoutDeleteError
      */
     message: string;
     /**
      * Путь к запрашиваемому ресурсу
      * @type {string}
-     * @memberof CheckTokenError
+     * @memberof LogoutDeleteError
      */
     path: string;
     /**
      * HTTP-код ответа
      * @type {number}
-     * @memberof CheckTokenError
+     * @memberof LogoutDeleteError
      */
     statusCode: number;
 }
 
-export function CheckTokenErrorFromJSON(json: any): CheckTokenError {
-    return CheckTokenErrorFromJSONTyped(json, false);
+export function LogoutDeleteErrorFromJSON(json: any): LogoutDeleteError {
+    return LogoutDeleteErrorFromJSONTyped(json, false);
 }
 
-export function CheckTokenErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): CheckTokenError {
+export function LogoutDeleteErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): LogoutDeleteError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function CheckTokenErrorFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function CheckTokenErrorToJSON(value?: CheckTokenError | null): any {
+export function LogoutDeleteErrorToJSON(value?: LogoutDeleteError | null): any {
     if (value === undefined) {
         return undefined;
     }
