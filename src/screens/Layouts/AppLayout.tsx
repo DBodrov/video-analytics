@@ -2,6 +2,7 @@ import React from 'react';
 import { NavMenu } from '@/components';
 import { Logo } from './Logo';
 import { PageTitle } from './PageTitle';
+import { DropDownLogoutMenu } from './DropDownLogoutMenu';
 import { Aside, Content, Header, Main, PageLayout } from './styles';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -10,6 +11,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <Header>
         <Logo />
         <PageTitle />
+        <DropDownLogoutMenu />
       </Header>
       <Main>
         <Aside>

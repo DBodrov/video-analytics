@@ -11,6 +11,7 @@ export interface Tokens {
 export interface IAuthContext {
   isAuthorized?: boolean;
   login: (loginData: LoginFormData) => void;
+  logout: () => void;
   accessToken?: string;
   companyId?: number;
   authHeader?: {Authorization: string};
