@@ -59,6 +59,8 @@ export function useAuthClient() {
       body: {METHOD: 'DELETE'},
     }).then(
       response => {
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
         setAuthState({
           status: 'resolved',
           accessToken: '',
@@ -66,14 +68,14 @@ export function useAuthClient() {
           companyId: undefined,
           data: undefined,
         });
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem(REFRESH_TOKEN_KEY);
         return response;
       },
       error => {
         const logoutError = LogoutDeleteErrorFromJSON(error);
 
         if (logoutError.statusCode === 401) {
+          localStorage.removeItem(ACCESS_TOKEN_KEY);
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
           setAuthState({
             status: 'rejected',
             accessToken: '',
@@ -82,8 +84,6 @@ export function useAuthClient() {
             data: undefined,
             error: logoutError,
           });
-          localStorage.removeItem(ACCESS_TOKEN_KEY);
-          localStorage.removeItem(REFRESH_TOKEN_KEY);
         } else setAuthState({status: 'rejected', error: logoutError});
 
         return error;
