@@ -9,6 +9,7 @@ export function EventsProvider(props: any) {
   const {
     error,
     eventsView,
+    object_count,
     queryEvents,
     getEventByCode,
     getEventsViewBySensorId,
@@ -23,8 +24,8 @@ export function EventsProvider(props: any) {
     tocIds: -1,
     tzOffset: TIMEZONE_OFFSET,
     onlyIncidents: false,
-    page: undefined,
-    pageSize: undefined,
+    page: 1, //page: undefined,
+    pageSize: 20, //pageSize: undefined,
     checkIds: [],
   });
 
@@ -46,8 +47,11 @@ export function EventsProvider(props: any) {
   const ctxValue = useMemo<TEventsContext>(
     () => ({
       eventsView,
+      count_event: object_count,
+      page_size: queryParams.pageSize, 
       error,
       setQueryParams,
+      page: queryParams.page,
       setFiltersState,
       filtersState,
       getEventByCode,
@@ -59,10 +63,13 @@ export function EventsProvider(props: any) {
     }),
     [
       error,
+      object_count,
       eventsView,
       filtersState,
       getEventByCode,
       getEventsViewBySensorId,
+      queryParams.page,
+      queryParams.pageSize,
       queryParams.onlyIncidents,
       refreshView,
       status,

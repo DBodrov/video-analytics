@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const WorkLayout = styled.div`
   display: grid;
-  grid-template: 60px 1fr / 1fr 310px;
+  grid-template: 60px 1fr 120px / 1fr 310px;
   width: 100%;
   height: 100%;
 `;
@@ -21,4 +21,9 @@ export const TablePlace = styled.div`
   grid-row: 2/3;
   grid-column: 1/2;
   padding: 30px;
+`;
+
+export const PaginationPlace = styled.div`
+    grid-row: 3/4;
+    grid-column: 1/2;
 `;

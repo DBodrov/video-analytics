@@ -9,6 +9,7 @@ type TEventsState = {
   events?: TEventsData['events'];
   incidents?: TIncidents;
   pagination?: TEventsData['pagination'];
+  object_count: number
   period?: TEventsData['period'];
   error?: any;
   view?: IEventView[] | IIncidentView[];
@@ -21,13 +22,14 @@ const initState: TEventsState = {
   events: undefined,
   incidents: undefined,
   pagination: undefined,
+  object_count: 0,
   period: undefined,
   view: undefined,
   viewType: 'events',
 };
 
 export function useEventsClient() {
-  const [{status, events, error, view, viewType}, setEventsState] = useReducer(
+  const [{status, events, error, view, viewType, object_count}, setEventsState] = useReducer(
     (state: TEventsState, changes: Partial<TEventsState>) => ({...state, ...changes}),
     initState,
   );
@@ -106,18 +108,20 @@ export function useEventsClient() {
         response => {
           if (onlyIncidents) {
             const [incidentsResponse] = response;
-            const {incidents /*pagination, period*/} = IncidentsGetResponse200FromJSON(incidentsResponse);
+            const {incidents, pagination/* period*/} = IncidentsGetResponse200FromJSON(incidentsResponse);
+
             setEventsState({
               status: 'resolved',
               incidents,
+              object_count: pagination.count,
               view: createIncidentsView(incidents),
               viewType: 'incidents',
             });
             return response;
           }
           const [eventsRaw] = response;
-          const {events} = EventsGetResponse200FromJSON(eventsRaw);
-          setEventsState({status: 'resolved', events, view: createEventsView(events), viewType: 'events'});
+          const {events, pagination} = EventsGetResponse200FromJSON(eventsRaw);
+          setEventsState({status: 'resolved', events, object_count: pagination.count, view: createEventsView(events), viewType: 'events'});
           return response;
         },
         error => {
@@ -159,6 +163,7 @@ export function useEventsClient() {
     queryEvents,
     events,
     error,
+    object_count,
     eventsView,
     getEventByCode,
     getEventsViewBySensorId,
