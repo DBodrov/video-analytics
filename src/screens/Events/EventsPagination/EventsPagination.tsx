@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import {PaginationWrapper, useStylePagination} from './styles';
 import {useEvents, TEventsQuery} from '@/context';
@@ -8,16 +8,23 @@ export const EventPagination: React.FC = () => {
   const {setQueryParams, status , page, count_event, page_size} = useEvents();
   const isSuccess = status === 'resolved';
 
-  const getPageCount = () => {
-    let pageCount = 1
+  const [pageCount, setPageCount] = useState<number>(1) 
+
+  const getPageCount = React.useCallback(() => {
+    let _pageCount = 1
     if (count_event && page_size)
-        pageCount = Math.round(count_event / page_size)
-        if (pageCount === 0)
-          pageCount = 1
-    else
-        pageCount = 1
-    return pageCount
-  } 
+    {
+      _pageCount = Math.round(count_event / page_size)
+      if (_pageCount === 0)
+        _pageCount = 1
+    }
+    setPageCount(_pageCount)
+  } ,[count_event,page_size,setPageCount])
+
+  useEffect(()=> {    
+    getPageCount()
+  },[count_event,page_size,pageCount,getPageCount])
+
 
   const handleChange = React.useCallback((event: React.ChangeEvent<unknown>, pageNumber: number) => {
     setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, page: pageNumber}));
@@ -31,7 +38,7 @@ export const EventPagination: React.FC = () => {
           onChange={handleChange}
           variant="outlined"
           shape="rounded"
-          count={getPageCount()}
+          count={pageCount}
           size="large"
           color="primary"
           page={page}
