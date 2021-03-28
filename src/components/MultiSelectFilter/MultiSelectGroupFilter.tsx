@@ -22,7 +22,7 @@ function Select({options, value = [], onSelect, className, prefix}: TMultiSelect
     border: `1px ${theme?.colors?.pageElementsColors?.border} solid`,
     boxSizing: 'border-box',
     backgroundColor: theme?.colors?.pageElementsColors?.formElements,
-    width: '100%',
+    width: '200%',
     height: 350,
     overflow: 'auto',
   });
@@ -169,7 +169,7 @@ function Select({options, value = [], onSelect, className, prefix}: TMultiSelect
                 width: 68,
                 height: 18,
                 fontSize: 11,
-                marginLeft: 'auto',
+                marginLeft: '50px',
                 '&:hover': {backgroundColor: '#29B311'},
               }}
               variant="primary"
