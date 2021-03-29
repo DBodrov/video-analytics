@@ -40,7 +40,7 @@ export function Select({onSelect, options, className, prefix, value = -1}: Selec
     border: `1px ${colors?.pageElementsColors?.border} solid`,
     boxSizing: 'border-box',
     backgroundColor: colors?.pageElementsColors?.formElements,
-    width: '100%',
+    width: '115%',
   });
 
   const optionBaseCss = css({
