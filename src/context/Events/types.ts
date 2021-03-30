@@ -23,6 +23,9 @@ export type TIncidentsData = IncidentsGetResponse200;
 export type TIncidents = IncidentGetResponse200Incident[];
 
 export type TEventsContext = {
+  page?: number | undefined
+  count_event?: number | undefined
+  page_size?: number | undefined
   eventsView?: IEventView[];
   view?: IEventView[] | IIncidentView[];
   refreshView: () => void;

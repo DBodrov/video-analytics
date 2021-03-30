@@ -33,6 +33,8 @@ export function useFetch() {
             ...customConfig,
             signal: getSignal(),
         };
+        if (body?.METHOD)
+            config.method = body.METHOD
         if (body) {
             config.body = JSON.stringify(body);
         }

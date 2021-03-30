@@ -19,6 +19,7 @@ export * from './LoginPostRequest';
 export * from './LoginPostResponse201';
 export * from './LoginPostResponse201User';
 export * from './LoginPostToken';
+export * from './LogoutDeleteError';
 export * from './ModelsGetResponse200';
 export * from './ModelsGetResponse200Models';
 export * from './ModelsGetResponse200Tocs';

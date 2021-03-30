@@ -23,6 +23,8 @@ export const loginMock: any = {
   },
 };
 
+export const logoutMock: any = {}
+
 export const refreshTokenMock: any = {
   user: {
     id: 2,

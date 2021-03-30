@@ -4,7 +4,8 @@ import {AppLayout} from '@/screens/Layouts';
 import {EventsFilters} from './EventsFilters';
 import {EventsTable} from './EventsTable';
 import {EventsRightSidebar} from './EventsRight';
-import {WorkLayout, FiltersPlace, RightBar, TablePlace} from './styles';
+import { EventPagination } from './EventsPagination';
+import {WorkLayout, FiltersPlace, RightBar, TablePlace, PaginationPlace} from './styles';
 
 export function Events() {
   const {error, status, view, refreshView, viewType} = useEvents();
@@ -30,6 +31,9 @@ export function Events() {
         <RightBar>
           <EventsRightSidebar />
         </RightBar>
+        <PaginationPlace>
+          <EventPagination/>
+        </PaginationPlace>
       </WorkLayout>
     </AppLayout>
   );

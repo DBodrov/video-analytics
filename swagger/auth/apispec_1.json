@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "0.12.dev78", 
+    "version": "0.13.dev86", 
     "title": "auth", 
     "description": "powered by Flasgger", 
     "termsOfService": "/tos"
@@ -214,6 +214,27 @@
       }
     }, 
     "/api/auth/refs/models": {
+      "get": {
+        "summary": "# Сведения о моделях расчета", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о моделях расчета", 
+            "schema": {
+              "$ref": "#/definitions/models_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }, 
       "post": {
         "summary": "# Сохранение модели и категорий отслеживаемых объектов", 
         "description": "# ", 
@@ -236,27 +257,6 @@
             }
           }
         ], 
-        "tags": [
-          "Refs"
-        ], 
-        "consumes": [
-          "application/json"
-        ], 
-        "produces": [
-          "application/json"
-        ]
-      }, 
-      "get": {
-        "summary": "# Сведения о моделях расчета", 
-        "description": "# ", 
-        "responses": {
-          "200": {
-            "description": "Сведения о моделях расчета", 
-            "schema": {
-              "$ref": "#/definitions/models_get_response_200"
-            }
-          }
-        }, 
         "tags": [
           "Refs"
         ], 
@@ -381,6 +381,44 @@
         ], 
         "tags": [
           "Company"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/logout": {
+      "delete": {
+        "summary": "# выход пользователя из системы", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Пользователь вышел из системы", 
+            "schema": {
+              "$ref": "#/definitions/logout_response_200"
+            }
+          }, 
+          "401": {
+            "description": "Запрос содержит некорректный токен доступа (access-токен)", 
+            "schema": {
+              "$ref": "#/definitions/logout_delete_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
         ], 
         "consumes": [
           "application/json"
@@ -1002,67 +1040,6 @@
         }
       }
     }, 
-    "models_request": {
-      "type": "object", 
-      "required": [
-        "model", 
-        "tocs"
-      ], 
-      "properties": {
-        "model": {
-          "type": "object", 
-          "required": [
-            "code", 
-            "name", 
-            "description"
-          ], 
-          "description": "Сведения о модели", 
-          "properties": {
-            "code": {
-              "type": "string", 
-              "description": "Код модели"
-            }, 
-            "name": {
-              "type": "string", 
-              "description": "Краткое название модели"
-            }, 
-            "description": {
-              "type": "string", 
-              "description": "Описание модели"
-            }
-          }
-        }, 
-        "tocs": {
-          "type": "array", 
-          "items": {
-            "type": "object", 
-            "required": [
-              "code", 
-              "name", 
-              "description"
-            ], 
-            "description": "Категория отслеживаемого объекта", 
-            "properties": {
-              "code": {
-                "type": "string", 
-                "description": "Код категории отслеживаемого объекта в рамках модели"
-              }, 
-              "name": {
-                "type": "string", 
-                "description": "Краткое название категории отслеживаемого объекта"
-              }, 
-              "description": {
-                "type": "string", 
-                "description": "Описание категории отслеживаемого объекта"
-              }
-            }
-          }
-        }
-      }
-    }, 
-    "models_response_201": {
-      "type": "object"
-    }, 
     "models_get_response_200": {
       "type": "object", 
       "required": [
@@ -1132,6 +1109,67 @@
           }
         }
       }
+    }, 
+    "models_request": {
+      "type": "object", 
+      "required": [
+        "model", 
+        "tocs"
+      ], 
+      "properties": {
+        "model": {
+          "type": "object", 
+          "required": [
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Сведения о модели", 
+          "properties": {
+            "code": {
+              "type": "string", 
+              "description": "Код модели"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название модели"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание модели"
+            }
+          }
+        }, 
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Категория отслеживаемого объекта", 
+            "properties": {
+              "code": {
+                "type": "string", 
+                "description": "Код категории отслеживаемого объекта в рамках модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории отслеживаемого объекта"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории отслеживаемого объекта"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_response_201": {
+      "type": "object"
     }, 
     "tocs_get_response_200": {
       "type": "object", 
@@ -1357,6 +1395,36 @@
               }
             }
           }
+        }
+      }
+    }, 
+    "logout_response_200": null, 
+    "type": "object", 
+    "logout_delete_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
         }
       }
     }, 
