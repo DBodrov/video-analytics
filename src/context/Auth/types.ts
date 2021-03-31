@@ -14,6 +14,7 @@ export interface IAuthContext {
   logout: () => void;
   accessToken?: string;
   companyId?: number;
+  user_name?: string;
   authHeader?: {Authorization: string};
 }
 

@@ -23,7 +23,7 @@ export function EventsFilters() {
   const setLocationFilter = useCallback(
     (id: number) => {
       setFiltersState(s => ({...s, locationFilter: id}));
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, locationIds: id}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, locationIds: id, page: 1}));
     },
     [setFiltersState, setQueryParams],
   );
@@ -31,14 +31,14 @@ export function EventsFilters() {
   const setSensorFilter = useCallback(
     (id: number) => {
       setFiltersState(s => ({...s, sensorFilter: id}));
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, sensorIds: id}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, sensorIds: id, page: 1}));
     },
     [setFiltersState, setQueryParams],
   );
 
   const setCheckFilter = useCallback(
     (ids: number[] = []) => {
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, checkIds: ids}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, checkIds: ids, page: 1}));
     },
     [setQueryParams],
   );
@@ -46,7 +46,7 @@ export function EventsFilters() {
   const setIncidentFilter = useCallback(
     (on: boolean) => {
       setFiltersState(s => ({...s, incidentFilter: on}));
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, onlyIncidents: on}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, onlyIncidents: on, page: 1}));
     },
     [setFiltersState, setQueryParams],
   );
@@ -55,7 +55,7 @@ export function EventsFilters() {
     (period: [startDate: string, endDate: string]) => {
       const eventPeriod: TDateRange = [dayIsoString(period[0], 'begin'), dayIsoString(period[1], 'end')];
       setFiltersState(s => ({...s, periodFilter: eventPeriod}));
-      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, dates: eventPeriod}));
+      setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, dates: eventPeriod, page: 1}));
     },
     [setFiltersState, setQueryParams],
   );

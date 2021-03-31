@@ -10,7 +10,7 @@ const storedLogin = localStorage.getItem(USERNAME_KEY) ?? '';
 export function LoginForm() {
   const [loginData, setLoginData] = useState<LoginFormData>({userName: storedLogin, password: ''});
   const [errorState, setErrorState] = useState<LoginFormData>({userName: '', password: ''});
-  const {login} = useAuth();
+  const {login, user_name} = useAuth();
   const userNameRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const handleChange = useCallback((value: string, event?: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,18 +60,22 @@ export function LoginForm() {
   );
 
   React.useEffect(() => {
+    if (user_name) {
+      setLoginData(s => ({...s, userName: user_name}))
+    }
+
     if (storedLogin) {
       passwordRef?.current?.focus();
     } else {
       userNameRef?.current?.focus();
     }
-  }, [])
+  }, [user_name])
 
   return (
     <Form onSubmit={handleLogin}>
       <H5>Авторизация</H5>
 
-      <Label htmlFor="userName">Email</Label>
+      <Label htmlFor="userName">Логин</Label>
       <Input
         ref={userNameRef}
         name="userName"
