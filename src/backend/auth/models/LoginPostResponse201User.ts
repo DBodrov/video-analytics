@@ -30,7 +30,7 @@ export interface LoginPostResponse201User {
      * @type {string}
      * @memberof LoginPostResponse201User
      */
-    code: string;
+    user_name: string;
     /**
      * Полное имя (Фамилия Имя Отчество)
      * @type {string}
@@ -92,7 +92,7 @@ export function LoginPostResponse201UserFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'id': json['id'],
-        'code': json['code'],
+        'user_name': json['user_name'],
         'fullName': json['full_name'],
         'firstName': json['first_name'],
         'lastName': json['last_name'],
@@ -114,7 +114,7 @@ export function LoginPostResponse201UserToJSON(value?: LoginPostResponse201User 
     return {
         
         'id': value.id,
-        'code': value.code,
+        'user_name': value.user_name,
         'full_name': value.fullName,
         'first_name': value.firstName,
         'last_name': value.lastName,

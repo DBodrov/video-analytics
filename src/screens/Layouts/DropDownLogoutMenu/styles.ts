@@ -1,4 +1,20 @@
 import {css} from '@emotion/react';
+import styled from '@emotion/styled';
+import ProfileImage from '@/assets/img/profile.png';
+
+export const UserName = styled.p`
+  margin-right: 15px;
+  margin-left: 10px;
+`
+
+export const LogoutMenu = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: right;
+  justify-content: flex-end;
+  margin-right: 30px;
+`;
 
 export const inputStyle = css`
   position: relative;
@@ -6,7 +22,7 @@ export const inputStyle = css`
   width: 36px;
   height: 36px;
   font-size: 0px;
-  background: url('https://cdn.icon-icons.com/icons2/38/PNG/512/maleuser_4945.png');
+  background: url(${ProfileImage});
   background-size: contain;
 
   & > svg {
@@ -32,6 +48,6 @@ export const optionStyle = css`
   height: 37px;
   &:hover {
     color: #2ea2f8;
-    background: #313D4F;
+    background: #313d4f;
   }
 `;
