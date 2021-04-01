@@ -15,7 +15,7 @@ import {pipelineChecksMock, pipelinesMock} from './settings-mocks';
 //import {sensorStats} from './sensors-stats';
 
 const authHandlers = [
-  rest.get('/api/auth/token', (req, res, ctx) => {
+  rest.post('/api/auth/token', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(refreshTokenMock));
   }),
 

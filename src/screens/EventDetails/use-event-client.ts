@@ -106,7 +106,7 @@ export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
         sensor: getSensorById(incidentData?.sensorId)?.ref?.name ?? '',
         location: getLocationById(incidentData.locationId)?.name ?? '',
         eventStatus: getEventStatusById(incidentData.status?.currentId)?.name,
-        checkCategory: getCheckCategoryById(incidentData.categoryId)?.name,
+        checkCategory: getIncidentNameByCategoryId(incidentData.categoryId),
       };
     }
     return undefined;

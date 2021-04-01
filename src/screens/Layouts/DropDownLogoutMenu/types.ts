@@ -1,7 +1,6 @@
 export enum EnumActions {
   FAQ_ACTION = 1,
-  EXIT_ACTION = 2,
-  UNDEFINED = 'undefined',
+  EXIT_ACTION = 2
 }
 
 export interface IOption {

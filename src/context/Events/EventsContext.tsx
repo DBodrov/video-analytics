@@ -66,6 +66,7 @@ export function EventsProvider(props: any) {
       object_count,
       eventsView,
       filtersState,
+      setFiltersState,
       getEventByCode,
       getEventsViewBySensorId,
       queryParams.page,

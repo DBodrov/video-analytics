@@ -9,7 +9,7 @@ export const PageLayout = styled.div`
 
 export const Header = styled.header`
   display: grid;
-  grid-template: 1fr / 250px 1fr 96px;
+  grid-template: 1fr / 250px 1fr 250px;
   width: 100%;
   height: 100%;
   background-color: var(--color-form);

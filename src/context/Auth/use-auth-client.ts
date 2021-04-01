@@ -14,11 +14,11 @@ import {LoginFormData} from './types';
 
 type TAuthState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
+  user_name?: string;
   data?: LoginPostResponse201;
   companyId?: number;
-  accessToken?: string;
-  refreshToken?: string;
   error?: LoginPostError;
+  isAuthorized: boolean;
 };
 
 const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)?.trim() ?? '';
@@ -31,23 +31,23 @@ const setRefreshToken = (token = '') => localStorage.setItem(REFRESH_TOKEN_KEY, 
 const authReducer = (s: TAuthState, a: Partial<TAuthState>): TAuthState => ({...s, ...a});
 const initialAuthState: TAuthState = {
   status: 'idle',
+  user_name: undefined,
   data: undefined,
   companyId: undefined,
-  accessToken: getAccessToken(),
-  refreshToken: getRefreshToken(),
   error: undefined,
+  isAuthorized: false,
 };
 
 const storeLoginData = (loginResponse: LoginPostResponse201) => {
   setAccessToken(loginResponse.accessToken.value);
   setRefreshToken(loginResponse.refreshToken.value);
-  localStorage.setItem(USERNAME_KEY, loginResponse.user.firstName ?? '');
+  localStorage.setItem(USERNAME_KEY, loginResponse.user.user_name ?? '');
 };
 
 let interval: any;
 
 export function useAuthClient() {
-  const [{status, companyId, data, error, accessToken, refreshToken}, setAuthState] = useReducer(
+  const [{status, companyId, data, error, user_name, isAuthorized}, setAuthState] = useReducer(
     authReducer,
     initialAuthState,
   );
@@ -55,65 +55,61 @@ export function useAuthClient() {
 
   const logout = useCallback(() => {
     fetchClient('/api/auth/logout', {
-      headers: {Authorization: `Bearer ${accessToken}`},
+      headers: {Authorization: `Bearer ${getAccessToken()}`},
       body: {METHOD: 'DELETE'},
     }).then(
       response => {
         localStorage.removeItem(ACCESS_TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);
+        window.clearInterval(interval);
         setAuthState({
           status: 'resolved',
-          accessToken: '',
-          refreshToken: '',
           companyId: undefined,
           data: undefined,
+          isAuthorized: false,
         });
         return response;
       },
       error => {
         const logoutError = LogoutDeleteErrorFromJSON(error);
-
+        window.clearInterval(interval);
         if (logoutError.statusCode === 401) {
           localStorage.removeItem(ACCESS_TOKEN_KEY);
           localStorage.removeItem(REFRESH_TOKEN_KEY);
           setAuthState({
             status: 'rejected',
-            accessToken: '',
-            refreshToken: '',
             companyId: undefined,
             data: undefined,
             error: logoutError,
+            isAuthorized: false,
           });
-        } else setAuthState({status: 'rejected', error: logoutError});
-
+        } else setAuthState({status: 'rejected', error: logoutError, isAuthorized: false});
         return error;
       },
     );
-  }, [fetchClient, accessToken]);
+  }, [fetchClient]);
 
   const fetchRefreshToken = useCallback(() => {
-    if (!refreshToken) {
-      window.clearInterval(interval);
+    if (!getRefreshToken()) {
+      logout();
       return;
     }
-    fetchClient('/api/auth/token', {headers: {Authorization: `Bearer ${refreshToken}`}, body: {}}).then(
+    fetchClient('/api/auth/token', {headers: {Authorization: `Bearer ${getRefreshToken()}`}, body: {}}).then(
       response => {
         const token = TokenPostResponse201FromJSON(response);
         setAccessToken(token.accessToken.value);
-        setAuthState({companyId: token.user.companyId});
         return response;
       },
       error => {
         localStorage.removeItem(REFRESH_TOKEN_KEY);
-        window.clearInterval(interval);
         logout();
         return error;
       },
     );
-  }, [fetchClient, refreshToken, logout]);
+  }, [fetchClient, logout]);
 
   const checkToken = useCallback(() => {
-    fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${accessToken}`}}).then(
+    fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${getAccessToken()}`}}).then(
       response => {
         const tokenData = CheckTokenResponse200FromJSON(response);
         setAuthState({status: 'resolved', companyId: tokenData.payload.companyId});
@@ -124,16 +120,16 @@ export function useAuthClient() {
         return error;
       },
     );
-  }, [accessToken, fetchClient, fetchRefreshToken]);
+  }, [fetchClient, fetchRefreshToken]);
 
   const run = useCallback(() => {
-    if (accessToken) {
+    if (getAccessToken()) {
       checkToken();
     }
     interval = window.setInterval(() => {
       fetchRefreshToken();
     }, REFRESH_TOKEN_INTERVAL);
-  }, [accessToken, checkToken, fetchRefreshToken]);
+  }, [checkToken, fetchRefreshToken]);
 
   const login = useCallback(
     (loginData: LoginFormData) => {
@@ -148,8 +144,8 @@ export function useAuthClient() {
             status: 'resolved',
             companyId: loginResponse.user.companyId,
             data: loginResponse,
-            accessToken: loginResponse.accessToken.value,
-            refreshToken: loginResponse.refreshToken.value,
+            user_name: loginResponse.user.user_name,
+            isAuthorized: true,
           });
           return response;
         },
@@ -172,14 +168,16 @@ export function useAuthClient() {
     isLoading: status === 'pending',
     isSuccess: status === 'resolved',
     isError: status === 'rejected',
-    isAuthorized: Boolean(accessToken),
+    isAuthorized: isAuthorized,
 
     run,
     login,
     logout,
     data,
+    user_name: user_name,
     companyId: companyId,
-    accessToken,
+    accessToken: getAccessToken(),
+    refreshToken: getRefreshToken(),
     error,
   };
 }
