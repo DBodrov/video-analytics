@@ -1,6 +1,6 @@
 import React from 'react';
 import {useFetch, TIMEZONE_OFFSET} from '@/utils';
-import {useAuth, useCompany} from '@/context';
+import {useAuth, useCompany, getAccessToken} from '@/context';
 import {CompanySensorStatsGetResponse200FromJSON} from '@/backend/main';
 import {groupByIdAndHours, sumCountsBySensor, sumTotalStats, countAllIncidentsByHours} from './utils';
 import {TSensorsStatsState} from './types'
@@ -12,12 +12,12 @@ export function useSensorsStats() {
     error: undefined,
   });
   const fetchClient = useFetch();
-  const {companyId, authHeader: headers} = useAuth();
+  const {companyId, logout} = useAuth();
   const {sensors} = useCompany();
 
   const fetchSensorsStats = React.useCallback(() => {
     setState(s => ({...s, status: 'pending', error: undefined}));
-    // const headers = {Authorization: `Bearer ${accessToken}`};
+    const headers = {Authorization: `Bearer ${getAccessToken()}`};
     const sensorsIds = sensors?.map(s => s.ref.id);
     sensorsIds?.forEach(sensorId => {
       let url = `/api/va/companies/${companyId}/sensors/${sensorId}/stats?tz_offset=${TIMEZONE_OFFSET}`;
@@ -31,11 +31,13 @@ export function useSensorsStats() {
         error => {
           setState(s => ({...s, status: 'rejected', error}));
           //console.error(error);
+          if (error?.status_code === 401)
+            logout();
           return error;
         },
       );
     });
-  }, [companyId, fetchClient, headers, sensors]);
+  }, [companyId, fetchClient, sensors, logout]);
 
   return {
     isIdle: status === 'idle',

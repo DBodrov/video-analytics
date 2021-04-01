@@ -18,3 +18,14 @@ export function defaultPeriod(): TDateRange {
   const endPeriod = new Date(end).toISOString();
   return [startPeriod, endPeriod];
 }
+
+export function getDatePeriod(timestamp : string | undefined): TDateRange {
+  console.log(timestamp)
+  let startTime = timestamp ? new Date(timestamp) : new Date();
+  startTime.setHours(0, 0, 0, 0);
+  const isoStart = startTime.toISOString();
+  let endTime = timestamp ? new Date(timestamp) : new Date();
+  endTime.setHours(23, 59, 59, 999);
+  const isoEnd = endTime.toISOString();
+  return [isoStart,isoEnd]
+}

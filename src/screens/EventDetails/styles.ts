@@ -7,6 +7,16 @@ export const EventContent = styled.div`
   height: 100%;
 `;
 
+export const PlayerLayout = styled.div`
+  margin: auto;
+  background-color: var(--color-form);
+`;
+
+export const PanelFilterLayout = styled.div`
+  padding-bottom: 7px;
+  padding-top: 7px;
+`;
+
 export const EventBox = styled.div`
   display: grid;
   grid-template: minmax(500px, 1fr) / 880px 1fr;

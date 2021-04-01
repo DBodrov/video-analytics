@@ -30,7 +30,7 @@ export const EventPagination: React.FC = () => {
     setQueryParams((q: TEventsQuery): TEventsQuery => ({...q, page: pageNumber}));
   }, [setQueryParams]);
 
-  if (isSuccess) {
+  if (isSuccess && count_event) {
     return (
       <PaginationWrapper>
         <Pagination

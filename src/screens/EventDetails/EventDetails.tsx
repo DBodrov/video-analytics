@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
-
+import { EventsDetailsFilters } from './EventsDetailsFilters'
 import {DetailsLayout} from '@/screens/Layouts';
 import {useEventClient} from './use-event-client';
-import {useTimelineClient} from './use-timeline-client';
+import {useTimelines} from './TimelineContext';
 import {EventSection} from './EventSection';
 import {Timeline} from './Timeline';
 import {Player} from './Player';
+import {getDatePeriod} from '@/utils';
 import {EventSidebar} from './EventSidebar';
-import {EventContent} from './styles';
+import {EventContent, PlayerLayout, PanelFilterLayout} from './styles';
 // import {TEvent, TIncident} from './types';
 
 export function EventDetails() {
+  
   const {
     state: {eventId, viewType},
   } = useLocation<{eventId: string; viewType: 'events' | 'incidents'}>();
@@ -34,38 +36,31 @@ export function EventDetails() {
     incidentsByHours,
     eventsCount,
     incidentsCount,
-    queryTimeline,
     events,
     incidents,
-  } = useTimelineClient();
+    refreshView
+  } = useTimelines();
 
   //const [isIncident, setIsIncident] = React.useState(viewType === 'incidents');
   const hasOccurrenceByHour = viewType === 'events' ? Boolean(eventsByHours) : Boolean(incidentsByHours);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (eventData) {
-      queryTimeline(eventData.date);
+      refreshView(getDatePeriod(eventData.date))
     }
-  }, [eventData, queryTimeline]);
+  }, [eventData, refreshView]);
+
 
   /**Список для боковой панели */
   const getEventsInCurrentHour = React.useCallback(() => {
     if (hasOccurrenceByHour && eventData) {
       const eventHour = new Date(eventData.date!).getHours();
-      const eventId = eventData.id;
       const occurrences = viewType === 'events' ? eventsByHours : incidentsByHours;
-      const occurrenceInHour =
-        occurrences &&
-        occurrences[eventHour].filter(o => {
-          if (viewType === 'events') {
-            return o.code !== eventId;
-          }
-          return o.id !== eventId;
-        });
+      const occurrenceInHour = occurrences && occurrences[eventHour];
       return occurrenceInHour;
     }
     return [];
-  }, [eventData, eventsByHours, hasOccurrenceByHour, incidentsByHours, viewType]);
+  }, [eventData, hasOccurrenceByHour, eventsByHours,incidentsByHours, viewType]);
 
   const handleFirstEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
@@ -160,12 +155,50 @@ export function EventDetails() {
     );
   };
 
+  const renderEventSidebar = () => {
+    if (isIdle || isLoading) {
+      return (
+        <span
+          css={{
+            display: 'flex',
+            marginTop: '5px',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          Загрузка...
+        </span>
+      );
+    }
+    if (isError) {
+      return (
+        <div
+          css={{
+            display: 'flex',
+            marginTop: '5px',
+            flexDirection: 'column',
+            color: 'var(--color-mts)',
+            alignItems: 'center'
+          }}
+        >
+          {error.message}
+        </div>
+      );
+    }
+    return <EventSidebar eventsList={getEventsInCurrentHour()} viewType={viewType} />;
+  };
+
   return (
     <DetailsLayout>
       <EventContent>
         <div css={{width: '100%'}}>
-          {renderEventSection()}
-          {renderPlayer()}
+          <PlayerLayout>
+            <PanelFilterLayout>
+             <EventsDetailsFilters/>
+            </PanelFilterLayout>
+            {renderEventSection()}
+            {renderPlayer()}
+          </PlayerLayout>
           <Timeline
             incidents={incidentsByHours}
             events={eventsByHours}
@@ -176,7 +209,7 @@ export function EventDetails() {
             currentDate={eventData?.date}
           />
         </div>
-        <EventSidebar eventsList={getEventsInCurrentHour()} viewType={viewType} />
+        {renderEventSidebar()}
       </EventContent>
     </DetailsLayout>
   );

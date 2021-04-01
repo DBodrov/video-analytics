@@ -1,5 +1,5 @@
 import {useReducer, useCallback} from 'react';
-import {useAuth} from '@/context/Auth';
+import {getAccessToken, useAuth} from '@/context/Auth';
 import {useFetch} from '@/utils';
 import {
   StatusesGetResponse200FromJSON,
@@ -28,15 +28,16 @@ const initialState: TRefsState = {
 
 export function useRefsClient() {
   const fetchClient = useFetch();
-  const {accessToken} = useAuth();
   const [{status, eventStatuses, checks, checkCategories, error, incidentsRefs}, setRefsState] = useReducer(
     (s: TRefsState, a: TRefsState) => ({...s, ...a}),
     initialState,
   );
 
+  const { logout } = useAuth()
+
   const fetchRefsData = useCallback(() => {
     setRefsState({status: 'pending'});
-    const headers = {Authorization: `Bearer ${accessToken}`};
+    const headers = {Authorization: `Bearer ${getAccessToken()}`};
     const fetchEventStatuses = fetchClient('/api/auth/refs/statuses', {headers});
     const fetchAllChecks = fetchClient('/api/auth/refs/checks', {headers});
     const fetchCheckCategories = fetchClient('/api/auth/refs/check_categories', {headers});
@@ -61,9 +62,11 @@ export function useRefsClient() {
       },
       error => {
         setRefsState({status: 'rejected', error});
+        if (error?.status_code === 401)
+          logout();
       },
     );
-  }, [accessToken, fetchClient]);
+  }, [fetchClient, logout]);
 
   const getEventStatusById = useCallback(
     (id?: number) => {
