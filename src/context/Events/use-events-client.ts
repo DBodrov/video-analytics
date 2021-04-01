@@ -1,6 +1,6 @@
 import React, {useReducer, useCallback} from 'react';
 import {EventsGetResponse200FromJSON, IncidentsGetResponse200FromJSON} from '@/backend/main';
-import {useAuth, useCompany, useRefs} from '@/context';
+import {useAuth, useCompany, useRefs, getAccessToken} from '@/context';
 import {useFetch, isEmptyString} from '@/utils';
 import {TEventsData, TEvents, TEventsQuery, IEventView, TIncidents, IIncidentView} from './types';
 
@@ -34,7 +34,7 @@ export function useEventsClient() {
     initState,
   );
   const fetchClient = useFetch();
-  const {authHeader, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const {getLocationById, getSensorById} = useCompany();
   const {getCheckById, getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId} = useRefs();
 
@@ -102,7 +102,7 @@ export function useEventsClient() {
         url += `?sort_by=desc&${query}`;
       }
 
-      const headers = authHeader;
+      const headers = {Authorization: `Bearer ${getAccessToken()}`};
       const fetchEvents = fetchClient(url, {headers});
       Promise.all([fetchEvents]).then(
         response => {
@@ -126,11 +126,15 @@ export function useEventsClient() {
         },
         error => {
           setEventsState({status: 'rejected', error});
+          if (error?.status_code === 401)
+          {
+            logout();
+          }
           return error;
         },
       );
     },
-    [authHeader, companyId, createEventsView, createIncidentsView, fetchClient],
+    [companyId, createEventsView, createIncidentsView, fetchClient, logout],
   );
 
   /**@deprecated */

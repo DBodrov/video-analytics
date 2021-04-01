@@ -1,8 +1,8 @@
-import React from 'react';
-import {useFetch, TIMEZONE_OFFSET} from '@/utils';
-import {useAuth, useCompany, useRefs} from '@/context';
+import React, {useEffect} from 'react';
+import {useFetch, TIMEZONE_OFFSET, isEmptyString} from '@/utils';
+import {useAuth, useCompany, useRefs, getAccessToken} from '@/context';
 import {TimelineGetResponse200FromJSON, TimelineGetOccurrence200} from '@/backend/main';
-import {IOccurrenceView, TOccurrenceByHours} from './types';
+import {IOccurrenceView, TOccurrenceByHours, ITimelinesQuery} from './types';
 // import {TEvents} from '@/context/Events';
 
 type State = {
@@ -55,7 +55,7 @@ export function useTimelineClient() {
     {status, error, events, incidents, eventsByHours, incidentsByHours, eventsCount, incidentsCount},
     dispatch,
   ] = React.useReducer(timelineReducer, initState);
-  const {authHeader, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const {getLocationById, getSensorById} = useCompany();
   const {getCheckById, getCheckCategoryById} = useRefs();
 
@@ -87,21 +87,17 @@ export function useTimelineClient() {
 
   const fetchClient = useFetch();
 
-  const queryTimeline = React.useCallback(
-    (timestamp?: string) => {
-      let startTime = timestamp ? new Date(timestamp) : new Date();
-      startTime.setHours(0, 0, 0, 0);
-      const isoStart = startTime.toISOString();
-      let endTime = timestamp ? new Date(timestamp) : new Date();
-      endTime.setHours(23, 59, 59, 999);
-      const isoEnd = endTime.toISOString();
 
-      fetchClient(
-        `/api/va/companies/${companyId}/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc&start_time=${isoStart}&end_time=${isoEnd}`,
-        {
-          headers: authHeader,
-        },
-      ).then(
+  const queryTimeline = React.useCallback(
+    (queryParams?:ITimelinesQuery) => {
+      let url = `/api/va/companies/${companyId}/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc`;
+        const query = encodeQueryData(queryParams);
+        if (!isEmptyString(query)) {
+          url += `&${query}`;
+        }
+      fetchClient(url, {
+        headers: {Authorization: `Bearer ${getAccessToken()}`},
+      }).then(
         response => {
           const {events, incidents} = TimelineGetResponse200FromJSON(response);
           const eventsByHours = groupEventsByHours(events);
@@ -119,12 +115,58 @@ export function useTimelineClient() {
         },
         error => {
           dispatch({status: 'rejected', error});
+          if (error?.status_code === 401) logout();
           return error;
         },
       );
     },
-    [authHeader, companyId, fetchClient, groupEventsByHours],
+    [companyId, fetchClient, groupEventsByHours, logout],
   );
+
+  function encodeQueryData(data: any) {
+    if (!data) return '';
+    const queryParameters = createQueryToJSON(data);
+    const query: string[] = [];
+    for (const param in queryParameters) {
+      if (param in queryParameters) {
+        query.push(`${encodeURIComponent(param)}=${encodeURIComponent(queryParameters[param])}`);
+      }
+    }
+    return query.join('&');
+  }
+
+  function createQueryToJSON(query: Record<string, any>) {
+    const queryParameters: Record<string, any> = {};
+
+    if (query.locationIds !== undefined && query.locationIds !== -1) {
+      queryParameters['location_ids'] = query.locationIds;
+    }
+
+    if (query.sensorIds !== undefined && query.sensorIds !== -1) {
+      queryParameters['sensor_ids'] = query.sensorIds;
+    }
+
+    if (query.tocIds !== undefined && query.tocIds !== -1) {
+      queryParameters['toc_ids'] = query.tocIds;
+    }
+
+    // if (query.tzOffset !== undefined) {
+    //   queryParameters['tz_offset'] = query.tzOffset;
+    // }
+
+    if (query.dates !== undefined) {
+      queryParameters['start_time'] = query.dates[0];
+    }
+
+    if (query.dates !== undefined) {
+      queryParameters['end_time'] = query.dates[1];
+    }
+
+    if (query.checkIds?.length > 0) {
+      queryParameters['check_ids'] = query.checkIds.join(',');
+    }
+    return queryParameters;
+  }
 
   // const getFirstEvent = React.useCallback(
   //   () => {
@@ -193,7 +235,6 @@ export function useTimelineClient() {
     isLoading: status === 'pending',
     isSuccess: status === 'resolved',
     isError: status === 'rejected',
-
     queryTimeline,
     error,
     eventsByHours,

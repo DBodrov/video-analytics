@@ -12,6 +12,8 @@ type TCounterProps = {
 };
 
 export function EventCounters({counts, isIncidents = false, isActive, showEvents, currentHour}: TCounterProps) {
+  const colorEventsOrIncidents = isIncidents ? 'var(--color-secondary)' : 'var(--color-primary)';
+  const colorCountBorder = (idx: number) => (isActive && idx === currentHour ?  colorEventsOrIncidents : 'var(--color-border)')
   return (
     <>
       <HeaderCell css={{backgroundColor: isActive ? '#364357' : 'transparent'}}>
@@ -26,7 +28,7 @@ export function EventCounters({counts, isIncidents = false, isActive, showEvents
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: `1px ${isActive && idx === currentHour ? isIncidents ? 'var(--color-secondary)' : 'var(--color-primary)' : 'var(--color-border)'} solid`,
+                border: `1px ${colorCountBorder(idx)} solid`,
               }}
             >
               {h > 0 ? (

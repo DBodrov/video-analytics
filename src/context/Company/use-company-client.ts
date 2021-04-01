@@ -9,7 +9,7 @@ import {
   PipelinesGetResponse200Pipelines,
   // PipelinesGetResponse200BySensor
 } from '@/backend/main';
-import {useAuth} from '../Auth';
+import {useAuth, getAccessToken} from '../Auth';
 import {TLocations, TSensors} from './types';
 
 type TCompanyState = {
@@ -47,12 +47,12 @@ const initialState: TCompanyState = {
 
 export function useCompanyClient() {
   const [{status, locations, sensors, pipelines, error}, setCompanyState] = useReducer(companyReducer, initialState);
-  const {accessToken, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const fetchClient = useFetch();
 
 
   const fetchData = useCallback(() => {
-    const headers = {Authorization: `Bearer ${accessToken}`};
+    const headers = {Authorization: `Bearer ${getAccessToken()}`};
     setCompanyState({status: 'pending'});
     const fetchLocations: Promise<CompanyLocationsGetResponse200> = fetchClient(
       `/api/va/companies/${companyId}/locations`,
@@ -74,9 +74,11 @@ export function useCompanyClient() {
       },
       error => {
         setCompanyState({status: 'rejected', error});
+        if (error?.status_code === 401)
+          logout();
       },
     );
-  }, [accessToken, companyId, fetchClient]);
+  }, [companyId, fetchClient, logout]);
 
   const getLocationById = useCallback(
     (id: number) => {

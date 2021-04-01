@@ -1,6 +1,6 @@
 import React from 'react';
 import {useFetch, TIMEZONE_OFFSET} from '@/utils';
-import {useAuth} from '@/context';
+import {useAuth, getAccessToken} from '@/context';
 import {
   CompanySensorGetResponse200FromJSON,
   CompanySensorStatsGetResponse200FromJSON,
@@ -20,13 +20,13 @@ export function useSensorClient() {
     error: undefined,
     sensor: undefined,
   });
-  const {authHeader, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const fetchClient = useFetch();
 
   const querySensorById = React.useCallback(
     (sensorId: number) => {
       setSensor(s => ({...s, status: 'pending', error: undefined}));
-      const headers = authHeader;
+      const headers = {Authorization: `Bearer ${getAccessToken()}`};
       const fetchSensorInfo = fetchClient(`/api/va/companies/${companyId}/sensors/${sensorId}`, {headers});
       const fetchSensorStats = fetchClient(`/api/va/companies/${companyId}/sensors/${sensorId}/stats?tz_offset=${TIMEZONE_OFFSET}`, {
         headers,
@@ -40,10 +40,12 @@ export function useSensorClient() {
         },
         error => {
           setSensor(s => ({...s, status: 'rejected', error}));
+          if (error?.status_code === 401)
+            logout();
         },
       );
     },
-    [authHeader, companyId, fetchClient],
+    [companyId, fetchClient,logout],
   );
 
   return {
