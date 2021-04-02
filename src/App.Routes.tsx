@@ -7,6 +7,7 @@ import {Faq} from '@/screens/Faq';
 import {SensorDetails} from '@/screens/SensorDetails';
 import {ReportsPage} from '@/screens/ReportsPage';
 import {Settings, AddSensorsPage} from '@/screens/Settings';
+import {TimelinesProvider} from '@/screens/EventDetails/TimelineContext'
 
 export function AppRoutes() {
   return (
@@ -16,7 +17,9 @@ export function AppRoutes() {
         <Events />
       </Route>
       <Route path="/events/details">
-        <EventDetails />
+        <TimelinesProvider>
+          <EventDetails />
+        </TimelinesProvider>
       </Route>
       <Route exact path="/sensors">
         <Sensors />

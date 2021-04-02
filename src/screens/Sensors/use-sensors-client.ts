@@ -1,6 +1,6 @@
 import React from 'react';
 import {EventsGetResponse200FromJSON} from '@/backend/main';
-import {useAuth, TEvents} from '@/context';
+import {useAuth, getAccessToken, TEvents} from '@/context';
 import {useFetch, TIMEZONE_OFFSET} from '@/utils';
 
 export function useSensorsClient() {
@@ -8,10 +8,10 @@ export function useSensorsClient() {
     undefined,
   );
   const fetchClient = useFetch();
-  const {accessToken, companyId} = useAuth();
+  const {companyId} = useAuth();
 
   const queryEventsByCurrentDay = React.useCallback(() => {
-    const headers = {Authorization: `Bearer ${accessToken}`};
+    const headers = {Authorization: `Bearer ${getAccessToken()}`};
     let url = `/api/va/companies/${companyId}/events?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc&page_size=10000`;
     fetchClient(url, {headers}).then(
       response => {
@@ -26,7 +26,7 @@ export function useSensorsClient() {
         return error;
       },
     );
-  }, [accessToken, companyId, fetchClient]);
+  }, [companyId, fetchClient]);
 
   return {
     lists,

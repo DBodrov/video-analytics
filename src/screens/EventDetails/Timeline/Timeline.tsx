@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import {HoursScale} from './HoursScale';
 import {ImagesLine} from './ImagesLine';
@@ -12,8 +12,6 @@ type TimelineProps = {
   incidents?: TOccurrenceByHours;
   eventsCount?: number[];
   incidentsCount?: number[];
-  // onFilter: (isIncident: boolean) => void;
-  // isIncident: boolean;
   viewType?: 'events' | 'incidents';
 };
 
@@ -23,12 +21,17 @@ export function Timeline({
   incidents,
   eventsCount,
   incidentsCount,
-  // onFilter,
-  //isIncident,
   viewType = 'events',
 }: TimelineProps) {
   const history = useHistory();
-  const currentHour = new Date(currentDate!).getHours();
+  const [currentHour, setCurrentHour] = useState<number>(new Date(currentDate!).getHours())
+
+
+  useEffect(()=>{
+    let hour = new Date(currentDate!).getHours()
+    setCurrentHour(hour)
+  },[currentDate])
+
 
   const handleShowEvents = React.useCallback(
     (hour: number, isIncident: boolean) => {
@@ -41,6 +44,7 @@ export function Timeline({
         id = events![hour][0].code;
         viewType = 'events';
       }
+      setCurrentHour(_=>(hour))
       history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
     },
     [events, history, incidents],

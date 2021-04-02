@@ -1,9 +1,9 @@
 import React from 'react';
-import {useAuth} from '@/context';
+import {useAuth, getAccessToken} from '@/context';
 import {IReportsPostRequest, ReportsPostRequestToJSON} from './types';
 
 export function useReportsClient() {
-  const {companyId, authHeader} = useAuth();
+  const {companyId, logout} = useAuth();
 
   const getReportFile = React.useCallback(
     (query: IReportsPostRequest) => {
@@ -14,7 +14,7 @@ export function useReportsClient() {
       window
         .fetch(`/api/va/companies/${companyId}/reports/${reportId}`, {
           body: JSON.stringify(body),
-          headers: authHeader,
+          headers: {Authorization: `Bearer ${getAccessToken()}`},
           method: 'POST',
         })
         .then(response => {
@@ -30,9 +30,13 @@ export function useReportsClient() {
           link.href = url;
           link.download = filename;
           link.click();
+        }).catch(error => {
+          if (error?.status_code === 401)
+            logout();
+          return error
         });
     },
-    [authHeader, companyId],
+    [companyId,logout],
   );
 
   return {

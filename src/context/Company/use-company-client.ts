@@ -1,22 +1,20 @@
 import {useReducer, useCallback} from 'react';
 import {useFetch} from '@/utils';
 import {
-  CompanyLocationsGetResponse200,
   CompanyLocationsGetResponse200FromJSON,
   CompanySensorsGetResponse200FromJSON,
   /*IncidentsGetResponse200Incidents,*/
-  PipelinesGetResponse200FromJSON,
   PipelinesGetResponse200Pipelines,
   // PipelinesGetResponse200BySensor
 } from '@/backend/main';
-import {useAuth} from '../Auth';
+import {useAuth, getAccessToken} from '../Auth';
 import {TLocations, TSensors} from './types';
 
 type TCompanyState = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';
   locations?: TLocations;
   sensors?: TSensors;
-  incidents?: any/*IncidentsGetResponse200Incidents*/;
+  incidents?: any /*IncidentsGetResponse200Incidents*/;
   pipelines?: PipelinesGetResponse200Pipelines[];
   data?: any;
   error?: any;
@@ -34,28 +32,15 @@ const initialState: TCompanyState = {
   error: undefined,
 };
 
-// const getCount = (bySensor: PipelinesGetResponse200BySensor[]) => {
-//   return bySensor.reduce((acc, current) => {
-//     return {
-//       ...acc,
-//       sensorId: current.id,
-//       checksCount: current.checks.length
-//     }
-//   }, {})
-// }
-
 export function useCompanyClient() {
   const [{status, locations, sensors, error}, setCompanyState] = useReducer(companyReducer, initialState);
-  const {accessToken, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const fetchClient = useFetch();
 
   const fetchData = useCallback(() => {
-    const headers = {Authorization: `Bearer ${accessToken}`};
+    const headers = {Authorization: `Bearer ${getAccessToken()}`};
     setCompanyState({status: 'pending'});
-    const fetchLocations = fetchClient(
-      `/api/va/companies/${companyId}/locations`,
-      {headers},
-    );
+    const fetchLocations = fetchClient(`/api/va/companies/${companyId}/locations`, {headers});
     const fetchSensors = fetchClient(`/api/va/companies/${companyId}/sensors`, {headers});
     // const fetchPipelines = fetchClient(`/api/va/companies/${companyId}/pipelines`, {headers});
     // const fetchIncidents = fetchClient(`/api/va/companies/${companyId}/refs/incidents`, {headers});
@@ -66,15 +51,15 @@ export function useCompanyClient() {
         const sensors = CompanySensorsGetResponse200FromJSON(sensorsData).sensors;
         // const pipelines = PipelinesGetResponse200FromJSON(pipelinesData).pipelines;
 
-
         // const incidents = RefIncidentsGetResponse200FromJSON(incidentsData).incidents;
         setCompanyState({status: 'resolved', locations, sensors});
       },
       error => {
         setCompanyState({status: 'rejected', error});
+        if (error?.status_code === 401) logout();
       },
     );
-  }, [accessToken, companyId, fetchClient]);
+  }, [companyId, fetchClient, logout]);
 
   const getLocationById = useCallback(
     (id: number) => {

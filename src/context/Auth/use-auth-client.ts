@@ -21,7 +21,7 @@ type TAuthState = {
   isAuthorized: boolean;
 };
 
-const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)?.trim() ?? '';
+export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)?.trim() ?? '';
 const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)?.trim() ?? '';
 
 const setAccessToken = (token = '') => localStorage.setItem(ACCESS_TOKEN_KEY, token);
@@ -112,7 +112,7 @@ export function useAuthClient() {
     fetchClient('/api/auth/check-token', {headers: {Authorization: `Bearer ${getAccessToken()}`}}).then(
       response => {
         const tokenData = CheckTokenResponse200FromJSON(response);
-        setAuthState({status: 'resolved', companyId: tokenData.payload.companyId});
+        setAuthState({status: 'resolved', companyId: tokenData.payload.companyId, isAuthorized: true});
         return response;
       },
       error => {
@@ -176,8 +176,6 @@ export function useAuthClient() {
     data,
     user_name: user_name,
     companyId: companyId,
-    accessToken: getAccessToken(),
-    refreshToken: getRefreshToken(),
-    error,
+    error
   };
 }

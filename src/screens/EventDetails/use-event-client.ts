@@ -1,6 +1,6 @@
 import React from 'react';
 import {EventGetResponse200EventFromJSON, IncidentGetResponse200IncidentFromJSON} from '@/backend/main';
-import {useAuth, useRefs, useCompany} from '@/context';
+import {useAuth, useRefs, useCompany, getAccessToken} from '@/context';
 import {TIMEZONE_OFFSET, useFetch} from '@/utils';
 import {
   TEvent,
@@ -31,7 +31,7 @@ const initState: State = {
 
 export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
   const fetchClient = useFetch();
-  const {authHeader, companyId} = useAuth();
+  const {companyId, logout} = useAuth();
   const {getCheckById, getCheckCategoryById, getEventStatusById, getIncidentNameByCategoryId} = useRefs();
   const {getSensorById, getLocationById} = useCompany();
   const [{status, eventData, imageContent, trackBoxes, error}, dispatch] = React.useReducer(
@@ -45,7 +45,7 @@ export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
 
       const url = `/api/va/companies/${companyId}/${occurrenceType}/${id}?tz_offset=${TIMEZONE_OFFSET}`;
 
-      fetchClient(url, {headers: authHeader}).then(
+      fetchClient(url, {headers: {Authorization: `Bearer ${getAccessToken()}`}} ).then(
         response => {
           const eventData =
             occurrenceType === 'events'
@@ -69,13 +69,15 @@ export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
         },
         error => {
           dispatch({status: 'rejected', error});
+          if (error?.status_code === 401)
+            logout();
           return error;
         },
       );
     };
 
     fetchEvent();
-  }, [authHeader, companyId, fetchClient, id, occurrenceType]);
+  }, [companyId, fetchClient, id, occurrenceType, logout]);
 
   const boxRects = trackBoxes?.map(box => {
     return {
