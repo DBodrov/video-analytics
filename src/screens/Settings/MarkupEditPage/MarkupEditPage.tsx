@@ -4,7 +4,6 @@ import {Section, SectionBlock, SectionHeader} from '../styles';
 import {MarkupToolbar} from './MarkupToolbar';
 import {MarkupSection} from './styles';
 
-
 type TCoordinate = {
   x: number;
   y: number;
@@ -12,9 +11,14 @@ type TCoordinate = {
 
 export function MarkupEditPage() {
   // const [lineState, dispatch] = React.useReducer(shapeStateReducer, initShapeState)
+  const [shape, setShape] = React.useState<'line' | 'square'>('line');
   const [mousePosition, setMousePosition] = React.useState<TCoordinate | undefined>(undefined);
   const [startPositions, setStartPositions] = React.useState<TCoordinate[] | undefined>(undefined);
+  const [startPositionsSquare, setStartPositionsSquare] = React.useState<TCoordinate[] | undefined>(
+    undefined,
+  );
   const [endPositions, setEndPositions] = React.useState<TCoordinate[] | undefined>(undefined);
+  const [endPositionsSquare, setEndPositionsSquare] = React.useState<TCoordinate[] | undefined>(undefined);
   const [isDrawing, setIsDrawing] = React.useState(false);
   //const [lineState, setLine] = React.useState([]);
   //const [lineCoordinates, setLineCoord] = React.useState({x: undefined, y: undefined});
@@ -26,14 +30,16 @@ export function MarkupEditPage() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const context = canvasRef.current?.getContext('2d');
 
-  const setShape = React.useCallback((shape: string) => {
-    // setState(s => ({...s, shape}));
-  }, []);
+  // const setShape = React.useCallback((shape: string) => {
+  //   // setState(s => ({...s, shape}));
+  // }, []);
 
   const clearAll = () => {
     //setLine([]);
     setStartPositions(undefined);
+    setStartPositionsSquare(undefined);
     setEndPositions(undefined);
+    setEndPositionsSquare(undefined);
     setMousePosition(undefined);
     clearCanvas();
   };
@@ -100,10 +106,32 @@ export function MarkupEditPage() {
     [context, endPositions, startPositions],
   );
 
+  const drawSquare = React.useCallback(
+    (startPosition, endPosition) => {
+      const height = endPosition.y - startPosition.y;
+      const width = endPosition.x - startPosition.x;
+
+      if (context) {
+        //console.log(height, width);
+        // context.beginPath();
+        context.lineWidth = 2; // width of the line
+        context.strokeStyle = '#57D841';
+        context.strokeRect(startPosition.x, startPosition.y, width, height);
+        //context.closePath();
+      }
+    },
+    [context],
+  );
+
   const handleMouseDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     const {x, y} = getCoordinates(event);
-    const updateStartPosition = startPositions ? [...startPositions, {x, y}] : [{x, y}];
-    setStartPositions(updateStartPosition);
+    if (shape === 'square') {
+      const updateStartPositionSquare = startPositionsSquare ? [...startPositionsSquare, {x, y}] : [{x, y}];
+      setStartPositionsSquare(updateStartPositionSquare);
+    } else {
+      const updateStartPosition = startPositions ? [...startPositions, {x, y}] : [{x, y}];
+      setStartPositions(updateStartPosition);
+    }
     setIsDrawing(true);
   };
 
@@ -111,18 +139,33 @@ export function MarkupEditPage() {
     if (!isDrawing) return;
 
     const newMousePosition = getCoordinates(event);
-    if (startPositions && newMousePosition) {
-      clearCanvas();
-      drawLine(startPositions[startPositions.length - 1], newMousePosition);
-      setMousePosition(newMousePosition);
+    clearCanvas();
+    if (shape === 'line') {
+      if (startPositions && newMousePosition) {
+        drawLine(startPositions[startPositions.length - 1], newMousePosition);
+      }
+    } else {
+      if (startPositionsSquare && newMousePosition) {
+        drawSquare(startPositionsSquare[startPositionsSquare.length - 1], newMousePosition);
+     }
     }
+    // setMousePosition(newMousePosition);
   };
 
   const handleMouseUp = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return;
     setIsDrawing(false);
     const {x, y} = getCoordinates(event);
     const updateEndPosition = endPositions ? [...endPositions, {x, y}] : [{x, y}];
     setEndPositions(updateEndPosition);
+  };
+
+  const handleMouseLeave = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (isDrawing) {
+      handleMouseUp(event);
+    } else {
+      return;
+    }
   };
 
   return (
@@ -152,7 +195,7 @@ export function MarkupEditPage() {
             </Button>
           </div>
         </SectionHeader>
-        <MarkupToolbar onClearAll={clearAll} onSetShape={setShape} shape="line" />
+        <MarkupToolbar onClearAll={clearAll} onSetShape={setShape} shape={shape} />
         <MarkupSection>
           <canvas
             id="markup"
@@ -162,6 +205,7 @@ export function MarkupEditPage() {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
           ></canvas>
         </MarkupSection>
       </SectionBlock>

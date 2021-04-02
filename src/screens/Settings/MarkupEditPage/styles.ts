@@ -28,5 +28,8 @@ export const ToolbarButton = styled.button`
   border: 1px var(--color-border) solid;
   border-radius: 4px;
   cursor: pointer;
-  /* outline: 0; */
+  outline: 0;
+  &:hover {
+    border-color: var(--color-primary);
+  }
 `;
