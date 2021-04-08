@@ -144,7 +144,6 @@ export function useEventClient(id: string, occurrenceType: TOccurrenceType) {
     boxRects,
     commonDetectInfo: createCommonDetectInfo(),
     extraDetectInfo: createExtraInfo(),
-
     error,
   };
 }

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useFetch, TIMEZONE_OFFSET, isEmptyString} from '@/utils';
 import {useAuth, useCompany, useRefs, getAccessToken} from '@/context';
 import {TimelineGetResponse200FromJSON, TimelineGetOccurrence200} from '@/backend/main';
@@ -32,7 +32,7 @@ const initState: State = {
   incidentsByHours: undefined,
   eventsCount: undefined,
   incidentsCount: undefined,
-  error: undefined,
+  error: undefined
 };
 
 const createEmptyView = () => {
@@ -91,10 +91,11 @@ export function useTimelineClient() {
   const queryTimeline = React.useCallback(
     (queryParams?:ITimelinesQuery) => {
       let url = `/api/va/companies/${companyId}/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc`;
-        const query = encodeQueryData(queryParams);
-        if (!isEmptyString(query)) {
-          url += `&${query}`;
-        }
+      const query = encodeQueryData(queryParams);
+      if (!isEmptyString(query)) {
+        url += `&${query}`;
+      }
+      dispatch({status: 'pending'})
       fetchClient(url, {
         headers: {Authorization: `Bearer ${getAccessToken()}`},
       }).then(
@@ -120,7 +121,7 @@ export function useTimelineClient() {
         },
       );
     },
-    [companyId, fetchClient, groupEventsByHours, logout],
+    [companyId, fetchClient, groupEventsByHours, logout, dispatch],
   );
 
   function encodeQueryData(data: any) {
@@ -235,6 +236,7 @@ export function useTimelineClient() {
     isLoading: status === 'pending',
     isSuccess: status === 'resolved',
     isError: status === 'rejected',
+    dispatch,
     queryTimeline,
     error,
     eventsByHours,

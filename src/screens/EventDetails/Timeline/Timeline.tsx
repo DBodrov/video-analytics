@@ -5,6 +5,7 @@ import {ImagesLine} from './ImagesLine';
 import {EventCounters} from './EventCounters';
 import {TOccurrenceByHours} from '../types';
 import {TimelineTable} from './styles';
+import {useTimelines} from '../TimelineContext';
 
 type TimelineProps = {
   currentDate?: string;
@@ -25,6 +26,7 @@ export function Timeline({
 }: TimelineProps) {
   const history = useHistory();
   const [currentHour, setCurrentHour] = useState<number>(new Date(currentDate!).getHours())
+  const { setIdleStatus } = useTimelines()
 
 
   useEffect(()=>{
@@ -45,9 +47,10 @@ export function Timeline({
         viewType = 'events';
       }
       setCurrentHour(_=>(hour))
+      setIdleStatus()
       history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
     },
-    [events, history, incidents],
+    [events, history, incidents,setIdleStatus],
   );
 
   return (

@@ -60,12 +60,14 @@ export type ITimelineContext = {
   error?: any;
   queryTimeline: ()=> void;
   isIdle: boolean;
-  isLoading: boolean;
+  isTimelineIdle: boolean;
   isSuccess: boolean;
   isError: boolean;
   setFiltersState: (filterState: ITimelinesFiltersState | ((args: ITimelinesFiltersState) => ITimelinesFiltersState)) => void
   setQueryParams: (queryParams: ITimelinesQuery | ((args: ITimelinesQuery) => ITimelinesQuery)) => void;
   queryParams: ITimelinesQuery;
   filtersState: ITimelinesFiltersState;
-  refreshView: (period: TDateRange) => void;
+  refreshView: (period : TDateRange) => void;
+  isTimelineLoading: boolean;
+  setIdleStatus: () => void;
 }
