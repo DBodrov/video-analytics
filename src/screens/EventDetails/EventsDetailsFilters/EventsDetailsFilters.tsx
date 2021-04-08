@@ -1,16 +1,39 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {useCompany, useRefs} from '@/context';
-import {SelectFilter, MultiSelectGroupFilter} from '@/components';
+import {SelectFilter, MultiSelectGroupFilter, TDateRange} from '@/components';
 import {useTimelines} from '../TimelineContext';
 import {createFilterList, createCheckAndCategoriesList} from './utils';
-import {Panel} from './styles';
+import {Panel, muiTheme, styleDatePicker} from './styles';
 import {ITimelinesQuery} from '../types';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {ThemeProvider} from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns';
+import ruLocale from "date-fns/locale/ru";
+import {getDatePeriod} from '@/utils';
+import format from "date-fns/format";
 
 
+class RuLocalizedUtils extends DateFnsUtils {
+  getCalendarHeaderText(date: number | Date) {
+    return format(date, "LLLL", { locale: ruLocale });
+  }
+
+  getDatePickerHeaderText(date: number | Date) {
+    return format(date, "d MMMM", { locale: ruLocale });
+  }
+}
 
 
-export function EventsDetailsFilters() {
-  const {setQueryParams, setFiltersState, filtersState } = useTimelines();
+interface Props {
+  parrentDate: string | undefined;
+  isLoading: boolean;
+  isIdle: boolean;
+  isTimelineLoading: boolean;
+  isTimelineIdle: boolean;
+}
+
+export function EventsDetailsFilters({parrentDate, isLoading, isIdle, isTimelineLoading, isTimelineIdle}: Props) {
+  const {setQueryParams, setFiltersState, filtersState} = useTimelines();
 
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -25,6 +48,11 @@ export function EventsDetailsFilters() {
 
   const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
 
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(parrentDate ?? 0));
+
+  useEffect(() => {
+    setSelectedDate(new Date(parrentDate ?? 0));
+  }, [parrentDate]);
 
   const setLocationFilter = useCallback(
     (id: number) => {
@@ -49,28 +77,68 @@ export function EventsDetailsFilters() {
     [setQueryParams],
   );
 
-  return (
-    <Panel>
-      <SelectFilter
-        onSelect={setLocationFilter}
-        options={locationsOptions}
-        prefix="Площадки"
-        css={{height: 36, flexBasis: 200, marginRight: 10}}
-        value={filtersState.locationFilter}
-      />
-      <SelectFilter
-        onSelect={setSensorFilter}
-        options={sensorsOptions}
-        prefix="Камеры"
-        css={{height: 36, flexBasis: 220, marginRight: 10}}
-        value={filtersState.sensorFilter}
-      />
-      <MultiSelectGroupFilter
-        onSelect={setCheckFilter}
-        options={checkAndCategoriesOptions}
-        prefix="Правила"
-        css={{height: 36, flexBasis: 300, marginRight: 10}}
-      />
-    </Panel>
+  const setData = useCallback(
+    (date: Date | null) => {
+      const eventPeriod: TDateRange = getDatePeriod(date?.toISOString());
+      setSelectedDate(date);
+      setFiltersState(s => ({...s, periodFilter: eventPeriod}));
+      setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, dates: eventPeriod}));
+    },
+    [setFiltersState, setQueryParams, setSelectedDate],
   );
+
+  if (isIdle || isLoading || isTimelineLoading || isTimelineIdle) {
+    return (
+      <span
+        css={{
+          display: 'flex',
+          marginTop: '5px',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+      </span>
+    );
+  } else
+    return (
+      <Panel>
+        <SelectFilter
+          onSelect={setLocationFilter}
+          options={locationsOptions}
+          prefix="Площадки"
+          css={{height: 36, flexBasis: 200, marginRight: 10}}
+          value={filtersState.locationFilter}
+        />
+        <SelectFilter
+          onSelect={setSensorFilter}
+          options={sensorsOptions}
+          prefix="Камеры"
+          css={{height: 36, flexBasis: 220, marginRight: 10}}
+          value={filtersState.sensorFilter}
+        />
+        <MultiSelectGroupFilter
+          onSelect={setCheckFilter}
+          options={checkAndCategoriesOptions}
+          prefix="Правила"
+          css={{height: 36, flexBasis: 300, marginRight: 10}}
+        />
+        <ThemeProvider theme={muiTheme}>
+          <MuiPickersUtilsProvider utils={RuLocalizedUtils} locale={ruLocale}>
+            <KeyboardDatePicker
+              css={styleDatePicker}
+              format="yyyy-MM-dd"
+              margin="dense"
+              id="date-picker-dialog"
+              label="Выбор даты"
+              variant="inline"
+              value={selectedDate}
+              onChange={setData}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
+      </Panel>
+    );
 }

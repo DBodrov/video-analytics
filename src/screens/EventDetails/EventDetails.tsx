@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
-import { EventsDetailsFilters } from './EventsDetailsFilters'
+import {EventsDetailsFilters} from './EventsDetailsFilters';
 import {DetailsLayout} from '@/screens/Layouts';
 import {useEventClient} from './use-event-client';
 import {useTimelines} from './TimelineContext';
@@ -10,10 +10,8 @@ import {Player} from './Player';
 import {getDatePeriod} from '@/utils';
 import {EventSidebar} from './EventSidebar';
 import {EventContent, PlayerLayout, PanelFilterLayout} from './styles';
-// import {TEvent, TIncident} from './types';
 
 export function EventDetails() {
-  
   const {
     state: {eventId, viewType},
   } = useLocation<{eventId: string; viewType: 'events' | 'incidents'}>();
@@ -36,9 +34,11 @@ export function EventDetails() {
     incidentsByHours,
     eventsCount,
     incidentsCount,
+    isTimelineIdle,
+    isTimelineLoading,
     events,
     incidents,
-    refreshView
+    refreshView,
   } = useTimelines();
 
   //const [isIncident, setIsIncident] = React.useState(viewType === 'incidents');
@@ -46,10 +46,9 @@ export function EventDetails() {
 
   useEffect(() => {
     if (eventData) {
-      refreshView(getDatePeriod(eventData.date))
+      refreshView(getDatePeriod(eventData?.date));
     }
   }, [eventData, refreshView]);
-
 
   /**Список для боковой панели */
   const getEventsInCurrentHour = React.useCallback(() => {
@@ -60,7 +59,7 @@ export function EventDetails() {
       return occurrenceInHour;
     }
     return [];
-  }, [eventData, hasOccurrenceByHour, eventsByHours,incidentsByHours, viewType]);
+  }, [eventData, hasOccurrenceByHour, eventsByHours, incidentsByHours, viewType]);
 
   const handleFirstEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
@@ -122,7 +121,7 @@ export function EventDetails() {
   //const changeOccurrenceType = (isIncidentView: boolean) => setIsIncident(isIncidentView);
 
   const renderEventSection = () => {
-    if (isIdle || isLoading) {
+    if (isTimelineIdle || isTimelineLoading || isLoading || isIdle) {
       return <span css={{display: 'flex', height: 500, width: 800, margin: 'auto'}}>Загрузка...</span>;
     }
     if (isError) {
@@ -156,14 +155,14 @@ export function EventDetails() {
   };
 
   const renderEventSidebar = () => {
-    if (isIdle || isLoading) {
+    if (isTimelineIdle || isTimelineLoading || isLoading || isIdle) {
       return (
         <span
           css={{
             display: 'flex',
             marginTop: '5px',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           Загрузка...
@@ -178,7 +177,7 @@ export function EventDetails() {
             marginTop: '5px',
             flexDirection: 'column',
             color: 'var(--color-mts)',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           {error.message}
@@ -194,7 +193,13 @@ export function EventDetails() {
         <div css={{width: '100%'}}>
           <PlayerLayout>
             <PanelFilterLayout>
-             <EventsDetailsFilters/>
+              <EventsDetailsFilters
+                parrentDate={eventData?.date}
+                isTimelineLoading={isTimelineLoading}
+                isTimelineIdle={isTimelineIdle}
+                isLoading={isLoading}
+                isIdle={isIdle}
+              />
             </PanelFilterLayout>
             {renderEventSection()}
             {renderPlayer()}

@@ -20,7 +20,6 @@ export function defaultPeriod(): TDateRange {
 }
 
 export function getDatePeriod(timestamp : string | undefined): TDateRange {
-  console.log(timestamp)
   let startTime = timestamp ? new Date(timestamp) : new Date();
   startTime.setHours(0, 0, 0, 0);
   const isoStart = startTime.toISOString();

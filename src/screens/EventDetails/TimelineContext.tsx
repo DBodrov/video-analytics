@@ -1,8 +1,7 @@
-import React, {useContext, useMemo, createContext, useState} from 'react';
+import React, {useContext, useMemo, createContext, useState, useEffect} from 'react';
 import {useTimelineClient} from './use-timeline-client';
 import {ITimelineContext, ITimelinesQuery, ITimelinesFiltersState} from './types';
-import {TDateRange} from '@/components';
-import {defaultPeriod, TIMEZONE_OFFSET, dayIsoString} from '@/utils';
+import {defaultPeriod, TIMEZONE_OFFSET} from '@/utils';
 
 const TimelineContext = createContext<ITimelineContext | undefined>(undefined);
 
@@ -18,7 +17,8 @@ export function TimelinesProvider(props: any) {
     isIdle,
     isLoading,
     isSuccess,
-    isError
+    isError,
+    dispatch
   } = useTimelineClient();
 
 
@@ -37,12 +37,22 @@ export function TimelinesProvider(props: any) {
     tzOffset: TIMEZONE_OFFSET,
     checkIds: [],
   });
+  
 
 
+   const setIdleStatus = React.useCallback(()=>{
+    dispatch({status:'idle'})
+   },[dispatch])
 
   const refreshView = React.useCallback((period: [startDate: string, endDate: string]) => {
-    queryTimeline({...queryParams,dates: period});
-  }, [queryTimeline,queryParams]);
+     
+     if (defaultPeriod()[0] === queryParams?.dates![0] || defaultPeriod()[1] === queryParams?.dates![1]) {
+      queryTimeline({...queryParams, dates: period});
+     }
+     else {
+      queryTimeline(queryParams)
+    }
+  }, [queryTimeline, queryParams]);
 
 
   const ctxValue = useMemo<ITimelineContext>(
@@ -60,8 +70,10 @@ export function TimelinesProvider(props: any) {
       events,
       incidents,
       isIdle,
-      isLoading,
+      isTimelineIdle: isIdle,
+      isTimelineLoading: isLoading,
       isSuccess,
+      setIdleStatus,
       isError
     }),
     [
@@ -75,6 +87,7 @@ export function TimelinesProvider(props: any) {
       eventsCount,
       incidentsCount,
       queryTimeline,
+      setIdleStatus,
       events,
       incidents,
       isIdle,
