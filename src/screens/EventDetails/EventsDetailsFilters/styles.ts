@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import {css} from '@emotion/react';
 import {createMuiTheme} from '@material-ui/core/styles';
 
 export const Panel = styled.div`
@@ -15,6 +14,11 @@ export const Panel = styled.div`
 
 export const muiTheme = createMuiTheme({
   overrides: {
+    MuiSvgIcon: {
+      root: {
+        color: 'var(--color-text-secondary)'
+      }
+    },
     MuiFormControl: {
       root: {
         height: '37px',
@@ -67,6 +71,7 @@ export const muiTheme = createMuiTheme({
         backgroundColor: '#28313E !important',
       },
     },
+    // @ts-ignore
     MuiPickersDay: {
       day: {
         color: 'white',
@@ -97,4 +102,3 @@ export const muiTheme = createMuiTheme({
   }
 });
 
-export const styleDatePicker = css``;

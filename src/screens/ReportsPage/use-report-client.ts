@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useAuth, getAccessToken} from '@/context';
 import {IReportsPostRequest, ReportsPostRequestToJSON} from './types';
 
 export function useReportsClient() {
   const {companyId, logout} = useAuth();
 
+  const [status, setStatus] = useState('')
+
   const getReportFile = React.useCallback(
     (query: IReportsPostRequest) => {
       const reportId = 2;
       const body = ReportsPostRequestToJSON(query);
       let filename = 'report.xlsx';
-
+      setStatus('Загрузка...')
       window
         .fetch(`/api/va/companies/${companyId}/reports/${reportId}`, {
           body: JSON.stringify(body),
@@ -19,6 +21,7 @@ export function useReportsClient() {
         })
         .then(response => {
           const header = response.headers.get('content-disposition');
+          setStatus('Загружен')
           if (header) {
             filename = header.split('filename=')[1];
           }
@@ -31,6 +34,7 @@ export function useReportsClient() {
           link.download = filename;
           link.click();
         }).catch(error => {
+          setStatus('Ошибка загрузки')
           if (error?.status_code === 401)
             logout();
           return error
@@ -41,5 +45,6 @@ export function useReportsClient() {
 
   return {
     getReportFile,
+    status
   };
 }

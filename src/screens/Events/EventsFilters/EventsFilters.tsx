@@ -1,11 +1,16 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
 import {SelectFilter, SwitchFilter, MultiSelectGroupFilter, DatesFilter, TDateRange} from '@/components';
 import {dayIsoString} from '@/utils';
 import {createFilterList, createCheckAndCategoriesList} from './utils';
 import {Panel} from './styles';
+import {ITimelinesFiltersState} from '../../EventDetails/types';
 
-export function EventsFilters() {
+interface Props {
+  detailsfiltersState?: ITimelinesFiltersState;
+}
+
+export function EventsFilters({detailsfiltersState}: Props) {
   const {setQueryParams, filtersState, setFiltersState} = useEvents();
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -19,6 +24,24 @@ export function EventsFilters() {
   checkCategoriesOptions?.unshift({id: -1, value: 'Любой'});
 
   const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
+
+  useEffect(() => {
+    if (detailsfiltersState) {
+      setFiltersState(s => ({
+        ...s,
+        locationFilter: detailsfiltersState?.locationFilter,
+        sensorFilter: detailsfiltersState.sensorFilter,
+      }));
+      setQueryParams(
+        (q: TEventsQuery): TEventsQuery => ({
+          ...q,
+          locationIds: detailsfiltersState.locationFilter,
+          sensorIds: detailsfiltersState.sensorFilter,
+          page: 1,
+        }),
+      );
+    }
+  }, [detailsfiltersState, setFiltersState, setQueryParams]);
 
   const setLocationFilter = useCallback(
     (id: number) => {

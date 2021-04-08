@@ -3,12 +3,13 @@ import {useCompany, useRefs} from '@/context';
 import {SelectFilter, MultiSelectGroupFilter, TDateRange} from '@/components';
 import {useTimelines} from '../TimelineContext';
 import {createFilterList, createCheckAndCategoriesList} from './utils';
-import {Panel, muiTheme, styleDatePicker} from './styles';
+import {Panel, muiTheme} from './styles';
 import {ITimelinesQuery} from '../types';
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {ThemeProvider} from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import ruLocale from "date-fns/locale/ru";
+import moment from 'moment';
 import {getDatePeriod} from '@/utils';
 import format from "date-fns/format";
 
@@ -26,14 +27,10 @@ class RuLocalizedUtils extends DateFnsUtils {
 
 interface Props {
   parrentDate: string | undefined;
-  isLoading: boolean;
-  isIdle: boolean;
-  isTimelineLoading: boolean;
-  isTimelineIdle: boolean;
 }
 
-export function EventsDetailsFilters({parrentDate, isLoading, isIdle, isTimelineLoading, isTimelineIdle}: Props) {
-  const {setQueryParams, setFiltersState, filtersState} = useTimelines();
+export function EventsDetailsFilters({parrentDate}: Props) {
+  const {setQueryParams, setFiltersState, filtersState, loadStatus} = useTimelines();
 
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -79,15 +76,19 @@ export function EventsDetailsFilters({parrentDate, isLoading, isIdle, isTimeline
 
   const setData = useCallback(
     (date: Date | null) => {
-      const eventPeriod: TDateRange = getDatePeriod(date?.toISOString());
-      setSelectedDate(date);
-      setFiltersState(s => ({...s, periodFilter: eventPeriod}));
-      setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, dates: eventPeriod}));
+      const isDate = moment(date,"DD-MM-YYYY")
+      if (isDate.isValid())
+      {
+        const eventPeriod: TDateRange = getDatePeriod(date?.toISOString());
+        setSelectedDate(date);
+        setFiltersState(s => ({...s, periodFilter: eventPeriod}));
+        setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, dates: eventPeriod}));
+      }
     },
     [setFiltersState, setQueryParams, setSelectedDate],
   );
 
-  if (isIdle || isLoading || isTimelineLoading || isTimelineIdle) {
+  if (!loadStatus) {
     return (
       <span
         css={{
@@ -125,7 +126,6 @@ export function EventsDetailsFilters({parrentDate, isLoading, isIdle, isTimeline
         <ThemeProvider theme={muiTheme}>
           <MuiPickersUtilsProvider utils={RuLocalizedUtils} locale={ruLocale}>
             <KeyboardDatePicker
-              css={styleDatePicker}
               format="yyyy-MM-dd"
               margin="dense"
               id="date-picker-dialog"

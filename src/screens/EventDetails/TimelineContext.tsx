@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, createContext, useState, useEffect} from 'react';
+import React, {useContext, useMemo, createContext, useState} from 'react';
 import {useTimelineClient} from './use-timeline-client';
 import {ITimelineContext, ITimelinesQuery, ITimelinesFiltersState} from './types';
 import {defaultPeriod, TIMEZONE_OFFSET} from '@/utils';
@@ -18,6 +18,7 @@ export function TimelinesProvider(props: any) {
     isLoading,
     isSuccess,
     isError,
+    loadStatus,
     dispatch
   } = useTimelineClient();
 
@@ -74,9 +75,11 @@ export function TimelinesProvider(props: any) {
       isTimelineLoading: isLoading,
       isSuccess,
       setIdleStatus,
+      loadStatus,
       isError
     }),
     [
+      loadStatus,
       refreshView,
       filtersState,
       setFiltersState,
