@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import {useEvents} from '@/context';
 import {AppLayout} from '@/screens/Layouts';
 import {EventsFilters} from './EventsFilters';
@@ -6,9 +7,12 @@ import {EventsTable} from './EventsTable';
 import {EventsRightSidebar} from './EventsRight';
 import { EventPagination } from './EventsPagination';
 import {WorkLayout, FiltersPlace, RightBar, TablePlace, PaginationPlace} from './styles';
+import { ITimelinesFiltersState } from '../EventDetails/types'
 
 export function Events() {
   const {error, status, view, refreshView, viewType} = useEvents();
+
+  const location = useLocation<{filtersState: ITimelinesFiltersState}>();
 
   React.useEffect(() => {
     refreshView();
@@ -18,7 +22,7 @@ export function Events() {
     <AppLayout>
       <WorkLayout>
         <FiltersPlace>
-          <EventsFilters />
+          <EventsFilters detailsfiltersState={location?.state?.filtersState} />
         </FiltersPlace>
         <TablePlace>
           <EventsTable

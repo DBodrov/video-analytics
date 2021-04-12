@@ -193,13 +193,7 @@ export function EventDetails() {
         <div css={{width: '100%'}}>
           <PlayerLayout>
             <PanelFilterLayout>
-              <EventsDetailsFilters
-                parrentDate={eventData?.date}
-                isTimelineLoading={isTimelineLoading}
-                isTimelineIdle={isTimelineIdle}
-                isLoading={isLoading}
-                isIdle={isIdle}
-              />
+              <EventsDetailsFilters parrentDate={eventData?.date} />
             </PanelFilterLayout>
             {renderEventSection()}
             {renderPlayer()}

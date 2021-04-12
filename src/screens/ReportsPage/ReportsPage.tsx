@@ -2,8 +2,9 @@ import React from 'react';
 import {Span, Button} from 'neutrino-ui';
 import {IReportsPostRequest} from './types';
 import {AppLayout} from '@/screens/Layouts';
-import {SelectFilter, DatesFilter, TDateRange} from '@/components';
+import {SelectFilter, DatesFilter, MultiSelectGroupFilter, TDateRange} from '@/components';
 import {useCompany, useRefs} from '@/context';
+import {createCheckAndCategoriesList} from '../Events/EventsFilters/utils';
 import {TIMEZONE_OFFSET, dayIsoString, defaultPeriod} from '@/utils';
 import {createFilterList} from '../Events/EventsFilters/utils';
 import {useReportsClient} from './use-report-client';
@@ -19,7 +20,7 @@ type TQueryState = {
   location: number;
   sensor: number;
   template: number;
-  rule: number;
+  rule: number[];
   types: number;
   dates?: TDateRange;
 };
@@ -39,12 +40,12 @@ export function ReportsPage() {
     location: -1,
     sensor: -1,
     template: -1,
-    rule: -1,
+    rule: [],
     types: -1,
     dates: defaultPeriod(),
   });
 
-  const {getReportFile} = useReportsClient();
+  const {status, getReportFile} = useReportsClient();
 
   const hasDates = Boolean(dates && dates[0] && dates[1]);
 
@@ -57,13 +58,13 @@ export function ReportsPage() {
   sensorsOptions.unshift({id: -1, value: 'Все'});
   const templatesList = createFilterList(checkCategories) ?? [];
   templatesList.unshift({id: -1, value: 'Любой'});
-  const rulesList = createFilterList(checks) ?? [];
-  rulesList.unshift({id: -1, value: 'Любые'});
+
+  const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
 
   const setLocation = React.useCallback((id: number) => setState(s => ({...s, location: id})), []);
   const setSensor = React.useCallback((id: number) => setState(s => ({...s, sensor: id})), []);
   const setTemplate = React.useCallback((id: number) => setState(s => ({...s, template: id})), []);
-  const setRule = React.useCallback((id: number) => setState(s => ({...s, rule: id})), []);
+  const setRule = React.useCallback((id: number[]) => setState(s => ({...s, rule: id})), []);
   const setType = React.useCallback((id: number) => setState(s => ({...s, types: id})), []);
   const setDates = React.useCallback((dates: [startDate: string, endDate: string]) => {
     const period: TDateRange = [dayIsoString(dates[0], 'begin'), dayIsoString(dates[1], 'end')];
@@ -83,7 +84,7 @@ export function ReportsPage() {
         locationIds: location > -1 ? [location] : undefined,
         sensorIds: sensor > -1 ? [sensor] : undefined,
         checkCategoryIds: template > -1 ? [template] : undefined,
-        checkIds: rule > -1 ? [rule] : undefined,
+        checkIds: rule.length !== 0 ? rule : undefined,
         entityTypes: typesList.find(t => t.id === types)!.type,
         tzOffset: TIMEZONE_OFFSET,
       };
@@ -120,9 +121,9 @@ export function ReportsPage() {
               css={{height: 36, flexBasis: 220, marginRight: 10}}
               value={template}
             />
-            <SelectFilter
+            <MultiSelectGroupFilter
               onSelect={setRule}
-              options={rulesList}
+              options={checkAndCategoriesOptions}
               prefix="Правила"
               css={{height: 36, minWidth: 'fit-content', marginRight: 10}}
               value={rule}
@@ -155,6 +156,9 @@ export function ReportsPage() {
             >
               Скачать отчет
             </Button>
+            <p style={{marginLeft:20}}>
+              {status}
+            </p>
           </div>
         </ReportCard>
       </div>

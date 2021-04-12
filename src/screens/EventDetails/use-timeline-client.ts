@@ -13,6 +13,7 @@ type State = {
   incidentsByHours?: TOccurrenceByHours;
   incidentsCount?: number[];
   eventsCount?: number[];
+  loadStatus: boolean;
   error?: any;
 };
 
@@ -32,7 +33,8 @@ const initState: State = {
   incidentsByHours: undefined,
   eventsCount: undefined,
   incidentsCount: undefined,
-  error: undefined
+  error: undefined,
+  loadStatus: false
 };
 
 const createEmptyView = () => {
@@ -52,7 +54,7 @@ const sumEventsByHours = (events: TOccurrenceByHours) => {
 
 export function useTimelineClient() {
   const [
-    {status, error, events, incidents, eventsByHours, incidentsByHours, eventsCount, incidentsCount},
+    {status, error, events, incidents, eventsByHours, incidentsByHours, eventsCount, incidentsCount, loadStatus},
     dispatch,
   ] = React.useReducer(timelineReducer, initState);
   const {companyId, logout} = useAuth();
@@ -95,7 +97,7 @@ export function useTimelineClient() {
       if (!isEmptyString(query)) {
         url += `&${query}`;
       }
-      dispatch({status: 'pending'})
+      dispatch({status: 'pending', loadStatus: true})
       fetchClient(url, {
         headers: {Authorization: `Bearer ${getAccessToken()}`},
       }).then(
@@ -245,6 +247,7 @@ export function useTimelineClient() {
     incidents,
     eventsCount,
     incidentsCount,
+    loadStatus,
     // getFirstEvent,
     // getLastEvent,
     // getPrevEventCode,

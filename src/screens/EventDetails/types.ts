@@ -70,4 +70,5 @@ export type ITimelineContext = {
   refreshView: (period : TDateRange) => void;
   isTimelineLoading: boolean;
   setIdleStatus: () => void;
+  loadStatus: boolean;
 }

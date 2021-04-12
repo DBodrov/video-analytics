@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from '@emotion/styled';
 import {Button} from 'neutrino-ui';
 import {ArrowDownIcon} from '@/assets/icons';
 import {Logo} from './Logo';
 import {Content, Header, PageLayout} from './styles';
+import { useTimelines } from '../EventDetails/TimelineContext'
 
 const BackButton = styled(Button)`
   background-color: transparent;
@@ -21,11 +22,18 @@ const BackButton = styled(Button)`
 
 export function DetailsLayout({children}: {children: React.ReactNode}) {
   const history = useHistory();
+
+  const { filtersState } = useTimelines();
+
+  const onClick = useCallback(()=>{
+    history.push({pathname: '/events', state: { filtersState }})
+  },[history,filtersState])
+
   return (
     <PageLayout>
       <Header>
         <Logo />
-        <BackButton outline flat onClick={() => history.push('/events')}>
+        <BackButton outline flat onClick={onClick}>
           <ArrowDownIcon css={{transform: 'rotate(90deg)', width: 9, height: 9, marginRight: 14}} />
           <span>Вернуться</span>
         </BackButton>
