@@ -12,7 +12,7 @@ type TCoordinate = {
 export function MarkupEditPage() {
   // const [lineState, dispatch] = React.useReducer(shapeStateReducer, initShapeState)
   const [shape, setShape] = React.useState<'line' | 'square'>('line');
-  const [mousePosition, setMousePosition] = React.useState<TCoordinate | undefined>(undefined);
+  // const [mousePosition, setMousePosition] = React.useState<TCoordinate | undefined>(undefined);
   const [startPositions, setStartPositions] = React.useState<TCoordinate[] | undefined>(undefined);
   const [startPositionsSquare, setStartPositionsSquare] = React.useState<TCoordinate[] | undefined>(
     undefined,
@@ -35,23 +35,25 @@ export function MarkupEditPage() {
   // }, []);
 
   const clearAll = () => {
-    //setLine([]);
     setStartPositions(undefined);
     setStartPositionsSquare(undefined);
     setEndPositions(undefined);
     setEndPositionsSquare(undefined);
-    setMousePosition(undefined);
     clearCanvas();
   };
 
   const getCoordinates = (event: React.PointerEvent<HTMLCanvasElement>): TCoordinate => {
     const {pageX, pageY} = event;
-    //console.log(pageX, pageY, canvasRef.current?.offsetLeft);
+    // console.log({event})
     const canvas = canvasRef?.current;
-    //console.log({canvas});
+    // console.log({canvas});
     if (canvas) {
-      const x = pageX - canvas.offsetLeft;
-      const y = pageY - canvas.offsetTop;
+      const canvasRect = canvas.getBoundingClientRect();
+      // console.log({canvasRect})
+      const x = pageX - canvasRect.left;
+      const y = pageY - canvasRect.top;
+      // const x = pageX - canvas.offsetLeft;
+      // const y = pageY - canvas.offsetTop;
       return {
         x,
         y,
@@ -69,11 +71,58 @@ export function MarkupEditPage() {
     }
   }, [context]);
 
+  const renderMarkers = () => {
+    if (endPositions) {
+      return endPositions.map((end, i) => {
+        const start = startPositions![i];
+        return (
+          <>
+            <Marker x={start.x} y={start.y} />
+            <Marker x={end.x} y={end.y} />
+          </>
+        );
+      });
+    }
+  };
+
+  const drawSavedLines = React.useCallback(() => {
+    if (context && endPositions) {
+      endPositions.forEach((end, i) => {
+        context.beginPath();
+        const start = startPositions![i];
+        context.moveTo(start.x, start.y);
+        context.lineTo(end.x, end.y);
+        context.stroke();
+        context.closePath();
+
+        context.beginPath();
+        context.arc(start.x, start.y, 5, 0, 2 * Math.PI, false);
+        context.arc(end.x, end.y, 5, 0, 2 * Math.PI, false);
+        context.fill();
+        context.closePath();
+      });
+    }
+  }, [context, endPositions, startPositions]);
+
+  const drawSavedSquares = React.useCallback(() => {
+    if (context && endPositionsSquare) {
+      endPositionsSquare.forEach((end, i) => {
+        const start = startPositionsSquare![i];
+        const width = end.x - start.x;
+        const height = end.y - start.y;
+
+        context.lineWidth = 2;
+        context.strokeStyle = '#57D841';
+        context.strokeRect(start.x, start.y, width, height);
+      });
+    }
+  }, [context, endPositionsSquare, startPositionsSquare]);
+
   const drawLine = React.useCallback(
     (startPosition, endPosition) => {
       if (context) {
         context.beginPath();
-        context.lineWidth = 2; // width of the line
+        context.lineWidth = 2;
         context.strokeStyle = '#57D841';
         context.fillStyle = '#57D841';
         context.moveTo(startPosition.x, startPosition.y);
@@ -87,40 +136,29 @@ export function MarkupEditPage() {
         context.fill();
         context.closePath();
 
-        endPositions?.forEach((end, i) => {
-          context.beginPath();
-          const start = startPositions![i];
-          context.moveTo(start.x, start.y);
-          context.lineTo(end.x, end.y);
-          context.stroke();
-          context.closePath();
-
-          context.beginPath();
-          context.arc(start.x, start.y, 5, 0, 2 * Math.PI, false);
-          context.arc(end.x, end.y, 5, 0, 2 * Math.PI, false);
-          context.fill();
-          context.closePath();
-        });
+        drawSavedLines();
+        drawSavedSquares();
       }
     },
-    [context, endPositions, startPositions],
+    [context, drawSavedLines, drawSavedSquares],
   );
 
   const drawSquare = React.useCallback(
     (startPosition, endPosition) => {
       const height = endPosition.y - startPosition.y;
       const width = endPosition.x - startPosition.x;
+      console.log(height, width);
 
       if (context) {
-        //console.log(height, width);
-        // context.beginPath();
-        context.lineWidth = 2; // width of the line
+        context.lineWidth = 2;
         context.strokeStyle = '#57D841';
         context.strokeRect(startPosition.x, startPosition.y, width, height);
-        //context.closePath();
+
+        drawSavedLines();
+        drawSavedSquares();
       }
     },
-    [context],
+    [context, drawSavedLines, drawSavedSquares],
   );
 
   const handleMouseDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -147,17 +185,41 @@ export function MarkupEditPage() {
     } else {
       if (startPositionsSquare && newMousePosition) {
         drawSquare(startPositionsSquare[startPositionsSquare.length - 1], newMousePosition);
-     }
+      }
     }
-    // setMousePosition(newMousePosition);
   };
 
   const handleMouseUp = (event: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
     setIsDrawing(false);
     const {x, y} = getCoordinates(event);
-    const updateEndPosition = endPositions ? [...endPositions, {x, y}] : [{x, y}];
-    setEndPositions(updateEndPosition);
+    if (shape === 'line') {
+      const updateEndPosition = endPositions ? [...endPositions, {x, y}] : [{x, y}];
+      setEndPositions(updateEndPosition);
+    } else if (shape === 'square') {
+      const updateEndPositionSquare = endPositionsSquare ? [...endPositionsSquare, {x, y}] : [{x, y}];
+      setEndPositionsSquare(updateEndPositionSquare);
+    }
+  };
+
+  const createSquarePolygons = () => {
+    if (startPositionsSquare && endPositionsSquare && canvasRef) {
+      const imageRect = canvasRef!.current!.getBoundingClientRect();
+
+      return startPositionsSquare.map((start, i) => {
+        const end = endPositionsSquare[i];
+        const firstPoint = {x: start.x / imageRect.width, y: start.y / imageRect.height, sequence: 0};
+        const thirdPoint = {x: end.x / imageRect.width, y: end.y / imageRect.height, sequence: 2};
+        const secondPoint = {x: thirdPoint.x, y: firstPoint.y, sequence: 1};
+        const fourthPoint = {x: firstPoint.x, y: thirdPoint.y, sequence: 3};
+        return [firstPoint, secondPoint, thirdPoint, fourthPoint];
+      });
+    }
+  };
+
+  const submitPolygons = () => {
+    const squarePolygonsCoordinates = createSquarePolygons();
+    console.log(squarePolygonsCoordinates);
   };
 
   const handleMouseLeave = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -190,13 +252,14 @@ export function MarkupEditPage() {
                 borderColor: '#39B54A',
                 '&:hover': {backgroundColor: '#39B54A', borderColor: '#39B54A'},
               }}
+              onClick={submitPolygons}
             >
               <Span css={{fontSize: '0.875rem'}}>Сохранить</Span>
             </Button>
           </div>
         </SectionHeader>
         <MarkupToolbar onClearAll={clearAll} onSetShape={setShape} shape={shape} />
-        <MarkupSection>
+        <MarkupSection css={{position: 'relative'}}>
           <canvas
             id="markup"
             width="960px"
@@ -207,8 +270,32 @@ export function MarkupEditPage() {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           ></canvas>
+          {endPositions?.map((ep, i) => {
+            return <Marker key={`lineEnd_${i}`} x={ep.x} y={ep.y} />;
+          })}
+          {}
         </MarkupSection>
       </SectionBlock>
     </Section>
+  );
+}
+
+type TMarkerProps = {
+  x: number;
+  y: number;
+};
+
+function Marker({x, y}: TMarkerProps) {
+  return (
+    <div
+      css={{
+        width: 10,
+        height: 10,
+        border: '1px var(--color-box) solid',
+        position: 'absolute',
+        top: y - 5,
+        left: x - 5,
+      }}
+    ></div>
   );
 }

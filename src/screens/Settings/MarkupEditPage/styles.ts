@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 export const MarkupSection = styled.section`
   width: 100%;
+  /* position: relative; */
   max-width: 960px;
   height: 455px;
   outline: 2px #2EA1F8 solid;
