@@ -7,6 +7,12 @@ export type TStepsStatuses = Record<TStep, TStepStatus>;
 export type TPipeline = PipelinesGetResponse200Pipelines;
 export type TPipelines = TPipeline[];
 
+export type TPolygons = {
+  x: number;
+  y: number;
+  sequence: number;
+}[][];
+
 export interface ISettingsContext {
   stepsStatuses: TStepsStatuses;
   activeStep: TStep;

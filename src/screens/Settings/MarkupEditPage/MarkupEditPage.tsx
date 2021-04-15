@@ -1,8 +1,10 @@
 import React from 'react';
 import {H6, Span, Button} from 'neutrino-ui';
 import {Section, SectionBlock, SectionHeader} from '../styles';
+import {useMarkupClient} from './use-markup-client';
 import {MarkupToolbar} from './MarkupToolbar';
-import {MarkupSection} from './styles';
+import {IncidentsSettings} from './IncidentsSettings';
+import {MarkupSection, Tooltip} from './styles';
 
 type TCoordinate = {
   x: number;
@@ -10,9 +12,7 @@ type TCoordinate = {
 };
 
 export function MarkupEditPage() {
-  // const [lineState, dispatch] = React.useReducer(shapeStateReducer, initShapeState)
   const [shape, setShape] = React.useState<'line' | 'square'>('line');
-  // const [mousePosition, setMousePosition] = React.useState<TCoordinate | undefined>(undefined);
   const [startPositions, setStartPositions] = React.useState<TCoordinate[] | undefined>(undefined);
   const [startPositionsSquare, setStartPositionsSquare] = React.useState<TCoordinate[] | undefined>(
     undefined,
@@ -20,19 +20,9 @@ export function MarkupEditPage() {
   const [endPositions, setEndPositions] = React.useState<TCoordinate[] | undefined>(undefined);
   const [endPositionsSquare, setEndPositionsSquare] = React.useState<TCoordinate[] | undefined>(undefined);
   const [isDrawing, setIsDrawing] = React.useState(false);
-  //const [lineState, setLine] = React.useState([]);
-  //const [lineCoordinates, setLineCoord] = React.useState({x: undefined, y: undefined});
-  // const [shapeState, setState] = React.useState({
-  //   shape: '',
-  //   line: undefined,
-  //   square: undefined,
-  // });
+  const {savePolygons, status} = useMarkupClient();
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const context = canvasRef.current?.getContext('2d');
-
-  // const setShape = React.useCallback((shape: string) => {
-  //   // setState(s => ({...s, shape}));
-  // }, []);
 
   const clearAll = () => {
     setStartPositions(undefined);
@@ -44,16 +34,12 @@ export function MarkupEditPage() {
 
   const getCoordinates = (event: React.PointerEvent<HTMLCanvasElement>): TCoordinate => {
     const {pageX, pageY} = event;
-    // console.log({event})
     const canvas = canvasRef?.current;
-    // console.log({canvas});
     if (canvas) {
       const canvasRect = canvas.getBoundingClientRect();
-      // console.log({canvasRect})
       const x = pageX - canvasRect.left;
       const y = pageY - canvasRect.top;
-      // const x = pageX - canvas.offsetLeft;
-      // const y = pageY - canvas.offsetTop;
+
       return {
         x,
         y,
@@ -71,19 +57,19 @@ export function MarkupEditPage() {
     }
   }, [context]);
 
-  const renderMarkers = () => {
-    if (endPositions) {
-      return endPositions.map((end, i) => {
-        const start = startPositions![i];
-        return (
-          <>
-            <Marker x={start.x} y={start.y} />
-            <Marker x={end.x} y={end.y} />
-          </>
-        );
-      });
-    }
-  };
+  // const renderMarkers = () => {
+  //   if (endPositions) {
+  //     return endPositions.map((end, i) => {
+  //       const start = startPositions![i];
+  //       return (
+  //         <>
+  //           <Marker x={start.x} y={start.y} />
+  //           <Marker x={end.x} y={end.y} />
+  //         </>
+  //       );
+  //     });
+  //   }
+  // };
 
   const drawSavedLines = React.useCallback(() => {
     if (context && endPositions) {
@@ -147,8 +133,6 @@ export function MarkupEditPage() {
     (startPosition, endPosition) => {
       const height = endPosition.y - startPosition.y;
       const width = endPosition.x - startPosition.x;
-      console.log(height, width);
-
       if (context) {
         context.lineWidth = 2;
         context.strokeStyle = '#57D841';
@@ -217,9 +201,25 @@ export function MarkupEditPage() {
     }
   };
 
+  const createLinesPolygons = () => {
+    if (startPositions && endPositions && canvasRef) {
+      const imageRect = canvasRef!.current!.getBoundingClientRect();
+      return startPositions.map((start, i) => {
+        const end = endPositions[i];
+        const firstPoint = {x: start.x / imageRect.width, y: start.y / imageRect.height, sequence: 0};
+        const secondPoint = {x: end.x / imageRect.width, y: end.y / imageRect.height, sequence: 1};
+        return [firstPoint, secondPoint];
+      });
+    }
+  };
+
   const submitPolygons = () => {
-    const squarePolygonsCoordinates = createSquarePolygons();
-    console.log(squarePolygonsCoordinates);
+    const squarePolygons = createSquarePolygons() ?? [];
+    const linesPolygons = createLinesPolygons() ?? [];
+    const polygons = [...squarePolygons, ...linesPolygons];
+    if (polygons.length > 0) {
+      savePolygons(polygons);
+    }
   };
 
   const handleMouseLeave = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -231,13 +231,19 @@ export function MarkupEditPage() {
   };
 
   return (
-    <Section css={{margin: '0 auto'}}>
+    <Section css={{margin: '0 auto', flexFlow: 'column nowrap', alignItems: 'center'}}>
       <SectionBlock css={{width: '960px', margin: '0 auto'}}>
-        <SectionHeader css={{flexFlow: 'row nowrap'}}>
+        <SectionHeader
+          css={{
+            flexFlow: 'row nowrap',
+            borderRadius: '4px 4px 0px 0px',
+            border: '1px var(--color-border) solid',
+          }}
+        >
           <div css={{display: 'flex', flexFlow: 'column nowrap'}}>
             <H6 css={{fontSize: 18, fontWeight: 400}}>Редактор разметки</H6>
             <Span css={{fontSize: 12, color: 'var(--color-text-secondary)', paddingTop: 5}}>
-              Выберите и установите нужны зоны
+              Выберите и установите нужные зоны
             </Span>
           </div>
           <div css={{display: 'flex', flexFlow: 'row nowrap', marginLeft: 'auto'}}>
@@ -253,6 +259,7 @@ export function MarkupEditPage() {
                 '&:hover': {backgroundColor: '#39B54A', borderColor: '#39B54A'},
               }}
               onClick={submitPolygons}
+              disabled={status === 'resolved'}
             >
               <Span css={{fontSize: '0.875rem'}}>Сохранить</Span>
             </Button>
@@ -270,32 +277,41 @@ export function MarkupEditPage() {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           ></canvas>
-          {endPositions?.map((ep, i) => {
+          {/* {endPositions?.map((ep, i) => {
             return <Marker key={`lineEnd_${i}`} x={ep.x} y={ep.y} />;
           })}
-          {}
+          {} */}
         </MarkupSection>
+        <Tooltip>
+          <Span css={{fontSize: 14}}>
+            <strong>Совет:</strong> Нажмите “Сохранить” для завершения редактирования зон и других элементов
+            разметки.
+          </Span>
+        </Tooltip>
+      </SectionBlock>
+      <SectionBlock>
+        <IncidentsSettings />
       </SectionBlock>
     </Section>
   );
 }
 
-type TMarkerProps = {
-  x: number;
-  y: number;
-};
+// type TMarkerProps = {
+//   x: number;
+//   y: number;
+// };
 
-function Marker({x, y}: TMarkerProps) {
-  return (
-    <div
-      css={{
-        width: 10,
-        height: 10,
-        border: '1px var(--color-box) solid',
-        position: 'absolute',
-        top: y - 5,
-        left: x - 5,
-      }}
-    ></div>
-  );
-}
+// function Marker({x, y}: TMarkerProps) {
+//   return (
+//     <div
+//       css={{
+//         width: 10,
+//         height: 10,
+//         border: '1px var(--color-box) solid',
+//         position: 'absolute',
+//         top: y - 5,
+//         left: x - 5,
+//       }}
+//     ></div>
+//   );
+// }

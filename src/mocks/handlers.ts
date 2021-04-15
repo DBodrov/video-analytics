@@ -103,8 +103,12 @@ const settingsHandlers = [
     return res(ctx.status(200), ctx.json({}));
   }),
 
+  rest.patch('/api/va/companies/:companyId/pipelines/:pipelineId/checks/:checkId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(req.body));
+  }),
+
   rest.patch('/api/va/companies/:companyId/pipelines/:pipelineId/sensors/:sensorId/checks/:checkId', (req, res, ctx) => {
-    return res(ctx.status(204), ctx.json({}));
+    return res(ctx.status(200), ctx.json({}));
   })
 
 ]
