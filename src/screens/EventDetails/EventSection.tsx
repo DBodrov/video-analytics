@@ -8,6 +8,7 @@ type TEventSectionProps = {
   commonDetectInfo?: TCommonDetectInfo;
   extraDetectInfo?: TExtraDetectInfo[];
   imageContent?: string;
+  viewType?: 'events' | 'incidents';
   boxes?: {
     top: number;
     left: number;
@@ -16,7 +17,7 @@ type TEventSectionProps = {
   }[];
 };
 
-export function EventSection({imageContent, boxes, commonDetectInfo, extraDetectInfo}: TEventSectionProps) {
+export function EventSection({imageContent, boxes, commonDetectInfo, extraDetectInfo, viewType = 'events'}: TEventSectionProps) {
   const [showTrackBox, setShowTrackBox] = React.useState(true);
   return (
     <EventBox>
@@ -29,7 +30,7 @@ export function EventSection({imageContent, boxes, commonDetectInfo, extraDetect
             ))
           : null}
       </div>
-      <DetectInfo commonInfo={commonDetectInfo} extraInfo={extraDetectInfo} />
+      <DetectInfo commonInfo={commonDetectInfo} viewType={viewType} extraInfo={extraDetectInfo} />
     </EventBox>
   );
 }

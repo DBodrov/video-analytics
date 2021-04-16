@@ -19,7 +19,9 @@ export function TimelinesProvider(props: any) {
     isSuccess,
     isError,
     loadStatus,
-    dispatch
+    dispatch,
+    clickSidebar,
+    changeDateTimeline
   } = useTimelineClient();
 
 
@@ -31,7 +33,9 @@ export function TimelinesProvider(props: any) {
   });
 
   const [queryParams, setQueryParams] = useState<ITimelinesQuery>({
+    changeDates: false,
     dates: defaultPeriod(),
+    firstRender : true,
     locationIds: -1,
     sensorIds: -1,
     tocIds: -1,
@@ -40,14 +44,22 @@ export function TimelinesProvider(props: any) {
   });
   
 
+  const setUnableClickSidebar = React.useCallback(()=>{
+    dispatch({clickSidebar:true})
+  },[dispatch])
+
+
+  const setDisableClickSidebar = React.useCallback(()=>{
+    dispatch({clickSidebar:false})
+  },[dispatch])
 
    const setIdleStatus = React.useCallback(()=>{
     dispatch({status:'idle'})
    },[dispatch])
 
   const refreshView = React.useCallback((period: [startDate: string, endDate: string]) => {
-     
-     if (defaultPeriod()[0] === queryParams?.dates![0] || defaultPeriod()[1] === queryParams?.dates![1]) {
+     if (queryParams.firstRender) {
+      setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, firstRender: false}));
       queryTimeline({...queryParams, dates: period});
      }
      else {
@@ -76,7 +88,11 @@ export function TimelinesProvider(props: any) {
       isSuccess,
       setIdleStatus,
       loadStatus,
-      isError
+      isError,
+      setUnableClickSidebar,
+      setDisableClickSidebar,
+      clickSidebar,
+      changeDateTimeline
     }),
     [
       loadStatus,
@@ -96,7 +112,11 @@ export function TimelinesProvider(props: any) {
       isIdle,
       isLoading,
       isSuccess,
-      isError
+      isError,
+      setUnableClickSidebar,
+      setDisableClickSidebar,
+      clickSidebar,
+      changeDateTimeline
     ],
   );
   return <TimelineContext.Provider value={ctxValue} {...props} />;

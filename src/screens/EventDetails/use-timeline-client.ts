@@ -3,6 +3,8 @@ import {useFetch, TIMEZONE_OFFSET, isEmptyString} from '@/utils';
 import {useAuth, useCompany, useRefs, getAccessToken} from '@/context';
 import {TimelineGetResponse200FromJSON, TimelineGetOccurrence200} from '@/backend/main';
 import {IOccurrenceView, TOccurrenceByHours, ITimelinesQuery} from './types';
+import {useHistory} from 'react-router-dom';
+import { statuses } from '@/mocks/refs-mocks';
 // import {TEvents} from '@/context/Events';
 
 type State = {
@@ -15,6 +17,8 @@ type State = {
   eventsCount?: number[];
   loadStatus: boolean;
   error?: any;
+  clickSidebar : boolean;
+  currentEventId : string;
 };
 
 const timelineReducer = (state: State, changes: Partial<State>): State => {
@@ -34,7 +38,9 @@ const initState: State = {
   eventsCount: undefined,
   incidentsCount: undefined,
   error: undefined,
-  loadStatus: false
+  loadStatus: false,
+  clickSidebar: false,
+  currentEventId: ''
 };
 
 const createEmptyView = () => {
@@ -54,12 +60,13 @@ const sumEventsByHours = (events: TOccurrenceByHours) => {
 
 export function useTimelineClient() {
   const [
-    {status, error, events, incidents, eventsByHours, incidentsByHours, eventsCount, incidentsCount, loadStatus},
+    {status, error, events, incidents, eventsByHours, incidentsByHours, eventsCount, incidentsCount, loadStatus, clickSidebar, currentEventId},
     dispatch,
   ] = React.useReducer(timelineReducer, initState);
   const {companyId, logout} = useAuth();
   const {getLocationById, getSensorById} = useCompany();
   const {getCheckById, getCheckCategoryById} = useRefs();
+  const history = useHistory()
 
   const groupEventsByHours = React.useCallback(
     (eventsOrIncidents: TimelineGetOccurrence200[]) => {
@@ -105,15 +112,15 @@ export function useTimelineClient() {
           const {events, incidents} = TimelineGetResponse200FromJSON(response);
           const eventsByHours = groupEventsByHours(events);
           const incidentsByHours = groupEventsByHours(incidents);
-          dispatch({
-            status: 'resolved',
-            events,
-            incidents,
-            eventsByHours,
-            incidentsByHours,
-            eventsCount: sumEventsByHours(eventsByHours),
-            incidentsCount: sumEventsByHours(incidentsByHours),
-          });
+            dispatch({
+              status: 'resolved',
+              events,
+              incidents,
+              eventsByHours,
+              incidentsByHours,
+              eventsCount: sumEventsByHours(eventsByHours),
+              incidentsCount: sumEventsByHours(incidentsByHours),
+            });
           return response;
         },
         error => {
@@ -124,6 +131,38 @@ export function useTimelineClient() {
       );
     },
     [companyId, fetchClient, groupEventsByHours, logout, dispatch],
+  );
+
+
+  const changeDateTimeline = React.useCallback(
+    (queryParams?:ITimelinesQuery) => {
+      let url = `/api/va/companies/${companyId}/timeline?tz_offset=${TIMEZONE_OFFSET}&sort_by=asc`;
+      const query = encodeQueryData(queryParams);
+      if (!isEmptyString(query)) {
+        url += `&${query}`;
+      }
+      dispatch({status: 'pending', loadStatus: true})
+      fetchClient(url, {
+        headers: {Authorization: `Bearer ${getAccessToken()}`},
+      }).then(
+        response => {
+          const {events} = TimelineGetResponse200FromJSON(response);
+          const first_event = events![0]
+          let id = '0'
+          if (first_event){
+            id = events![0].code
+          }
+          history.push({pathname: '/events/details', state: {eventId: String(id), viewType: 'events'}});
+          return response;
+        },
+        error => {
+          dispatch({status: 'rejected', error});
+          if (error?.status_code === 401) logout();
+          return error;
+        },
+      );
+    },
+    [companyId, fetchClient, groupEventsByHours, logout, dispatch, history],
   );
 
   function encodeQueryData(data: any) {
@@ -248,6 +287,8 @@ export function useTimelineClient() {
     eventsCount,
     incidentsCount,
     loadStatus,
+    clickSidebar,
+    changeDateTimeline
     // getFirstEvent,
     // getLastEvent,
     // getPrevEventCode,

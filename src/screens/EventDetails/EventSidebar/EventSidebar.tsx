@@ -1,11 +1,14 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import {List, EventBox, EventInfo} from './styles';
+import {EventsList, EventBox, EventInfo, EventSidebarWrapper} from './styles';
 import {IOccurrenceView} from '../types';
+import {LabelSidebar} from './LabelSidebar';
+import {useTimelines} from '../TimelineContext';
 
 type Props = {
   eventsList?: IOccurrenceView[];
   viewType?: 'events' | 'incidents';
+  eventId?: string;
 };
 
 const formatTimestamp = (timestamp?: string) => {
@@ -20,46 +23,72 @@ const formatTimestamp = (timestamp?: string) => {
   return result;
 };
 
-export function EventSidebar({eventsList, viewType}: Props) {
+export function EventSidebar({eventsList, viewType, eventId}: Props) {
   const history = useHistory();
+  const {setIdleStatus, setUnableClickSidebar} = useTimelines();
+
+  const colorCountBorder = (prevEventId: number | string) =>
+    String(prevEventId) === String(eventId) ? '#2EA1F8' : 'none';
+
+  const eventBoxBackgroundColor = (prevEventId: number | string) =>
+    String(prevEventId) === String(eventId) ? '#364357' : 'none';
+
+  const eventBoxHandleClick = (eventId: string | number) => {
+    setIdleStatus();
+    setUnableClickSidebar();
+    history.push({
+      pathname: '/events/details',
+      state: {
+        eventId: eventId,
+        viewType,
+      },
+    });
+  };
 
   return (
-    <List>
-      {eventsList
-        ? eventsList.map(event => {
-            return (
-              <EventBox
-                key={event.id}
-                onClick={() =>
-                  history.push({
-                    pathname: '/events/details',
-                    state: {
-                      eventId: event.eventId,
-                      viewType
-                    },
-                  })
-                }
-              >
-                <div
+    <EventSidebarWrapper>
+      <LabelSidebar viewType={viewType} />
+      <EventsList>
+        {eventsList
+          ? eventsList.map(event => {
+              return (
+                <EventBox
                   css={{
-                    minWidth: 130,
-                    height: 80,
+                    backgroundColor: `${eventBoxBackgroundColor(event.eventId)}`,
                   }}
+                  key={event.id}
+                  onClick={() => eventBoxHandleClick(event.eventId)}
                 >
-                  <img src={event.thumbnail} width="100%" height="100%" alt="thumb" css={{borderRadius: 4}} />
-                </div>
-                <EventInfo>
-                  <span>{event.checkCategory}</span>
-                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
-                    {formatTimestamp(event.timestamp)}
-                  </span>
-                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.check}</span>
-                  <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.sensorName}</span>
-                </EventInfo>
-              </EventBox>
-            );
-          })
-        : null}
-    </List>
+                  <div
+                    css={{
+                      minWidth: 130,
+                      height: 78,
+                      border: `2px ${colorCountBorder(event.eventId)} solid`,
+                      borderRadius: '4px',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <img
+                      src={event.thumbnail}
+                      width="100%"
+                      height="100%"
+                      alt="thumb"
+                      css={{borderRadius: 4}}
+                    />
+                  </div>
+                  <EventInfo>
+                    <span>{event.checkCategory}</span>
+                    <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>
+                      {formatTimestamp(event.timestamp)}
+                    </span>
+                    <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.check}</span>
+                    <span css={{fontSize: 12, color: 'var(--color-text-secondary)'}}>{event.sensorName}</span>
+                  </EventInfo>
+                </EventBox>
+              );
+            })
+          : null}
+      </EventsList>
+    </EventSidebarWrapper>
   );
 }

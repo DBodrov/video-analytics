@@ -8,29 +8,35 @@ import {ITimelinesQuery} from '../types';
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {ThemeProvider} from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
-import ruLocale from "date-fns/locale/ru";
+import ruLocale from 'date-fns/locale/ru';
 import moment from 'moment';
 import {getDatePeriod} from '@/utils';
-import format from "date-fns/format";
-
+import format from 'date-fns/format';
 
 class RuLocalizedUtils extends DateFnsUtils {
   getCalendarHeaderText(date: number | Date) {
-    return format(date, "LLLL", { locale: ruLocale });
+    return format(date, 'LLLL', {locale: ruLocale});
   }
 
   getDatePickerHeaderText(date: number | Date) {
-    return format(date, "d MMMM", { locale: ruLocale });
+    return format(date, 'd MMMM', {locale: ruLocale});
   }
 }
-
 
 interface Props {
   parrentDate: string | undefined;
 }
 
 export function EventsDetailsFilters({parrentDate}: Props) {
-  const {setQueryParams, setFiltersState, filtersState, loadStatus} = useTimelines();
+  const {
+    setQueryParams,
+    setFiltersState,
+    filtersState,
+    loadStatus,
+    setDisableClickSidebar,
+    queryParams,
+    changeDateTimeline,
+  } = useTimelines();
 
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
@@ -53,39 +59,43 @@ export function EventsDetailsFilters({parrentDate}: Props) {
 
   const setLocationFilter = useCallback(
     (id: number) => {
+      setDisableClickSidebar();
       setFiltersState(s => ({...s, locationFilter: id}));
       setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, locationIds: id}));
     },
-    [setFiltersState, setQueryParams],
+    [setFiltersState, setQueryParams, setDisableClickSidebar],
   );
 
   const setSensorFilter = useCallback(
     (id: number) => {
+      setDisableClickSidebar();
       setFiltersState(s => ({...s, sensorFilter: id}));
       setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, sensorIds: id}));
     },
-    [setFiltersState, setQueryParams],
+    [setFiltersState, setQueryParams, setDisableClickSidebar],
   );
 
   const setCheckFilter = useCallback(
     (ids: number[] = []) => {
+      setDisableClickSidebar();
       setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, checkIds: ids}));
     },
-    [setQueryParams],
+    [setQueryParams, setDisableClickSidebar],
   );
 
   const setData = useCallback(
     (date: Date | null) => {
-      const isDate = moment(date,"DD-MM-YYYY")
-      if (isDate.isValid())
-      {
+      const isDate = moment(date, 'DD-MM-YYYY');
+      if (isDate.isValid()) {
         const eventPeriod: TDateRange = getDatePeriod(date?.toISOString());
+        setDisableClickSidebar();
         setSelectedDate(date);
         setFiltersState(s => ({...s, periodFilter: eventPeriod}));
-        setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, dates: eventPeriod}));
+        setQueryParams((q: ITimelinesQuery)=>({...q, dates: eventPeriod}))
+        changeDateTimeline({...queryParams, dates: eventPeriod});
       }
     },
-    [setFiltersState, setQueryParams, setSelectedDate],
+    [setFiltersState, queryParams, changeDateTimeline, setSelectedDate, setDisableClickSidebar,setQueryParams],
   );
 
   if (!loadStatus) {
@@ -97,8 +107,7 @@ export function EventsDetailsFilters({parrentDate}: Props) {
           flexDirection: 'column',
           alignItems: 'center',
         }}
-      >
-      </span>
+      ></span>
     );
   } else
     return (
