@@ -7,11 +7,11 @@ import {Panel} from './styles';
 import {ITimelinesFiltersState} from '../../EventDetails/types';
 
 interface Props {
-  detailsfiltersState?: ITimelinesFiltersState;
+  detailsfiltersState?: {filtersState: ITimelinesFiltersState; checkIds?: number[]};
 }
 
 export function EventsFilters({detailsfiltersState}: Props) {
-  const {setQueryParams, filtersState, setFiltersState} = useEvents();
+  const {setQueryParams, filtersState, setFiltersState, checkIds} = useEvents();
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
 
@@ -29,19 +29,20 @@ export function EventsFilters({detailsfiltersState}: Props) {
     if (detailsfiltersState) {
       setFiltersState(s => ({
         ...s,
-        locationFilter: detailsfiltersState?.locationFilter,
-        sensorFilter: detailsfiltersState.sensorFilter,
+        locationFilter: detailsfiltersState?.filtersState?.locationFilter,
+        sensorFilter: detailsfiltersState?.filtersState?.sensorFilter,
+        page: 1
       }));
+
       setQueryParams(
         (q: TEventsQuery): TEventsQuery => ({
           ...q,
-          locationIds: detailsfiltersState.locationFilter,
-          sensorIds: detailsfiltersState.sensorFilter,
+          locationIds: detailsfiltersState.filtersState?.locationFilter,
+          sensorIds: detailsfiltersState.filtersState?.sensorFilter,
           page: 1,
-        }),
-      );
+        }));
     }
-  }, [detailsfiltersState, setFiltersState, setQueryParams]);
+   }, [detailsfiltersState, setFiltersState, setQueryParams]);
 
   const setLocationFilter = useCallback(
     (id: number) => {
@@ -107,6 +108,7 @@ export function EventsFilters({detailsfiltersState}: Props) {
       />
       <MultiSelectGroupFilter
         onSelect={setCheckFilter}
+        value={checkIds}
         options={checkAndCategoriesOptions}
         prefix="Правила"
         css={{height: 36, flexBasis: 300, marginRight: 10}}

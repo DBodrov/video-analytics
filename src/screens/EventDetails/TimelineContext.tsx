@@ -58,13 +58,7 @@ export function TimelinesProvider(props: any) {
    },[dispatch])
 
   const refreshView = React.useCallback((period: [startDate: string, endDate: string]) => {
-     if (queryParams.firstRender) {
-      setQueryParams((q: ITimelinesQuery): ITimelinesQuery => ({...q, firstRender: false}));
       queryTimeline({...queryParams, dates: period});
-     }
-     else {
-      queryTimeline(queryParams)
-    }
   }, [queryTimeline, queryParams]);
 
 

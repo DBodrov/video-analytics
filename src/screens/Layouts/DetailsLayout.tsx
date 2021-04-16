@@ -24,11 +24,11 @@ const BackButton = styled(Button)`
 export function DetailsLayout({children}: {children: React.ReactNode}) {
   const history = useHistory();
 
-  const { filtersState } = useTimelines();
+  const { filtersState, queryParams } = useTimelines();
 
   const onClick = useCallback(()=>{
-    history.push({pathname: '/events', state: { filtersState }})
-  },[history,filtersState])
+    history.push({pathname: '/events', state: { filtersState , checkIds: queryParams?.checkIds }})
+  },[history, filtersState, queryParams?.checkIds])
 
   return (
     <PageLayout>

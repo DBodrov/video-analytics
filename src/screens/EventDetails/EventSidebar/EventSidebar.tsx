@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import {EventsList, EventBox, EventInfo, EventSidebarWrapper} from './styles';
 import {IOccurrenceView} from '../types';
@@ -27,6 +27,20 @@ export function EventSidebar({eventsList, viewType, eventId}: Props) {
   const history = useHistory();
   const {setIdleStatus, setUnableClickSidebar} = useTimelines();
 
+  const refs = eventsList?.reduce((acc, value) => {
+    acc[value.eventId] = React.createRef();
+    return acc;
+  }, {});
+
+  useEffect(()=>{
+    if(refs![eventId]) {
+      refs![eventId]!.current!.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  },[refs,eventId])
+
   const colorCountBorder = (prevEventId: number | string) =>
     String(prevEventId) === String(eventId) ? '#2EA1F8' : 'none';
 
@@ -41,7 +55,7 @@ export function EventSidebar({eventsList, viewType, eventId}: Props) {
       state: {
         eventId: eventId,
         viewType,
-      },
+      }
     });
   };
 
@@ -53,6 +67,7 @@ export function EventSidebar({eventsList, viewType, eventId}: Props) {
           ? eventsList.map(event => {
               return (
                 <EventBox
+                  ref={refs![event.eventId]}
                   css={{
                     backgroundColor: `${eventBoxBackgroundColor(event.eventId)}`,
                   }}

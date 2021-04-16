@@ -15,7 +15,7 @@ import {ITimelinesQuery} from './types';
 export function EventDetails() {
   const {
     state: {eventId, viewType},
-  } = useLocation<{eventId: string; viewType: 'events' | 'incidents'; isChangeDates?: boolean;}>();
+  } = useLocation<{eventId: string; viewType: 'events' | 'incidents';}>();
   const history = useHistory();
 
   const {
@@ -54,6 +54,8 @@ export function EventDetails() {
     }
   }, [eventData, refreshView]);
 
+
+
   /**Список для боковой панели */
   const getEventsInCurrentHour = React.useCallback(() => {
     if (hasOccurrenceByHour && eventData) {
@@ -64,6 +66,7 @@ export function EventDetails() {
     }
     return [];
   }, [eventData, hasOccurrenceByHour, eventsByHours, incidentsByHours, viewType]);
+
 
   const handleFirstEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
@@ -179,7 +182,6 @@ export function EventDetails() {
   };
 
   const renderEventSidebar = () => {
-    console.log(isTimelineIdle , isTimelineLoading , isLoading , isIdle)
     if ((isTimelineIdle || isTimelineLoading || isLoading || isIdle) && !clickSidebar) {
       return (
         <span

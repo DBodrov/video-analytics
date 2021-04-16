@@ -42,7 +42,6 @@ export type ITimelinesQuery = {
   dates?: TDateRange;
   checkIds?: number[];
   changeDates: boolean;
-  firstRender: boolean;
 };
 
 export type ITimelinesFiltersState = {
@@ -74,6 +73,7 @@ export type ITimelineContext = {
   setIdleStatus: () => void;
   setUnableClickSidebar: () => void;
   setDisableClickSidebar: () => void;
+  changeDateTimeline : (queryParams: ITimelinesQuery) => void;
   clickSidebar: boolean;
   loadStatus: boolean;
 }
