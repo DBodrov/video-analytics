@@ -10,11 +10,12 @@ import {Player} from './Player';
 import {getDatePeriod} from '@/utils';
 import {EventSidebar} from './EventSidebar';
 import {EventContent, PlayerLayout, PanelFilterLayout} from './styles';
+import {ITimelinesQuery} from './types';
 
 export function EventDetails() {
   const {
     state: {eventId, viewType},
-  } = useLocation<{eventId: string; viewType: 'events' | 'incidents'}>();
+  } = useLocation<{eventId: string; viewType: 'events' | 'incidents'; isChangeDates?: boolean;}>();
   const history = useHistory();
 
   const {
@@ -39,6 +40,9 @@ export function EventDetails() {
     events,
     incidents,
     refreshView,
+    setIdleStatus,
+    clickSidebar,
+    setUnableClickSidebar,
   } = useTimelines();
 
   //const [isIncident, setIsIncident] = React.useState(viewType === 'incidents');
@@ -64,36 +68,51 @@ export function EventDetails() {
   const handleFirstEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
       const id = viewType === 'events' ? events![0].code : incidents![0].id;
-      if (id) {
+      if (id && id !== eventId) {
+        setUnableClickSidebar();
+        setIdleStatus();
         history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
       }
     }
-  }, [events, hasOccurrenceByHour, history, incidents, viewType]);
+  }, [events, hasOccurrenceByHour, history, incidents, viewType, setIdleStatus, setUnableClickSidebar, eventId]);
 
   const handleLastEvent = React.useCallback(() => {
     if (hasOccurrenceByHour) {
       const id =
         viewType === 'events' ? events![events!.length - 1].code : incidents![incidents!.length - 1].id;
-      if (id) {
+      if (id && id !== eventId) {
+        setUnableClickSidebar();
+        setIdleStatus();
         history.push({pathname: '/events/details', state: {eventId: String(id), viewType}});
       }
     }
-  }, [events, hasOccurrenceByHour, history, incidents, viewType]);
+  }, [events, hasOccurrenceByHour, history, incidents, viewType, setIdleStatus, setUnableClickSidebar,eventId]);
 
   const handlePrevEvent = React.useCallback(() => {
     if (events && incidents && eventData) {
       const currentEventCodeIndex = events.findIndex(e => e.code === eventData?.id);
 
       const currentIncidentIdIndex = incidents?.findIndex(i => i.id === eventData?.id);
+
+      if (currentEventCodeIndex < 1 && viewType === 'events') {
+        return;
+      }
+
+      if (currentIncidentIdIndex < 1 && viewType === 'incidents') {
+        return;
+      }
+
       const prevId =
         viewType === 'events'
           ? events[currentEventCodeIndex - 1].code
           : incidents[currentIncidentIdIndex - 1].id.toString();
       if (prevId) {
+        setUnableClickSidebar();
+        setIdleStatus();
         history.push({pathname: '/events/details', state: {eventId: String(prevId), viewType}});
       }
     }
-  }, [eventData, events, history, incidents, viewType]);
+  }, [eventData, events, history, incidents, viewType, setIdleStatus, setUnableClickSidebar]);
 
   const handleNextEvent = React.useCallback(() => {
     if (events && incidents && eventData) {
@@ -101,24 +120,19 @@ export function EventDetails() {
       const currentIncidentIdIndex = incidents?.findIndex(i => i.id === eventData.id);
       let nextId;
       if (viewType === 'events') {
-        nextId =
-          currentEventCodeIndex < events.length - 1
-            ? events[currentEventCodeIndex + 1].code
-            : events[currentEventCodeIndex].code;
+        nextId = currentEventCodeIndex < events.length - 1 ? events[currentEventCodeIndex + 1].code : null;
       } else {
         nextId =
-          currentIncidentIdIndex < incidents.length - 1
-            ? incidents[currentIncidentIdIndex + 1].id
-            : incidents[currentIncidentIdIndex].id;
+          currentIncidentIdIndex < incidents.length - 1 ? incidents[currentIncidentIdIndex + 1].id : null;
       }
 
       if (nextId) {
+        setUnableClickSidebar();
+        setIdleStatus();
         history.push({pathname: '/events/details', state: {eventId: String(nextId), viewType}});
       }
     }
-  }, [eventData, events, history, incidents, viewType]);
-
-  //const changeOccurrenceType = (isIncidentView: boolean) => setIsIncident(isIncidentView);
+  }, [eventData, events, history, incidents, viewType, setIdleStatus, setUnableClickSidebar]);
 
   const renderEventSection = () => {
     if (isTimelineIdle || isTimelineLoading || isLoading || isIdle) {
@@ -131,9 +145,19 @@ export function EventDetails() {
         </span>
       );
     }
+
+    if (events?.length === 0) {
+      return (
+        <span css={{display: 'flex', height: 500, width: 800, margin: 'auto', color: 'var(--color-mts)'}}>
+          Событий не найдено
+        </span>
+      );
+    }
+
     return (
       <EventSection
         boxes={boxRects}
+        viewType={viewType}
         imageContent={imageContent}
         commonDetectInfo={commonDetectInfo}
         extraDetectInfo={extraDetectInfo}
@@ -155,12 +179,14 @@ export function EventDetails() {
   };
 
   const renderEventSidebar = () => {
-    if (isTimelineIdle || isTimelineLoading || isLoading || isIdle) {
+    console.log(isTimelineIdle , isTimelineLoading , isLoading , isIdle)
+    if ((isTimelineIdle || isTimelineLoading || isLoading || isIdle) && !clickSidebar) {
       return (
         <span
           css={{
             display: 'flex',
-            marginTop: '5px',
+            paddingTop: '15px',
+            backgroundColor: 'var(--color-form)',
             flexDirection: 'column',
             alignItems: 'center',
           }}
@@ -174,8 +200,9 @@ export function EventDetails() {
         <div
           css={{
             display: 'flex',
-            marginTop: '5px',
+            paddingTop: '15px',
             flexDirection: 'column',
+            backgroundColor: 'var(--color-form)',
             color: 'var(--color-mts)',
             alignItems: 'center',
           }}
@@ -184,7 +211,7 @@ export function EventDetails() {
         </div>
       );
     }
-    return <EventSidebar eventsList={getEventsInCurrentHour()} viewType={viewType} />;
+    return <EventSidebar eventsList={getEventsInCurrentHour()} viewType={viewType} eventId={eventId} />;
   };
 
   return (
@@ -205,7 +232,7 @@ export function EventDetails() {
             incidentsCount={incidentsCount}
             // onFilter={changeOccurrenceType}
             viewType={viewType}
-            currentDate={eventData?.date}
+            eventData={eventData}
           />
         </div>
         {renderEventSidebar()}

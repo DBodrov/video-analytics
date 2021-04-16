@@ -6,6 +6,7 @@ import {ArrowDownIcon} from '@/assets/icons';
 import {Logo} from './Logo';
 import {Content, Header, PageLayout} from './styles';
 import { useTimelines } from '../EventDetails/TimelineContext'
+import {DropDownLogoutMenu} from './DropDownLogoutMenu'
 
 const BackButton = styled(Button)`
   background-color: transparent;
@@ -37,6 +38,7 @@ export function DetailsLayout({children}: {children: React.ReactNode}) {
           <ArrowDownIcon css={{transform: 'rotate(90deg)', width: 9, height: 9, marginRight: 14}} />
           <span>Вернуться</span>
         </BackButton>
+        <DropDownLogoutMenu/>
       </Header>
       <Content>{children}</Content>
     </PageLayout>
