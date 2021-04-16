@@ -20,9 +20,9 @@ export const EventBox = styled.li`
   justify-content: flex-start;
   align-items: center;
   padding: 0px 30px;
-  margin-top : 5px;
-  margin-bottom: 5px;
-  min-height: 80px;
+  margin-top : 2px;
+  margin-bottom: 2px;
+  min-height: 90px;
   cursor: pointer;
   &:hover {
     outline: 1px var(--color-border) solid;
@@ -37,6 +37,7 @@ export const EventInfo = styled.div`
   height: 100%;
   width: 100%;
   margin-left: 10px;
+  margin-top: 5px;
 `;
 
 

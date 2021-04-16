@@ -30,7 +30,6 @@ export function Timeline({
 
 
   useEffect(()=>{
-    console.log(eventData?.date)
     let hour = new Date(eventData?.date!).getHours()
     setCurrentHour(hour)
   },[eventData])

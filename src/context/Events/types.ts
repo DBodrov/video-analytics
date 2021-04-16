@@ -28,13 +28,14 @@ export type TEventsContext = {
   page_size?: number | undefined
   eventsView?: IEventView[];
   view?: IEventView[] | IIncidentView[];
-  refreshView: () => void;
+  refreshView: (checkIds?: number[]) => void;
   setQueryParams: (queryParams: TEventsQuery | ((args: TEventsQuery) => TEventsQuery)) => void;
   setFiltersState: (filterState: TFiltersState | ((args: TFiltersState) => TFiltersState)) => void;
   getEventByCode: (eventCode: string) => IEventView | undefined;
   getEventsViewBySensorId: (sensorId: number) => IEventView[] | undefined;
   filtersState: TFiltersState;
   error?: Error;
+  checkIds?: number[]
   status?: 'idle' | 'pending' | 'resolved' | 'rejected';
   viewType: 'events' | 'incidents';
 };
