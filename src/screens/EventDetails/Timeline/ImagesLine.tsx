@@ -17,7 +17,7 @@ export function ImagesLine({events}: TImageLineProps) {
           return (
             <ImageBox key={hour}>
               {currentEvents.map(event => {
-                return <img key={event.eventId} src={event.thumbnail} alt="thumb" />;
+                return <img key={event?.eventId} src={event?.thumbnail} alt="thumb" />;
               })}
             </ImageBox>
           );

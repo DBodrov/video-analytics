@@ -1,12 +1,17 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useCompany, useEvents, TEventsQuery, useRefs} from '@/context';
 import {SelectFilter, SwitchFilter, MultiSelectGroupFilter, DatesFilter, TDateRange} from '@/components';
 import {dayIsoString} from '@/utils';
 import {createFilterList, createCheckAndCategoriesList} from './utils';
 import {Panel} from './styles';
+import {ITimelinesFiltersState} from '../../EventDetails/types';
 
-export function EventsFilters() {
-  const {setQueryParams, filtersState, setFiltersState} = useEvents();
+interface Props {
+  detailsfiltersState?: {filtersState: ITimelinesFiltersState; checkIds?: number[]};
+}
+
+export function EventsFilters({detailsfiltersState}: Props) {
+  const {setQueryParams, filtersState, setFiltersState, checkIds} = useEvents();
   const {locations, sensors} = useCompany();
   const {checkCategories, checks} = useRefs();
 
@@ -19,6 +24,25 @@ export function EventsFilters() {
   checkCategoriesOptions?.unshift({id: -1, value: 'Любой'});
 
   const checkAndCategoriesOptions = createCheckAndCategoriesList(checkCategories, checks);
+
+  useEffect(() => {
+    if (detailsfiltersState) {
+      setFiltersState(s => ({
+        ...s,
+        locationFilter: detailsfiltersState?.filtersState?.locationFilter,
+        sensorFilter: detailsfiltersState?.filtersState?.sensorFilter,
+        page: 1
+      }));
+
+      setQueryParams(
+        (q: TEventsQuery): TEventsQuery => ({
+          ...q,
+          locationIds: detailsfiltersState.filtersState?.locationFilter,
+          sensorIds: detailsfiltersState.filtersState?.sensorFilter,
+          page: 1,
+        }));
+    }
+   }, [detailsfiltersState, setFiltersState, setQueryParams]);
 
   const setLocationFilter = useCallback(
     (id: number) => {
@@ -84,6 +108,7 @@ export function EventsFilters() {
       />
       <MultiSelectGroupFilter
         onSelect={setCheckFilter}
+        value={checkIds}
         options={checkAndCategoriesOptions}
         prefix="Правила"
         css={{height: 36, flexBasis: 300, marginRight: 10}}

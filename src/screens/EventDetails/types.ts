@@ -41,6 +41,7 @@ export type ITimelinesQuery = {
   tzOffset?: number;
   dates?: TDateRange;
   checkIds?: number[];
+  changeDates: boolean;
 };
 
 export type ITimelinesFiltersState = {
@@ -60,12 +61,19 @@ export type ITimelineContext = {
   error?: any;
   queryTimeline: ()=> void;
   isIdle: boolean;
-  isLoading: boolean;
+  isTimelineIdle: boolean;
   isSuccess: boolean;
   isError: boolean;
   setFiltersState: (filterState: ITimelinesFiltersState | ((args: ITimelinesFiltersState) => ITimelinesFiltersState)) => void
   setQueryParams: (queryParams: ITimelinesQuery | ((args: ITimelinesQuery) => ITimelinesQuery)) => void;
   queryParams: ITimelinesQuery;
   filtersState: ITimelinesFiltersState;
-  refreshView: (period: TDateRange) => void;
+  refreshView: (period : TDateRange, newReq?: boolean) => void;
+  isTimelineLoading: boolean;
+  setIdleStatus: () => void;
+  setUnableClickSidebar: () => void;
+  setDisableClickSidebar: () => void;
+  changeDateTimeline : (queryParams: ITimelinesQuery) => void;
+  clickSidebar: boolean;
+  loadStatus: boolean;
 }

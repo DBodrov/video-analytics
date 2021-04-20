@@ -1,7 +1,8 @@
-import React, {useContext, useMemo, createContext, useState} from 'react';
+import React, {useContext, useMemo, createContext, useState, useEffect} from 'react';
 import {TIMEZONE_OFFSET, defaultPeriod} from '@/utils';
 import {useEventsClient} from './use-events-client';
 import {TEventsContext, TEventsQuery, TFiltersState} from './types';
+import { checks } from '@/mocks/refs-mocks';
 
 const EventsContext = createContext<TEventsContext | undefined>(undefined);
 
@@ -37,12 +38,9 @@ export function EventsProvider(props: any) {
   });
 
   const refreshView = React.useCallback(() => {
-    queryEvents(queryParams);
+      queryEvents(queryParams);
   }, [queryEvents, queryParams]);
 
-  // useEffect(() => {
-  //   queryEvents(queryParams);
-  // }, [queryEvents, queryParams]);
 
   const ctxValue = useMemo<TEventsContext>(
     () => ({
@@ -52,6 +50,7 @@ export function EventsProvider(props: any) {
       error,
       setQueryParams,
       page: queryParams.page,
+      checkIds: queryParams.checkIds,
       setFiltersState,
       filtersState,
       getEventByCode,
@@ -71,6 +70,7 @@ export function EventsProvider(props: any) {
       getEventsViewBySensorId,
       queryParams.page,
       queryParams.pageSize,
+      queryParams.checkIds,
       queryParams.onlyIncidents,
       refreshView,
       status,
