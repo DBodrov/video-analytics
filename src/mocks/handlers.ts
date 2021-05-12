@@ -11,7 +11,7 @@ import {eventMock} from './event-details-mocks';
 import {timeline} from './timeline-mock';
 import {incidentDetailMock} from './incident-details-mocks';
 import {sensorDetail, sensorStats} from './sensor-detail';
-import {pipelineChecksMock, pipelinesMock} from './settings-mocks';
+import {pipelineChecksMock, pipelinesMock, pipelineSensorCheck} from './settings-mocks';
 //import {sensorStats} from './sensors-stats';
 
 const authHandlers = [
@@ -105,6 +105,10 @@ const settingsHandlers = [
 
   rest.patch('/api/va/companies/:companyId/pipelines/:pipelineId/checks/:checkId', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(req.body));
+  }),
+
+  rest.get('/api/va/companies/:companyId/pipelines/:pipelineId/sensors/:sensorId/checks/:checkId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(pipelineSensorCheck));
   }),
 
   rest.patch('/api/va/companies/:companyId/pipelines/:pipelineId/sensors/:sensorId/checks/:checkId', (req, res, ctx) => {

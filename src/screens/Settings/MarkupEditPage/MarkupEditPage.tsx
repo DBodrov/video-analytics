@@ -12,24 +12,36 @@ type TCoordinate = {
 };
 
 export function MarkupEditPage() {
-  const [shape, setShape] = React.useState<'line' | 'square'>('line');
+  const point = React.useRef<TCoordinate | null>(null);
   const [startPositions, setStartPositions] = React.useState<TCoordinate[] | undefined>(undefined);
   const [startPositionsSquare, setStartPositionsSquare] = React.useState<TCoordinate[] | undefined>(
     undefined,
   );
   const [endPositions, setEndPositions] = React.useState<TCoordinate[] | undefined>(undefined);
   const [endPositionsSquare, setEndPositionsSquare] = React.useState<TCoordinate[] | undefined>(undefined);
-  const [isDrawing, setIsDrawing] = React.useState(false);
-  const {savePolygons, status} = useMarkupClient();
+
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const context = canvasRef.current?.getContext('2d');
 
+  const {
+    setShape,
+    shape,
+    isDrawing,
+    setIsDrawing,
+    readPolygons,
+    savePolygons,
+    status,
+    linesPolygons,
+    squaresPolygons,
+    createNewLine,
+    createNewSquare,
+    createLinesPolygons,
+    createSquarePolygons
+  } = useMarkupClient(canvasRef);
+
   const clearAll = () => {
-    setStartPositions(undefined);
-    setStartPositionsSquare(undefined);
-    setEndPositions(undefined);
-    setEndPositionsSquare(undefined);
-    clearCanvas();
+    savePolygons([]);
+    //clearCanvas();
   };
 
   const getCoordinates = (event: React.PointerEvent<HTMLCanvasElement>): TCoordinate => {
@@ -72,10 +84,14 @@ export function MarkupEditPage() {
   // };
 
   const drawSavedLines = React.useCallback(() => {
-    if (context && endPositions) {
-      endPositions.forEach((end, i) => {
+    if (context && linesPolygons) {
+      linesPolygons.forEach(polygon => {
         context.beginPath();
-        const start = startPositions![i];
+        context.lineWidth = 2;
+        context.strokeStyle = '#57D841';
+        context.fillStyle = '#57D841';
+        const start = polygon[0];
+        const end = polygon[1];
         context.moveTo(start.x, start.y);
         context.lineTo(end.x, end.y);
         context.stroke();
@@ -88,21 +104,21 @@ export function MarkupEditPage() {
         context.closePath();
       });
     }
-  }, [context, endPositions, startPositions]);
+  }, [context, linesPolygons]);
 
   const drawSavedSquares = React.useCallback(() => {
-    if (context && endPositionsSquare) {
-      endPositionsSquare.forEach((end, i) => {
-        const start = startPositionsSquare![i];
-        const width = end.x - start.x;
-        const height = end.y - start.y;
-
+    if (context && squaresPolygons) {
+      squaresPolygons.forEach(polygon => {
+        const start = polygon.find(p => p.sequence === 0);
+        const end = polygon.find(p => p.sequence === 2);
+        const width = end!.x - start!.x;
+        const height = end!.y - start!.y;
         context.lineWidth = 2;
         context.strokeStyle = '#57D841';
-        context.strokeRect(start.x, start.y, width, height);
+        context.strokeRect(start!.x, start!.y, width, height);
       });
     }
-  }, [context, endPositionsSquare, startPositionsSquare]);
+  }, [context, squaresPolygons]);
 
   const drawLine = React.useCallback(
     (startPosition, endPosition) => {
@@ -131,6 +147,7 @@ export function MarkupEditPage() {
 
   const drawSquare = React.useCallback(
     (startPosition, endPosition) => {
+      // console.log(startPosition, endPosition);
       const height = endPosition.y - startPosition.y;
       const width = endPosition.x - startPosition.x;
       if (context) {
@@ -147,14 +164,18 @@ export function MarkupEditPage() {
 
   const handleMouseDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     const {x, y} = getCoordinates(event);
-    if (shape === 'square') {
-      const updateStartPositionSquare = startPositionsSquare ? [...startPositionsSquare, {x, y}] : [{x, y}];
-      setStartPositionsSquare(updateStartPositionSquare);
-    } else {
-      const updateStartPosition = startPositions ? [...startPositions, {x, y}] : [{x, y}];
-      setStartPositions(updateStartPosition);
-    }
+    point.current = {x, y};
     setIsDrawing(true);
+    // if (shape === 'square') {
+    //   const updateStartPositionSquare = startPositionsSquare ? [...startPositionsSquare, {x, y}] : [{x, y}];
+    //   setStartPositionsSquare(updateStartPositionSquare);
+    // } else if (shape === 'line') {
+    //   console.log(point);
+    //   // point.current.y = y;
+
+    //   // const updateStartPosition = startPositions ? [...startPositions, {x, y}] : [{x, y}];
+    //   // setStartPositions(updateStartPosition);
+    // }
   };
 
   const handleMouseMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -163,12 +184,12 @@ export function MarkupEditPage() {
     const newMousePosition = getCoordinates(event);
     clearCanvas();
     if (shape === 'line') {
-      if (startPositions && newMousePosition) {
-        drawLine(startPositions[startPositions.length - 1], newMousePosition);
+      if (point.current && newMousePosition) {
+        drawLine(point.current, newMousePosition);
       }
     } else {
-      if (startPositionsSquare && newMousePosition) {
-        drawSquare(startPositionsSquare[startPositionsSquare.length - 1], newMousePosition);
+      if (point.current && newMousePosition) {
+        drawSquare(point.current, newMousePosition);
       }
     }
   };
@@ -178,48 +199,43 @@ export function MarkupEditPage() {
     setIsDrawing(false);
     const {x, y} = getCoordinates(event);
     if (shape === 'line') {
-      const updateEndPosition = endPositions ? [...endPositions, {x, y}] : [{x, y}];
-      setEndPositions(updateEndPosition);
+      const line = [
+        {x: point.current!.x, y: point.current!.y, sequence: 0},
+        {x, y, sequence: 1},
+      ];
+      createNewLine(line);
     } else if (shape === 'square') {
-      const updateEndPositionSquare = endPositionsSquare ? [...endPositionsSquare, {x, y}] : [{x, y}];
-      setEndPositionsSquare(updateEndPositionSquare);
+      const square = [
+        {x: point.current!.x, y: point.current!.y, sequence: 0},
+        {x, y, sequence: 2},
+        {x, y: point.current!.y, sequence: 1},
+        {x: point.current!.x, y, sequence: 3},
+      ];
+      createNewSquare(square);
     }
+    point.current = null;
   };
 
-  const createSquarePolygons = () => {
-    if (startPositionsSquare && endPositionsSquare && canvasRef) {
-      const imageRect = canvasRef!.current!.getBoundingClientRect();
-
-      return startPositionsSquare.map((start, i) => {
-        const end = endPositionsSquare[i];
-        const firstPoint = {x: start.x / imageRect.width, y: start.y / imageRect.height, sequence: 0};
-        const thirdPoint = {x: end.x / imageRect.width, y: end.y / imageRect.height, sequence: 2};
-        const secondPoint = {x: thirdPoint.x, y: firstPoint.y, sequence: 1};
-        const fourthPoint = {x: firstPoint.x, y: thirdPoint.y, sequence: 3};
-        return [firstPoint, secondPoint, thirdPoint, fourthPoint];
-      });
-    }
-  };
-
-  const createLinesPolygons = () => {
-    if (startPositions && endPositions && canvasRef) {
-      const imageRect = canvasRef!.current!.getBoundingClientRect();
-      return startPositions.map((start, i) => {
-        const end = endPositions[i];
-        const firstPoint = {x: start.x / imageRect.width, y: start.y / imageRect.height, sequence: 0};
-        const secondPoint = {x: end.x / imageRect.width, y: end.y / imageRect.height, sequence: 1};
-        return [firstPoint, secondPoint];
-      });
-    }
+  const createLinesCoordinate = ({x, y}: {x: number; y: number}) => {
+    const imageRect = canvasRef!.current!.getBoundingClientRect();
+    const xCoord = x * imageRect.width;
+    const yCoord = y * imageRect.height;
+    return {x: xCoord, y: yCoord};
   };
 
   const submitPolygons = () => {
-    const squarePolygons = createSquarePolygons() ?? [];
-    const linesPolygons = createLinesPolygons() ?? [];
-    const polygons = [...squarePolygons, ...linesPolygons];
-    if (polygons.length > 0) {
-      savePolygons(polygons);
-    }
+    const lines = createLinesPolygons() ?? [];
+    const squares = createSquarePolygons() ?? [];
+
+    const polygons = [...lines, ...squares];
+    savePolygons(polygons);
+    // const squarePolygons = createSquarePolygons() ?? [];
+    // const linesPolygons = createLinesPolygons() ?? [];
+    // const polygons = [...squarePolygons, ...linesPolygons];
+
+    // if (polygons.length > 0) {
+    //   //savePolygons(polygons);
+    // }
   };
 
   const handleMouseLeave = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -229,6 +245,18 @@ export function MarkupEditPage() {
       return;
     }
   };
+
+  React.useEffect(() => {
+    readPolygons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (status === 'fetched') {
+      drawSavedLines();
+      drawSavedSquares();
+    }
+  }, [drawSavedLines, drawSavedSquares, status]);
 
   return (
     <Section css={{margin: '0 auto', flexFlow: 'column nowrap', alignItems: 'center'}}>
@@ -259,7 +287,7 @@ export function MarkupEditPage() {
                 '&:hover': {backgroundColor: '#39B54A', borderColor: '#39B54A'},
               }}
               onClick={submitPolygons}
-              disabled={status === 'resolved'}
+              disabled={status === 'saved'}
             >
               <Span css={{fontSize: '0.875rem'}}>Сохранить</Span>
             </Button>

@@ -27,6 +27,7 @@ export const globalStyles = css(css`
     '--color-background': '#3a3d43',
     '--color-content': '#1B2431',
     '--color-form': '#273142',
+    '--color-formfield': '#222C3C',
     '--color-box': '#57D841'
 },
 '*': { boxSizing: 'border-box' },
