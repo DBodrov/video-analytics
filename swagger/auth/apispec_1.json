@@ -1,0 +1,2016 @@
+{
+  "info": {
+    "version": "0.13.dev86", 
+    "title": "auth", 
+    "description": "powered by Flasgger", 
+    "termsOfService": "/tos"
+  }, 
+  "paths": {
+    "/api/auth/refs/check_categories": {
+      "get": {
+        "summary": "# Справочные сведения о категориях проверок (шаблонах)", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о категориях проверок (шаблонах)", 
+            "schema": {
+              "$ref": "#/definitions/check-categories_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/event_statuses": {
+      "get": {
+        "summary": "# Справочные сведения о статусах событий", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о статусах событий", 
+            "schema": {
+              "$ref": "#/definitions/statuses_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/status_chains": {
+      "get": {
+        "summary": "# Справочные сведения о цепочках статусов", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о цепочках статусов", 
+            "schema": {
+              "$ref": "#/definitions/status-chains_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/thumbnails": {
+      "get": {
+        "summary": "# Сведения о форматах превью изображений", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о форматах превью изображений", 
+            "schema": {
+              "$ref": "#/definitions/thumbnails_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/detectors": {
+      "get": {
+        "summary": "# Справочные сведения о детекторах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о детекторах", 
+            "schema": {
+              "$ref": "#/definitions/detectors_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/incidents": {
+      "get": {
+        "summary": "# Справочные сведения о детекторах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения об инцидентах", 
+            "schema": {
+              "$ref": "#/definitions/incidents_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/statuses": {
+      "get": {
+        "summary": "# Справочные сведения о статусах событий", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о статусах событий", 
+            "schema": {
+              "$ref": "#/definitions/statuses_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/trackers": {
+      "get": {
+        "summary": "# Справочные сведения о трекерах", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о трекерах", 
+            "schema": {
+              "$ref": "#/definitions/trackers_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/checks": {
+      "get": {
+        "summary": "# Справочные сведения о проверках (бизнес-правилах)", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о проверках (бизнес-правилах)", 
+            "schema": {
+              "$ref": "#/definitions/checks_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/models": {
+      "get": {
+        "summary": "# Сведения о моделях расчета", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о моделях расчета", 
+            "schema": {
+              "$ref": "#/definitions/models_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }, 
+      "post": {
+        "summary": "# Сохранение модели и категорий отслеживаемых объектов", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Данные успешно сохранены", 
+            "schema": {
+              "$ref": "#/definitions/models_response_201"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "request", 
+            "in": "body", 
+            "required": true, 
+            "description": "Сведения о модели и категориях отслеживаемых объектов", 
+            "schema": {
+              "$ref": "#/definitions/models_request"
+            }
+          }
+        ], 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/tocs": {
+      "get": {
+        "summary": "# Сведения о категориях отслеживаемых объектов", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о категориях отслеживаемых объектов", 
+            "schema": {
+              "$ref": "#/definitions/tocs_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/check-token": {
+      "get": {
+        "summary": "# Проверка токена доступа", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Запрос содержит действующий токен доступа", 
+            "schema": {
+              "$ref": "#/definitions/check-token_response_200"
+            }
+          }, 
+          "401": {
+            "description": "Отсутсвует токен доступа или истек срок его действия", 
+            "schema": {
+              "$ref": "#/definitions/check-token_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/heartbeat": {
+      "get": {
+        "summary": "# Доступность сервиса", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сервис доступен", 
+            "schema": {
+              "$ref": "#/definitions/heartbeat_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Core"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/companies": {
+      "get": {
+        "summary": "# Сведения о компаниях", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о компаниях", 
+            "schema": {
+              "$ref": "#/definitions/companies_get_response_200"
+            }
+          }, 
+          "401": {
+            "description": "Отсутсвует токен доступа или истек срок его действия", 
+            "schema": {
+              "$ref": "#/definitions/companies_get_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Company"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/logout": {
+      "delete": {
+        "summary": "# выход пользователя из системы", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Пользователь вышел из системы", 
+            "schema": {
+              "$ref": "#/definitions/logout_response_200"
+            }
+          }, 
+          "401": {
+            "description": "Запрос содержит некорректный токен доступа (access-токен)", 
+            "schema": {
+              "$ref": "#/definitions/logout_delete_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/login": {
+      "post": {
+        "summary": "# Идентификация пользователя", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Access/refresh-токены с указанием периода действия", 
+            "schema": {
+              "$ref": "#/definitions/login_post_response_201"
+            }
+          }, 
+          "400": {
+            "description": "Ошибка пр разборе параметров запроса", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }, 
+          "401": {
+            "description": "Некорректный пароль и/или имя пользователя", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }, 
+          "403": {
+            "description": "Пользователь не найден. Недостаточно прав для проведения авторизации", 
+            "schema": {
+              "$ref": "#/definitions/login_post_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "request", 
+            "in": "body", 
+            "required": true, 
+            "description": "Авторизационные данные пользователя", 
+            "schema": {
+              "$ref": "#/definitions/login_post_request"
+            }
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/token": {
+      "post": {
+        "summary": "# Обновление токена доступа", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Действующий токен доступа", 
+            "schema": {
+              "$ref": "#/definitions/token_post_response_201"
+            }
+          }, 
+          "401": {
+            "description": "Запрос содержит некорректный токен доступа (refresh-токен)", 
+            "schema": {
+              "$ref": "#/definitions/token_post_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа (refresh) в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/users": {
+      "post": {
+        "summary": "# Регистрация пользователя", 
+        "description": "# ", 
+        "responses": {
+          "201": {
+            "description": "Пользователь успешно зарегистрирован", 
+            "schema": {
+              "$ref": "#/definitions/users_post_response_201"
+            }
+          }, 
+          "400": {
+            "description": "Ошибка пр разборе параметров запроса", 
+            "schema": {
+              "$ref": "#/definitions/users_post_error"
+            }
+          }, 
+          "401": {
+            "description": "Отсутсвует токен доступа или истек срок его действия", 
+            "schema": {
+              "$ref": "#/definitions/users_post_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "request", 
+            "in": "body", 
+            "required": true, 
+            "description": "Сведения о пользователе", 
+            "schema": {
+              "$ref": "#/definitions/users_post_request"
+            }
+          }, 
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Auth"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/about": {
+      "get": {
+        "summary": "# Сведения о сервисе и API", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о сервисе и API", 
+            "schema": {
+              "$ref": "#/definitions/about_get_response_200"
+            }
+          }
+        }, 
+        "tags": [
+          "Core"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/refs/status_chains/{chain_id}": {
+      "get": {
+        "summary": "# Справочные сведения о цепочке статусов", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Справочные сведения о цепочке статусов", 
+            "schema": {
+              "$ref": "#/definitions/status-chain_get_response_200"
+            }
+          }, 
+          "404": {
+            "description": "Цепочка статусов не найдена", 
+            "schema": {
+              "$ref": "#/definitions/status-chain_get_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "chain_id", 
+            "in": "path", 
+            "type": "integer", 
+            "required": true, 
+            "description": "Идентификатор цепочки"
+          }
+        ], 
+        "tags": [
+          "Refs"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }, 
+    "/api/auth/companies/{company_id}": {
+      "get": {
+        "summary": "# Сведения о компании", 
+        "description": "# ", 
+        "responses": {
+          "200": {
+            "description": "Сведения о компании", 
+            "schema": {
+              "$ref": "#/definitions/company_get_response_200"
+            }
+          }, 
+          "401": {
+            "description": "Отсутсвует токен доступа или истек срок его действия", 
+            "schema": {
+              "$ref": "#/definitions/company_get_error"
+            }
+          }
+        }, 
+        "parameters": [
+          {
+            "name": "company_id", 
+            "in": "path", 
+            "type": "integer", 
+            "required": true, 
+            "description": "Идентификатор компании"
+          }, 
+          {
+            "name": "Authorization", 
+            "in": "header", 
+            "type": "string", 
+            "required": true, 
+            "description": "Действующий токен доступа в формате \"Bearer {token}\""
+          }
+        ], 
+        "tags": [
+          "Company"
+        ], 
+        "consumes": [
+          "application/json"
+        ], 
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  }, 
+  "definitions": {
+    "check-categories_get_response_200": {
+      "type": "object", 
+      "required": [
+        "categories"
+      ], 
+      "properties": {
+        "categories": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Описание категории", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор категории"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код категории"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "statuses_get_response_200": {
+      "type": "object", 
+      "required": [
+        "statuses"
+      ], 
+      "properties": {
+        "statuses": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Статус по событию", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор статуса"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код статуса"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название статуса"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание статуса"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "status-chains_get_response_200": {
+      "type": "object", 
+      "required": [
+        "chains"
+      ], 
+      "properties": {
+        "chains": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "chain", 
+              "relations", 
+              "status_ids"
+            ], 
+            "description": "Сведения о цепочке статусов", 
+            "properties": {
+              "chain": {
+                "type": "object", 
+                "required": [
+                  "id", 
+                  "code", 
+                  "name", 
+                  "description"
+                ], 
+                "description": "Описание цепочки статусов", 
+                "properties": {
+                  "id": {
+                    "type": "integer", 
+                    "description": "Идентификатор цепочки"
+                  }, 
+                  "code": {
+                    "type": "string", 
+                    "description": "Код цепочки"
+                  }, 
+                  "name": {
+                    "type": "string", 
+                    "description": "Краткое название цепочки"
+                  }, 
+                  "description": {
+                    "type": "string", 
+                    "description": "Описание цепочки"
+                  }
+                }
+              }, 
+              "relations": {
+                "type": "array", 
+                "description": "Переход между статусами в цепочки статусов", 
+                "items": {
+                  "type": "object", 
+                  "required": [
+                    "from_status_id", 
+                    "to_status_id"
+                  ], 
+                  "properties": {
+                    "from_status_id": {
+                      "type": "integer", 
+                      "description": "Из какого статуса"
+                    }, 
+                    "to_status_id": {
+                      "type": "integer", 
+                      "description": "В какой статус"
+                    }
+                  }
+                }
+              }, 
+              "status_ids": {
+                "type": "array", 
+                "description": "Перечень идентификаторов статусов, входящих в цепочку статусов", 
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "thumbnails_get_response_200": {
+      "type": "object", 
+      "required": [
+        "thumbnails"
+      ], 
+      "properties": {
+        "thumbnails": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "width", 
+              "height"
+            ], 
+            "description": "Сведения о форматах", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор формата"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код формата"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название формата"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание формата"
+              }, 
+              "width": {
+                "type": "integer", 
+                "description": "Максимальная ширина изображения"
+              }, 
+              "height": {
+                "type": "integer", 
+                "description": "Максимальная высота изображения"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "detectors_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description"
+      ], 
+      "description": "Описание детектора", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор детектора"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код детектора"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название детектора"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание детектора"
+        }
+      }
+    }, 
+    "incidents_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description", 
+        "parameters", 
+        "checks"
+      ], 
+      "description": "Описание инцидента", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор инцидента"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код инцидента"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название инцидента"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание инцидента"
+        }, 
+        "parameters": {
+          "type": "object", 
+          "description": "Параметры инцидента"
+        }, 
+        "checks": {
+          "type": "array", 
+          "description": "Перечень проверок, участвующих в инциденте", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "parameters"
+            ], 
+            "description": "Описание проверки", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор проверки"
+              }, 
+              "parameters": {
+                "type": "object", 
+                "description": "Параметры проверки"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "trackers_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "code", 
+        "name", 
+        "description"
+      ], 
+      "description": "Описание трекера", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор трекера"
+        }, 
+        "code": {
+          "type": "string", 
+          "description": "Код трекера"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Краткое название трекера"
+        }, 
+        "description": {
+          "type": "string", 
+          "description": "Описание трекера"
+        }
+      }
+    }, 
+    "checks_get_response_200": {
+      "type": "object", 
+      "required": [
+        "checks"
+      ], 
+      "properties": {
+        "checks": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "category_id"
+            ], 
+            "description": "Описание проверки", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор проверки"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код проверки"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название проверки"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание проверки"
+              }, 
+              "category_id": {
+                "type": "integer", 
+                "description": "Идентификатор категории проверки"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_get_response_200": {
+      "type": "object", 
+      "required": [
+        "models"
+      ], 
+      "properties": {
+        "models": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "tocs"
+            ], 
+            "description": "Сведения о модели", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор модели"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название модели"
+              }, 
+              "description": {
+                "type": "string"
+              }, 
+              "tocs": {
+                "type": "array", 
+                "items": {
+                  "type": "object", 
+                  "required": [
+                    "id", 
+                    "code", 
+                    "name", 
+                    "description"
+                  ], 
+                  "description": "Категория отслеживаемого объекта", 
+                  "properties": {
+                    "id": {
+                      "type": "integer", 
+                      "description": "Идентификатор категории отслеживаемого объекта"
+                    }, 
+                    "code": {
+                      "type": "string", 
+                      "description": "Код категории отслеживаемого объекта"
+                    }, 
+                    "name": {
+                      "type": "string", 
+                      "description": "Краткое название категории отслеживаемого объекта"
+                    }, 
+                    "description": {
+                      "type": "string", 
+                      "description": "Описание категории отслеживаемого объекта"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_request": {
+      "type": "object", 
+      "required": [
+        "model", 
+        "tocs"
+      ], 
+      "properties": {
+        "model": {
+          "type": "object", 
+          "required": [
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Сведения о модели", 
+          "properties": {
+            "code": {
+              "type": "string", 
+              "description": "Код модели"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название модели"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание модели"
+            }
+          }
+        }, 
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "code", 
+              "name", 
+              "description"
+            ], 
+            "description": "Категория отслеживаемого объекта", 
+            "properties": {
+              "code": {
+                "type": "string", 
+                "description": "Код категории отслеживаемого объекта в рамках модели"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории отслеживаемого объекта"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории отслеживаемого объекта"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "models_response_201": {
+      "type": "object"
+    }, 
+    "tocs_get_response_200": {
+      "type": "object", 
+      "required": [
+        "tocs"
+      ], 
+      "properties": {
+        "tocs": {
+          "type": "array", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "id", 
+              "code", 
+              "name", 
+              "description", 
+              "by_default", 
+              "models"
+            ], 
+            "description": "Сведения о категории", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "description": "Идентификатор категории"
+              }, 
+              "code": {
+                "type": "string", 
+                "description": "Код категории"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Краткое название категории"
+              }, 
+              "description": {
+                "type": "string", 
+                "description": "Описание категории"
+              }, 
+              "by_default": {
+                "type": "boolean", 
+                "description": "Отображаемая категория умолчанию"
+              }, 
+              "company_id": {
+                "type": "integer", 
+                "description": "Идентификатор компании"
+              }, 
+              "models": {
+                "type": "array", 
+                "items": {
+                  "type": "object", 
+                  "required": [
+                    "id", 
+                    "code", 
+                    "name", 
+                    "description"
+                  ], 
+                  "description": "Сведения о модели", 
+                  "properties": {
+                    "id": {
+                      "type": "integer", 
+                      "description": "Идентификатор модели"
+                    }, 
+                    "code": {
+                      "type": "string", 
+                      "description": "Код модели"
+                    }, 
+                    "name": {
+                      "type": "string", 
+                      "description": "Краткое название модели"
+                    }, 
+                    "description": {
+                      "type": "string", 
+                      "description": "Описание модели"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "check-token_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "description": "HTTP-код ответа", 
+          "type": "integer"
+        }
+      }
+    }, 
+    "check-token_response_200": {
+      "type": "object", 
+      "required": [
+        "payload"
+      ], 
+      "properties": {
+        "payload": {
+          "type": "object", 
+          "required": [
+            "user_id"
+          ], 
+          "properties": {
+            "company_id": {
+              "type": "integer", 
+              "title": "Идентификатор компании"
+            }, 
+            "user_id": {
+              "type": "integer", 
+              "title": "Идентификатор авторизованного пользователя"
+            }
+          }
+        }
+      }
+    }, 
+    "heartbeat_get_response_200": {
+      "type": "object"
+    }, 
+    "companies_get_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "companies_get_response_200": {
+      "type": "array", 
+      "items": {
+        "type": "object", 
+        "required": [
+          "id", 
+          "inn", 
+          "ogrn", 
+          "name", 
+          "full_name", 
+          "database"
+        ], 
+        "description": "Сведения о компании", 
+        "properties": {
+          "id": {
+            "type": "integer", 
+            "description": "Идентификатор компании"
+          }, 
+          "inn": {
+            "type": "string", 
+            "description": "ИНН"
+          }, 
+          "ogrn": {
+            "type": "string", 
+            "description": "ОГРН"
+          }, 
+          "name": {
+            "type": "integer", 
+            "description": "Краткое название"
+          }, 
+          "full_name": {
+            "type": "string", 
+            "description": "Полное название"
+          }, 
+          "database": {
+            "type": "object", 
+            "required": [
+              "hostname", 
+              "port", 
+              "name", 
+              "user"
+            ], 
+            "properties": {
+              "hostname": {
+                "type": "string", 
+                "description": "Название сервера для хранения видеоаналитики"
+              }, 
+              "port": {
+                "type": "integer", 
+                "description": "Порт для подключения к серверу"
+              }, 
+              "name": {
+                "type": "string", 
+                "description": "Название базы данных"
+              }, 
+              "user": {
+                "type": "string", 
+                "description": "Учетная запись для подключения"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "logout_response_200": null, 
+    "type": "object", 
+    "logout_delete_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "login_post_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "login_post_token": {
+      "type": "object", 
+      "description": "Токен доступа", 
+      "required": [
+        "value"
+      ], 
+      "properties": {
+        "value": {
+          "type": "string", 
+          "description": "Значение токена доступа"
+        }, 
+        "expired_at": {
+          "type": "string", 
+          "description": "UTC дата и время истечения срока действия. Null, если токен бессрочный"
+        }
+      }
+    }, 
+    "login_post_request": {
+      "type": "object", 
+      "required": [
+        "user_name", 
+        "password"
+      ], 
+      "properties": {
+        "user_name": {
+          "type": "string", 
+          "description": "Учетная запись пользователя"
+        }, 
+        "password": {
+          "type": "string", 
+          "description": "Пароль пользователя"
+        }
+      }
+    }, 
+    "login_post_response_201": {
+      "type": "object", 
+      "required": [
+        "access_token", 
+        "refresh_token", 
+        "user"
+      ], 
+      "properties": {
+        "user": {
+          "type": "object", 
+          "description": "Сведения о пользователе", 
+          "required": [
+            "id", 
+            "code", 
+            "full_name", 
+            "first_name", 
+            "last_name", 
+            "short_name", 
+            "system"
+          ], 
+          "properties": {
+            "id": {
+              "type": "integer", 
+              "description": "Идентификатор пользователя"
+            }, 
+            "code": {
+              "type": "string", 
+              "description": "Учетная запись пользователя"
+            }, 
+            "full_name": {
+              "type": "string", 
+              "description": "Полное имя (Фамилия Имя Отчество)"
+            }, 
+            "first_name": {
+              "type": "string", 
+              "description": "Имя"
+            }, 
+            "last_name": {
+              "type": "string", 
+              "description": "Фамилия"
+            }, 
+            "middle_name": {
+              "type": "string", 
+              "description": "Отчество"
+            }, 
+            "short_name": {
+              "type": "string", 
+              "description": "Краткое имя (Фамилия И.О.)"
+            }, 
+            "system": {
+              "type": "string", 
+              "description": "Признак системного пользователя"
+            }, 
+            "email": {
+              "type": "string", 
+              "description": "Адрес электронной почты"
+            }, 
+            "company_id": {
+              "type": "integer", 
+              "description": "Идентификатор компании"
+            }
+          }
+        }, 
+        "access_token": {
+          "type": "object", 
+          "description": "Access-токен", 
+          "$ref": "#/definitions/login_post_token"
+        }, 
+        "refresh_token": {
+          "type": "object", 
+          "description": "Refresh-токен", 
+          "$ref": "#/definitions/login_post_token"
+        }
+      }
+    }, 
+    "token_post_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "token_post_token": {
+      "type": "object", 
+      "title": "Токен доступа", 
+      "required": [
+        "value", 
+        "expired_at"
+      ], 
+      "properties": {
+        "value": {
+          "type": "string", 
+          "description": "Значение токена доступа"
+        }, 
+        "expired_at": {
+          "type": "string", 
+          "description": "UTC дата и время истечения срока действия токена. Null, если токен бессрочный"
+        }
+      }
+    }, 
+    "token_post_response_201": {
+      "type": "object", 
+      "required": [
+        "access_token", 
+        "user"
+      ], 
+      "properties": {
+        "user": {
+          "type": "object", 
+          "title": "Сведения о пользователе", 
+          "required": [
+            "id", 
+            "code", 
+            "full_name", 
+            "first_name", 
+            "last_name", 
+            "middle_name", 
+            "short_name", 
+            "system"
+          ], 
+          "properties": {
+            "id": {
+              "type": "integer", 
+              "description": "Идентификатор пользователя"
+            }, 
+            "code": {
+              "type": "string", 
+              "description": "Учетная запись пользователя"
+            }, 
+            "full_name": {
+              "type": "string", 
+              "description": "Полное имя (Фамилия Имя Отчество)"
+            }, 
+            "first_name": {
+              "type": "string", 
+              "description": "Имя"
+            }, 
+            "last_name": {
+              "type": "string", 
+              "description": "Фамилия"
+            }, 
+            "middle_name": {
+              "type": "string", 
+              "description": "Отчество"
+            }, 
+            "short_name": {
+              "type": "string", 
+              "description": "Краткое имя (Фамилия И.О.)"
+            }, 
+            "system": {
+              "type": "string", 
+              "description": "Признак системного пользователя"
+            }, 
+            "email": {
+              "type": "string", 
+              "description": "Адрес электронной почты"
+            }, 
+            "company_id": {
+              "type": "integer", 
+              "description": "Идентификатор компании"
+            }
+          }
+        }, 
+        "access_token": {
+          "type": "string", 
+          "title": "Access-токен", 
+          "$ref": "#/definitions/token_post_token"
+        }
+      }
+    }, 
+    "users_post_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "users_post_request": {
+      "type": "object", 
+      "required": [
+        "user_name", 
+        "last_name", 
+        "first_name", 
+        "password"
+      ], 
+      "properties": {
+        "user_name": {
+          "type": "string", 
+          "description": "Учетная запись пользователя"
+        }, 
+        "last_name": {
+          "type": "string", 
+          "description": "Фамилия пользователя"
+        }, 
+        "first_name": {
+          "type": "string", 
+          "description": "Имя пользователя"
+        }, 
+        "middle_name": {
+          "type": "string", 
+          "description": "Отчество пользователя"
+        }, 
+        "email": {
+          "type": "string", 
+          "description": "Адрес электронной почты"
+        }, 
+        "password": {
+          "type": "string", 
+          "description": "Пароль к учетной записи"
+        }, 
+        "system": {
+          "type": "boolean", 
+          "description": "Признак технического пользователя"
+        }, 
+        "company_id": {
+          "type": "integer", 
+          "description": "Идентификатор компании"
+        }
+      }
+    }, 
+    "users_post_response_201": {
+      "type": "object"
+    }, 
+    "about_get_response_200": {
+      "type": "object", 
+      "description": "Сведения о сервисе и API", 
+      "required": [
+        "commit", 
+        "env", 
+        "name", 
+        "resources", 
+        "timestamp", 
+        "version"
+      ], 
+      "properties": {
+        "commit": {
+          "type": "string", 
+          "description": "Идентификатор последнего коммита"
+        }, 
+        "env": {
+          "type": "string", 
+          "description": "Название среды"
+        }, 
+        "name": {
+          "type": "string", 
+          "description": "Название сервиса"
+        }, 
+        "resources": {
+          "type": "array", 
+          "description": "Методы API", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "name", 
+              "methods", 
+              "section", 
+              "urls"
+            ], 
+            "properties": {
+              "name": {
+                "type": "string", 
+                "description": "Название метода"
+              }, 
+              "methods": {
+                "type": "array", 
+                "items": {
+                  "type": "string", 
+                  "description": "Доступные HTTP-методы"
+                }
+              }, 
+              "section": {
+                "type": "string", 
+                "description": "Раздел"
+              }, 
+              "urls": {
+                "type": "array", 
+                "items": {
+                  "type": "string", 
+                  "description": "Перечень URL, по которым доступен метод"
+                }
+              }
+            }
+          }
+        }, 
+        "timestamp": {
+          "type": "string", 
+          "description": "Дата и время сборки"
+        }, 
+        "version": {
+          "type": "string", 
+          "description": "Версия API"
+        }
+      }
+    }, 
+    "status-chain_get_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "status-chain_get_response_200": {
+      "type": "object", 
+      "required": [
+        "chain", 
+        "relations", 
+        "status_ids"
+      ], 
+      "description": "Сведения о цепочке статусов", 
+      "properties": {
+        "chain": {
+          "type": "object", 
+          "required": [
+            "id", 
+            "code", 
+            "name", 
+            "description"
+          ], 
+          "description": "Описание цепочки статусов", 
+          "properties": {
+            "id": {
+              "type": "integer", 
+              "description": "Идентификатор цепочки"
+            }, 
+            "code": {
+              "type": "string", 
+              "description": "Код цепочки"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Краткое название цепочки"
+            }, 
+            "description": {
+              "type": "string", 
+              "description": "Описание цепочки"
+            }
+          }
+        }, 
+        "relations": {
+          "type": "array", 
+          "description": "Переход между статусами в цепочки статусов", 
+          "items": {
+            "type": "object", 
+            "required": [
+              "from_status_id", 
+              "to_status_id"
+            ], 
+            "properties": {
+              "from_status_id": {
+                "type": "integer", 
+                "description": "Из какого статуса"
+              }, 
+              "to_status_id": {
+                "type": "integer", 
+                "description": "В какой статус"
+              }
+            }
+          }
+        }, 
+        "status_ids": {
+          "type": "array", 
+          "description": "Перечень идентификаторов статусов, входящих в цепочку статусов", 
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    }, 
+    "company_get_error": {
+      "type": "object", 
+      "required": [
+        "details", 
+        "message", 
+        "path", 
+        "status_code"
+      ], 
+      "description": "Сведения об ошибке", 
+      "properties": {
+        "details": {
+          "type": "object", 
+          "description": "Контекст выполнения и значение переменных"
+        }, 
+        "message": {
+          "type": "string", 
+          "description": "Сообщение об ошибке"
+        }, 
+        "path": {
+          "type": "string", 
+          "description": "Путь к запрашиваемому ресурсу"
+        }, 
+        "status_code": {
+          "type": "integer", 
+          "description": "HTTP-код ответа"
+        }
+      }
+    }, 
+    "company_get_response_200": {
+      "type": "object", 
+      "required": [
+        "id", 
+        "inn", 
+        "ogrn", 
+        "name", 
+        "full_name", 
+        "database"
+      ], 
+      "description": "Сведения о компании", 
+      "properties": {
+        "id": {
+          "type": "integer", 
+          "description": "Идентификатор компании"
+        }, 
+        "inn": {
+          "type": "string", 
+          "description": "ИНН"
+        }, 
+        "ogrn": {
+          "type": "string", 
+          "description": "ОГРН"
+        }, 
+        "name": {
+          "type": "integer", 
+          "description": "Краткое название"
+        }, 
+        "full_name": {
+          "type": "string", 
+          "description": "Полное название"
+        }, 
+        "database": {
+          "type": "object", 
+          "required": [
+            "hostname", 
+            "port", 
+            "name", 
+            "user"
+          ], 
+          "properties": {
+            "hostname": {
+              "type": "string", 
+              "description": "Название сервера для хранения видеоаналитики"
+            }, 
+            "port": {
+              "type": "integer", 
+              "description": "Порт для подключения к серверу"
+            }, 
+            "name": {
+              "type": "string", 
+              "description": "Название базы данных"
+            }, 
+            "user": {
+              "type": "string", 
+              "description": "Учетная запись для подключения"
+            }
+          }
+        }
+      }
+    }
+  }, 
+  "swagger": "2.0", 
+  "swaggerUiPrefix": ""
+}
