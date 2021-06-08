@@ -1,0 +1,10 @@
+curl 'http://dev.va.mts.ru/api/va/companies/1/incidents' \
+  -H 'Connection: keep-alive' \
+  -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY4MzQzOTcsIm5iZiI6MTYwNjgzNDM5NywianRpIjoiODcxN2M4YmMtOTI4ZS00M2JmLWFhNmYtNWFkYjNjMmExNzE2IiwiZXhwIjoxNjA2ODM1Mjk3LCJpZGVudGl0eSI6eyJ1c2VyX2lkIjoyLCJjb21wYW55X2lkIjoxfSwiZnJlc2giOnRydWUsInR5cGUiOiJhY2Nlc3MifQ.OjtQ0Ko-n-e6IC6OK-yqfYTvr4F6Ka4B9k1vEeFynaI' \
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36' \
+  -H 'Accept: */*' \
+  -H 'Referer: http://dev.va.mts.ru/events' \
+  -H 'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'Cookie: dspid=996db7c4-0079-453c-9952-fd3ae3203087; _ga=GA1.2.593797201.1593592793; _ym_d=1593592793; _ym_uid=1593592793707095143; _ga=GA1.4.593797201.1593592793' \
+  --compressed \
+  --insecure
