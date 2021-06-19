@@ -8,7 +8,7 @@ import {EventsRightSidebar} from './EventsRight';
 import {EventPagination} from './EventsPagination';
 import {WorkLayout, FiltersPlace, RightBar, TablePlace, PaginationPlace} from './styles';
 import {ITimelinesFiltersState} from '../EventDetails/types';
-import { checks } from '@/mocks/refs-mocks';
+
 
 export function Events() {
   const {error, status, view, refreshView, viewType} = useEvents();
@@ -34,7 +34,7 @@ export function Events() {
           <EventsRightSidebar />
         </RightBar>
         <PaginationPlace>
-          <EventPagination />
+          {/* <EventPagination /> */}
         </PaginationPlace>
       </WorkLayout>
     </AppLayout>

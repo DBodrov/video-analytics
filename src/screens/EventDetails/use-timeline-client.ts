@@ -4,8 +4,6 @@ import {useAuth, useCompany, useRefs, getAccessToken} from '@/context';
 import {TimelineGetResponse200FromJSON, TimelineGetOccurrence200} from '@/backend/main';
 import {IOccurrenceView, TOccurrenceByHours, ITimelinesQuery} from './types';
 import {useHistory} from 'react-router-dom';
-import { statuses } from '@/mocks/refs-mocks';
-// import {TEvents} from '@/context/Events';
 
 type State = {
   status: 'idle' | 'pending' | 'resolved' | 'rejected';

@@ -243,7 +243,7 @@ export function useMarkupClient(canvasRef: React.RefObject<HTMLCanvasElement>) {
       console.log(squaresPolygons)
       return squaresPolygons.map((square, i) => {
         console.log(square)
-        const start = square.;
+        const start = square[0];
         const end = square[2];
         const firstPoint = {x: start.x / imageRect.width, y: start.y / imageRect.height, sequence: 0};
         const thirdPoint = {x: end.x / imageRect.width, y: end.y / imageRect.height, sequence: 2};
@@ -297,7 +297,7 @@ export function useMarkupClient(canvasRef: React.RefObject<HTMLCanvasElement>) {
         );
       }
     },
-    [authHeader, companyId, currentChecksIds, currentSensorsIds, currentTemplateId, fetchClient, status],
+    [authHeader, companyId, currentChecksIds, currentSensorsIds, currentTemplateId, fetchClient],
   );
 
   return {
